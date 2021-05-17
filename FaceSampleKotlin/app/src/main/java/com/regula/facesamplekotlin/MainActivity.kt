@@ -11,8 +11,11 @@ import android.provider.MediaStore
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
-import com.regula.facesdk.FaceReaderService
+import com.regula.facesdk.Face
+import com.regula.facesdk.configuration.FaceCaptureConfiguration
+import com.regula.facesdk.configuration.LivenessConfiguration
 import com.regula.facesdk.enums.eInputFaceType
+import com.regula.facesdk.results.FaceCaptureResponse
 import com.regula.facesdk.results.LivenessResponse
 import com.regula.facesdk.results.MatchFacesResponse
 import com.regula.facesdk.structs.Image
@@ -108,10 +111,12 @@ class MainActivity : Activity() {
     }
 
     private fun startFaceCaptureActivity(imageView: ImageView?) {
-        FaceReaderService.Instance().getFaceFromCamera(this@MainActivity) { i: Int, image: Image?, s: String? ->
-            if (image != null) {
-                imageView!!.setImageBitmap(image.bitmap)
-                imageView.tag = eInputFaceType.ift_Live
+        val configuration = FaceCaptureConfiguration.Builder().setCameraSwitchEnabled(true).build()
+
+        Face.Instance().presentFaceCaptureActivity(this@MainActivity, configuration) { faceCaptureResponse: FaceCaptureResponse? ->
+            if (faceCaptureResponse?.image != null) {
+                imageView!!.setImageBitmap(faceCaptureResponse.image.bitmap)
+                imageView!!.tag = eInputFaceType.ift_Live
             }
         }
     }
@@ -147,8 +152,8 @@ class MainActivity : Activity() {
         secondImage.imageType = (imageView2!!.tag as Int)
         matchRequest.images.add(secondImage)
 
-        FaceReaderService.Instance().matchFaces(matchRequest) { i: Int, matchFacesResponse: MatchFacesResponse?, s: String? ->
-            if (matchFacesResponse?.matchedFaces != null) {
+        Face.Instance().matchFaces(matchRequest) { matchFacesResponse: MatchFacesResponse? ->
+            if (matchFacesResponse?.matchedFaces != null && matchFacesResponse.matchedFaces.size > 0) {
                 val similarity = matchFacesResponse.matchedFaces[0].similarity
                 textViewSimilarity!!.text = "Similarity: " + String.format("%.2f", similarity * 100) + "%"
             } else {
@@ -162,7 +167,9 @@ class MainActivity : Activity() {
     }
 
     private fun startLiveness() {
-        FaceReaderService.Instance().startLivenessMatching(this@MainActivity) { livenessResponse: LivenessResponse? ->
+        val configuration = LivenessConfiguration.Builder().setCameraSwitchEnabled(true).build()
+
+        Face.Instance().startLiveness(this@MainActivity, configuration) { livenessResponse: LivenessResponse? ->
             if (livenessResponse != null && livenessResponse.bitmap != null) {
                 imageView1!!.setImageBitmap(livenessResponse.bitmap)
                 imageView1!!.tag = eInputFaceType.ift_Live

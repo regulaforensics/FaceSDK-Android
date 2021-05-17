@@ -7,8 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,7 +14,9 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.regula.facesdk.FaceReaderService;
+import com.regula.facesdk.Face;
+import com.regula.facesdk.configuration.FaceCaptureConfiguration;
+import com.regula.facesdk.configuration.LivenessConfiguration;
 import com.regula.facesdk.enums.eInputFaceType;
 import com.regula.facesdk.structs.Image;
 import com.regula.facesdk.structs.MatchFacesRequest;
@@ -121,9 +121,11 @@ public class MainActivity extends Activity {
     }
 
     private void startFaceCaptureActivity(ImageView imageView) {
-        FaceReaderService.Instance().getFaceFromCamera(MainActivity.this, (i, image, s) -> {
-            if (image != null) {
-                imageView.setImageBitmap(image.getBitmap());
+        FaceCaptureConfiguration configuration = new FaceCaptureConfiguration.Builder().setCameraSwitchEnabled(true).build();
+
+        Face.Instance().presentFaceCaptureActivity(MainActivity.this, configuration, faceCaptureResponse -> {
+            if (faceCaptureResponse != null && faceCaptureResponse.image != null) {
+                imageView.setImageBitmap(faceCaptureResponse.image.getBitmap());
                 imageView.setTag(eInputFaceType.ift_Live);
             }
         });
@@ -161,8 +163,8 @@ public class MainActivity extends Activity {
         secondImage.imageType = (Integer) imageView2.getTag();
         matchRequest.images.add(secondImage);
 
-        FaceReaderService.Instance().matchFaces(matchRequest, (i, matchFacesResponse, s) -> {
-            if (matchFacesResponse != null && matchFacesResponse.matchedFaces != null) {
+        Face.Instance().matchFaces(matchRequest, matchFacesResponse -> {
+            if (matchFacesResponse != null && matchFacesResponse.matchedFaces != null && matchFacesResponse.matchedFaces.size() > 0) {
                 double similarity = matchFacesResponse.matchedFaces.get(0).similarity;
                 textViewSimilarity.setText("Similarity: " + String.format("%.2f", similarity * 100) + "%");
             } else {
@@ -176,7 +178,9 @@ public class MainActivity extends Activity {
     }
 
     private void startLiveness() {
-        FaceReaderService.Instance().startLivenessMatching(MainActivity.this, livenessResponse -> {
+        LivenessConfiguration configuration = new LivenessConfiguration.Builder().setCameraSwitchEnabled(true).build();
+
+        Face.Instance().startLiveness(MainActivity.this, configuration, livenessResponse -> {
             if (livenessResponse != null && livenessResponse.getBitmap() != null) {
                 imageView1.setImageBitmap(livenessResponse.getBitmap());
                 imageView1.setTag(eInputFaceType.ift_Live);

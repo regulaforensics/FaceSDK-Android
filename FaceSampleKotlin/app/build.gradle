@@ -55,7 +55,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation ('com.regula.documentreader:facesdk:5.4.599@aar'){
+    implementation ('com.regula.face:api:5.4.910@aar'){
         transitive = true
     }
 }
