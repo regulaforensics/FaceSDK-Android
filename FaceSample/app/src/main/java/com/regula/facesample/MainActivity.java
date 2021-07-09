@@ -14,12 +14,16 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.regula.facesdk.Face;
+import com.regula.facesdk.FaceSDK;
 import com.regula.facesdk.configuration.FaceCaptureConfiguration;
 import com.regula.facesdk.configuration.LivenessConfiguration;
-import com.regula.facesdk.enums.eInputFaceType;
-import com.regula.facesdk.structs.Image;
-import com.regula.facesdk.structs.MatchFacesRequest;
+import com.regula.facesdk.enums.ImageType;
+import com.regula.facesdk.enums.LivenessStatus;
+import com.regula.facesdk.model.Image;
+import com.regula.facesdk.request.MatchFacesRequest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity {
 
@@ -123,10 +127,10 @@ public class MainActivity extends Activity {
     private void startFaceCaptureActivity(ImageView imageView) {
         FaceCaptureConfiguration configuration = new FaceCaptureConfiguration.Builder().setCameraSwitchEnabled(true).build();
 
-        Face.Instance().presentFaceCaptureActivity(MainActivity.this, configuration, faceCaptureResponse -> {
-            if (faceCaptureResponse != null && faceCaptureResponse.image != null) {
-                imageView.setImageBitmap(faceCaptureResponse.image.getBitmap());
-                imageView.setTag(eInputFaceType.ift_Live);
+        FaceSDK.Instance().presentFaceCaptureActivity(MainActivity.this, configuration, faceCaptureResponse -> {
+            if (faceCaptureResponse != null && faceCaptureResponse.getImage() != null) {
+                imageView.setImageBitmap(faceCaptureResponse.getImage().getBitmap());
+                imageView.setTag(ImageType.IMAGE_TYPE_LIVE);
             }
         });
     }
@@ -138,34 +142,27 @@ public class MainActivity extends Activity {
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_1){
             imageUri = data.getData();
             imageView1.setImageURI(imageUri);
-            imageView1.setTag(eInputFaceType.ift_DocumentPrinted);
+            imageView1.setTag(ImageType.IMAGE_TYPE_PRINTED);
             textViewSimilarity.setText("Similarity: null");
         }
 
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_2){
             imageUri = data.getData();
             imageView2.setImageURI(imageUri);
-            imageView2.setTag(eInputFaceType.ift_DocumentPrinted);
+            imageView2.setTag(ImageType.IMAGE_TYPE_PRINTED);
             textViewSimilarity.setText("Similarity: null");
         }
     }
 
     private void matchFaces(Bitmap first, Bitmap second) {
-        MatchFacesRequest matchRequest = new MatchFacesRequest();
+        List<Image> imageList = new ArrayList<>();
+        imageList.add(new Image((Integer) imageView1.getTag(), first));
+        imageList.add(new Image((Integer) imageView2.getTag(), second));
+        MatchFacesRequest matchRequest = new MatchFacesRequest(imageList);
 
-        Image firstImage = new Image();
-        firstImage.setImage(first);
-        firstImage.imageType = (Integer) imageView1.getTag();
-        matchRequest.images.add(firstImage);
-
-        Image secondImage = new Image();
-        secondImage.setImage(second);
-        secondImage.imageType = (Integer) imageView2.getTag();
-        matchRequest.images.add(secondImage);
-
-        Face.Instance().matchFaces(matchRequest, matchFacesResponse -> {
-            if (matchFacesResponse != null && matchFacesResponse.matchedFaces != null && matchFacesResponse.matchedFaces.size() > 0) {
-                double similarity = matchFacesResponse.matchedFaces.get(0).similarity;
+        FaceSDK.Instance().matchFaces(matchRequest, matchFacesResponse -> {
+            if (matchFacesResponse.getMatchedFaces().size() > 0) {
+                double similarity = matchFacesResponse.getMatchedFaces().get(0).getSimilarity();
                 textViewSimilarity.setText("Similarity: " + String.format("%.2f", similarity * 100) + "%");
             } else {
                 textViewSimilarity.setText("Similarity: null");
@@ -180,12 +177,12 @@ public class MainActivity extends Activity {
     private void startLiveness() {
         LivenessConfiguration configuration = new LivenessConfiguration.Builder().setCameraSwitchEnabled(true).build();
 
-        Face.Instance().startLiveness(MainActivity.this, configuration, livenessResponse -> {
-            if (livenessResponse != null && livenessResponse.getBitmap() != null) {
+        FaceSDK.Instance().startLiveness(MainActivity.this, configuration, livenessResponse -> {
+            if (livenessResponse.getBitmap() != null) {
                 imageView1.setImageBitmap(livenessResponse.getBitmap());
-                imageView1.setTag(eInputFaceType.ift_Live);
+                imageView1.setTag(ImageType.IMAGE_TYPE_LIVE);
 
-                if (livenessResponse.liveness == 0) {
+                if (livenessResponse.getLiveness() == LivenessStatus.PASSED) {
                     textViewLiveness.setText("Liveness: passed");
                 } else {
                     textViewLiveness.setText("Liveness: unknown");
