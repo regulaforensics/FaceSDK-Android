@@ -91,7 +91,8 @@ public class MainActivity extends Activity {
         });
     }
 
-    @SuppressLint("ResourceType")
+
+    @SuppressLint("NonConstantResourceId")
     private void showMenu(ImageView imageView, int i) {
         PopupMenu popupMenu = new PopupMenu(MainActivity.this, imageView);
         popupMenu.setOnMenuItemClickListener(menuItem -> {
@@ -106,7 +107,7 @@ public class MainActivity extends Activity {
                     return false;
             }
         });
-        popupMenu.getMenuInflater().inflate(R.layout.menu, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.menu, popupMenu.getMenu());
 
         popupMenu.show();
     }
@@ -114,9 +115,7 @@ public class MainActivity extends Activity {
     private Bitmap getImageBitmap(ImageView imageView) {
         imageView.invalidate();
         BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
-
-        return bitmap;
+        return drawable.getBitmap();
     }
 
     private void openGallery(int id) {
@@ -128,10 +127,11 @@ public class MainActivity extends Activity {
         FaceCaptureConfiguration configuration = new FaceCaptureConfiguration.Builder().setCameraSwitchEnabled(true).build();
 
         FaceSDK.Instance().presentFaceCaptureActivity(MainActivity.this, configuration, faceCaptureResponse -> {
-            if (faceCaptureResponse != null && faceCaptureResponse.getImage() != null) {
-                imageView.setImageBitmap(faceCaptureResponse.getImage().getBitmap());
-                imageView.setTag(ImageType.IMAGE_TYPE_LIVE);
-            }
+            if (faceCaptureResponse.getImage() == null)
+                return;
+
+            imageView.setImageBitmap(faceCaptureResponse.getImage().getBitmap());
+            imageView.setTag(ImageType.IMAGE_TYPE_LIVE);
         });
     }
 
@@ -139,19 +139,24 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_1){
-            imageUri = data.getData();
-            imageView1.setImageURI(imageUri);
-            imageView1.setTag(ImageType.IMAGE_TYPE_PRINTED);
-            textViewSimilarity.setText("Similarity: null");
-        }
+        if (resultCode != RESULT_OK)
+            return;
 
-        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_2){
-            imageUri = data.getData();
-            imageView2.setImageURI(imageUri);
-            imageView2.setTag(ImageType.IMAGE_TYPE_PRINTED);
-            textViewSimilarity.setText("Similarity: null");
-        }
+        imageUri = data.getData();
+        textViewSimilarity.setText("Similarity: null");
+
+        ImageView imageView = null;
+
+        if (requestCode == PICK_IMAGE_1)
+            imageView = imageView1;
+        else if (requestCode == PICK_IMAGE_2)
+            imageView = imageView2;
+
+        if (imageView == null)
+            return;
+
+        imageView.setImageURI(imageUri);
+        imageView.setTag(ImageType.IMAGE_TYPE_PRINTED);
     }
 
     private void matchFaces(Bitmap first, Bitmap second) {

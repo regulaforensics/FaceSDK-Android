@@ -1,6 +1,5 @@
 package com.regula.facesamplekotlin
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -11,27 +10,28 @@ import android.provider.MediaStore
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
-import com.regula.facesdk.Face
+import com.regula.facesdk.FaceSDK
 import com.regula.facesdk.configuration.FaceCaptureConfiguration
 import com.regula.facesdk.configuration.LivenessConfiguration
-import com.regula.facesdk.enums.eInputFaceType
-import com.regula.facesdk.results.FaceCaptureResponse
-import com.regula.facesdk.results.LivenessResponse
-import com.regula.facesdk.results.MatchFacesResponse
-import com.regula.facesdk.structs.Image
-import com.regula.facesdk.structs.MatchFacesRequest
+import com.regula.facesdk.enums.ImageType
+import com.regula.facesdk.enums.LivenessStatus
+import com.regula.facesdk.model.Image
+import com.regula.facesdk.model.results.FaceCaptureResponse
+import com.regula.facesdk.model.results.LivenessResponse
+import com.regula.facesdk.model.results.MatchFacesResponse
+import com.regula.facesdk.request.MatchFacesRequest
 
 
 class MainActivity : Activity() {
-    private var imageView1: ImageView? = null
-    private var imageView2: ImageView? = null
+    private lateinit var imageView1: ImageView
+    private lateinit var imageView2: ImageView
 
-    private var buttonMatch: Button? = null
-    private var buttonLiveness: Button? = null
-    private var buttonClear: Button? = null
+    private lateinit var buttonMatch: Button
+    private lateinit var buttonLiveness: Button
+    private lateinit var buttonClear: Button
 
-    private var textViewSimilarity: TextView? = null
-    private var textViewLiveness: TextView? = null
+    private lateinit var textViewSimilarity: TextView
+    private lateinit var textViewLiveness: TextView
 
     private var imageUri: Uri? = null
 
@@ -40,10 +40,10 @@ class MainActivity : Activity() {
         setContentView(R.layout.activity_main)
 
         imageView1 = findViewById(R.id.imageView1)
-        imageView1!!.layoutParams.height = 400
+        imageView1.layoutParams.height = 400
 
         imageView2 = findViewById(R.id.imageView2)
-        imageView2!!.layoutParams.height = 400
+        imageView2.layoutParams.height = 400
 
         buttonMatch = findViewById(R.id.buttonMatch)
         buttonLiveness = findViewById(R.id.buttonLiveness)
@@ -52,33 +52,36 @@ class MainActivity : Activity() {
         textViewSimilarity = findViewById(R.id.textViewSimilarity)
         textViewLiveness = findViewById(R.id.textViewLiveness)
 
-        imageView1!!.setOnClickListener { v: View? -> showMenu(imageView1, PICK_IMAGE_1) }
-        imageView2!!.setOnClickListener { v: View? -> showMenu(imageView2, PICK_IMAGE_2) }
+        imageView1.setOnClickListener { showMenu(imageView1, PICK_IMAGE_1) }
+        imageView2.setOnClickListener { showMenu(imageView2, PICK_IMAGE_2) }
 
-        buttonMatch!!.setOnClickListener(View.OnClickListener { v: View? ->
-            if (imageView1!!.drawable != null && imageView2!!.drawable != null) {
-                textViewSimilarity!!.text = "Processing..."
+        buttonMatch.setOnClickListener { _: View? ->
+            if (imageView1.drawable != null && imageView2.drawable != null) {
+                textViewSimilarity.text = "Processing..."
 
                 matchFaces(getImageBitmap(imageView1), getImageBitmap(imageView2))
-                buttonMatch!!.isEnabled = false
-                buttonLiveness!!.isEnabled = false
-                buttonClear!!.isEnabled = false
+                buttonMatch.isEnabled = false
+                buttonLiveness.isEnabled = false
+                buttonClear.isEnabled = false
             } else {
-                Toast.makeText(this@MainActivity, "Having both images are compulsory", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@MainActivity,
+                    "Having both images are compulsory",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-        })
+        }
 
-        buttonLiveness!!.setOnClickListener(View.OnClickListener { v: View? -> startLiveness() })
+        buttonLiveness.setOnClickListener { startLiveness() }
 
-        buttonClear!!.setOnClickListener(View.OnClickListener { v: View? ->
-            imageView1!!.setImageDrawable(null)
-            imageView2!!.setImageDrawable(null)
-            textViewSimilarity!!.text = "Similarity: null"
-            textViewLiveness!!.text = "Liveness: null"
-        })
+        buttonClear.setOnClickListener {
+            imageView1.setImageDrawable(null)
+            imageView2.setImageDrawable(null)
+            textViewSimilarity.text = "Similarity: null"
+            textViewLiveness.text = "Liveness: null"
+        }
     }
 
-    @SuppressLint("ResourceType")
     private fun showMenu(imageView: ImageView?, i: Int) {
         val popupMenu = PopupMenu(this@MainActivity, imageView)
         popupMenu.setOnMenuItemClickListener { menuItem: MenuItem ->
@@ -94,13 +97,13 @@ class MainActivity : Activity() {
                 else -> return@setOnMenuItemClickListener false
             }
         }
-        popupMenu.menuInflater.inflate(R.layout.menu, popupMenu.menu)
+        popupMenu.menuInflater.inflate(R.menu.menu, popupMenu.menu)
         popupMenu.show()
     }
 
     private fun getImageBitmap(imageView: ImageView?): Bitmap {
-        imageView!!.invalidate()
-        val drawable = imageView.drawable as BitmapDrawable
+        imageView?.invalidate()
+        val drawable = imageView?.drawable as BitmapDrawable
 
         return drawable.bitmap
     }
@@ -113,10 +116,10 @@ class MainActivity : Activity() {
     private fun startFaceCaptureActivity(imageView: ImageView?) {
         val configuration = FaceCaptureConfiguration.Builder().setCameraSwitchEnabled(true).build()
 
-        Face.Instance().presentFaceCaptureActivity(this@MainActivity, configuration) { faceCaptureResponse: FaceCaptureResponse? ->
+        FaceSDK.Instance().presentFaceCaptureActivity(this@MainActivity, configuration) { faceCaptureResponse: FaceCaptureResponse? ->
             if (faceCaptureResponse?.image != null) {
                 imageView!!.setImageBitmap(faceCaptureResponse.image.bitmap)
-                imageView!!.tag = eInputFaceType.ift_Live
+                imageView.tag = ImageType.IMAGE_TYPE_LIVE
             }
         }
     }
@@ -124,66 +127,58 @@ class MainActivity : Activity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_1) {
-            imageUri = data.data
-            imageView1!!.setImageURI(imageUri)
-            imageView1!!.tag = eInputFaceType.ift_DocumentPrinted
-            textViewSimilarity!!.text = "Similarity: null"
-        }
+        if (resultCode != RESULT_OK)
+            return
 
-        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_2) {
-            imageUri = data.data
-            imageView2!!.setImageURI(imageUri)
-            imageView2!!.tag = eInputFaceType.ift_DocumentPrinted
-            textViewSimilarity!!.text = "Similarity: null"
-        }
+        imageUri = data.data
+        textViewSimilarity.text = "Similarity: null"
+
+        var imageView: ImageView? = null
+        if (requestCode == PICK_IMAGE_1)
+            imageView = imageView1;
+        else if (requestCode == PICK_IMAGE_2)
+            imageView = imageView2;
+
+        imageView?.setImageURI(imageUri)
+        imageView?.tag = ImageType.IMAGE_TYPE_PRINTED
     }
 
     private fun matchFaces(first: Bitmap, second: Bitmap) {
-        val matchRequest = MatchFacesRequest()
+        val firstImage = Image(imageView1.tag as Int, first)
+        val secondImage = Image(imageView2.tag as Int, second)
 
-        val firstImage = Image()
-        firstImage.setImage(first)
-        firstImage.imageType = (imageView1!!.tag as Int)
-        matchRequest.images.add(firstImage)
-
-        val secondImage = Image()
-        secondImage.setImage(second)
-        secondImage.imageType = (imageView2!!.tag as Int)
-        matchRequest.images.add(secondImage)
-
-        Face.Instance().matchFaces(matchRequest) { matchFacesResponse: MatchFacesResponse? ->
+        FaceSDK.Instance().matchFaces(MatchFacesRequest(arrayListOf(firstImage, secondImage))) { matchFacesResponse: MatchFacesResponse? ->
             if (matchFacesResponse?.matchedFaces != null && matchFacesResponse.matchedFaces.size > 0) {
                 val similarity = matchFacesResponse.matchedFaces[0].similarity
-                textViewSimilarity!!.text = "Similarity: " + String.format("%.2f", similarity * 100) + "%"
+                textViewSimilarity.text = "Similarity: " + String.format("%.2f", similarity * 100) + "%"
             } else {
-                textViewSimilarity!!.text = "Similarity: null"
+                textViewSimilarity.text = "Similarity: null"
             }
 
-            buttonMatch!!.isEnabled = true
-            buttonLiveness!!.isEnabled = true
-            buttonClear!!.isEnabled = true
+            buttonMatch.isEnabled = true
+            buttonLiveness.isEnabled = true
+            buttonClear.isEnabled = true
         }
     }
 
     private fun startLiveness() {
         val configuration = LivenessConfiguration.Builder().setCameraSwitchEnabled(true).build()
 
-        Face.Instance().startLiveness(this@MainActivity, configuration) { livenessResponse: LivenessResponse? ->
+        FaceSDK.Instance().startLiveness(this@MainActivity, configuration) { livenessResponse: LivenessResponse? ->
             if (livenessResponse != null && livenessResponse.bitmap != null) {
-                imageView1!!.setImageBitmap(livenessResponse.bitmap)
-                imageView1!!.tag = eInputFaceType.ift_Live
+                imageView1.setImageBitmap(livenessResponse.bitmap)
+                imageView1.tag = ImageType.IMAGE_TYPE_LIVE
 
-                if (livenessResponse.liveness == 0) {
-                    textViewLiveness!!.text = "Liveness: passed"
+                if (livenessResponse.liveness == LivenessStatus.PASSED) {
+                    textViewLiveness.text = "Liveness: passed"
                 } else {
-                    textViewLiveness!!.text = "Liveness: unknown"
+                    textViewLiveness.text = "Liveness: unknown"
                 }
             } else {
-                textViewLiveness!!.text = "Liveness: null"
+                textViewLiveness.text = "Liveness: null"
             }
 
-            textViewSimilarity!!.text = "Similarity: null"
+            textViewSimilarity.text = "Similarity: null"
         }
     }
 
