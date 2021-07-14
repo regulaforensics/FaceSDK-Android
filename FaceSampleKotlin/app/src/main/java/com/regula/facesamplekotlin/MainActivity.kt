@@ -55,7 +55,7 @@ class MainActivity : Activity() {
         imageView1.setOnClickListener { showMenu(imageView1, PICK_IMAGE_1) }
         imageView2.setOnClickListener { showMenu(imageView2, PICK_IMAGE_2) }
 
-        buttonMatch.setOnClickListener { _: View? ->
+        buttonMatch.setOnClickListener {
             if (imageView1.drawable != null && imageView2.drawable != null) {
                 textViewSimilarity.text = "Processing..."
 
@@ -147,8 +147,8 @@ class MainActivity : Activity() {
         val firstImage = Image(imageView1.tag as Int, first)
         val secondImage = Image(imageView2.tag as Int, second)
 
-        FaceSDK.Instance().matchFaces(MatchFacesRequest(arrayListOf(firstImage, secondImage))) { matchFacesResponse: MatchFacesResponse? ->
-            if (matchFacesResponse?.matchedFaces != null && matchFacesResponse.matchedFaces.size > 0) {
+        FaceSDK.Instance().matchFaces(MatchFacesRequest(arrayListOf(firstImage, secondImage))) { matchFacesResponse: MatchFacesResponse ->
+            if (matchFacesResponse.matchedFaces.size > 0) {
                 val similarity = matchFacesResponse.matchedFaces[0].similarity
                 textViewSimilarity.text = "Similarity: " + String.format("%.2f", similarity * 100) + "%"
             } else {
@@ -164,8 +164,8 @@ class MainActivity : Activity() {
     private fun startLiveness() {
         val configuration = LivenessConfiguration.Builder().setCameraSwitchEnabled(true).build()
 
-        FaceSDK.Instance().startLiveness(this@MainActivity, configuration) { livenessResponse: LivenessResponse? ->
-            if (livenessResponse != null && livenessResponse.bitmap != null) {
+        FaceSDK.Instance().startLiveness(this@MainActivity, configuration) { livenessResponse: LivenessResponse ->
+            if (livenessResponse.bitmap != null) {
                 imageView1.setImageBitmap(livenessResponse.bitmap)
                 imageView1.tag = ImageType.IMAGE_TYPE_LIVE
 
