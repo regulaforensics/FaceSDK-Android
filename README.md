@@ -11,7 +11,7 @@ Face SDK is a framework that is used for face matching, recognition, and livenes
 2. Open the project and run it.
 
 ## Documentation
-You can find documentation on API [here](https://docs.regulaforensics.com/android-face).
+You can find documentation on API [here](https://docs.regulaforensics.com/face-sdk).
 
 ## Additional information
-If you have any technical questions, feel free to [contact](mailto:android.support@regulaforensics.com) us or create issues [here](https://github.com/regulaforensics/FaceSDK-Android/issues).
+If you have any technical questions, feel free to [contact](mailto:support@regulaforensics.com) us or create issues [here](https://github.com/regulaforensics/FaceSDK-Android/issues).

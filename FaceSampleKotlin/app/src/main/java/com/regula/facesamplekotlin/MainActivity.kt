@@ -118,7 +118,7 @@ class MainActivity : Activity() {
 
         FaceSDK.Instance().presentFaceCaptureActivity(this@MainActivity, configuration) { faceCaptureResponse: FaceCaptureResponse? ->
             if (faceCaptureResponse?.image != null) {
-                imageView!!.setImageBitmap(faceCaptureResponse.image.bitmap)
+                imageView!!.setImageBitmap(faceCaptureResponse.image!!.bitmap)
                 imageView.tag = ImageType.IMAGE_TYPE_LIVE
             }
         }
