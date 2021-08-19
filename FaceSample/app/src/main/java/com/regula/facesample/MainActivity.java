@@ -180,7 +180,10 @@ public class MainActivity extends Activity {
     }
 
     private void startLiveness() {
-        LivenessConfiguration configuration = new LivenessConfiguration.Builder().setCameraSwitchEnabled(true).build();
+        LivenessConfiguration configuration = new LivenessConfiguration.Builder()
+                .setCameraSwitchEnabled(true)
+                .setUiFragmentClass(CustomUiFragment.class)
+                .build();
 
         FaceSDK.Instance().startLiveness(MainActivity.this, configuration, livenessResponse -> {
             if (livenessResponse.getBitmap() != null) {

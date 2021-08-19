@@ -16,6 +16,9 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url "http://maven.regulaforensics.com/RegulaDocumentReader"
+        }
     }
 }
 
