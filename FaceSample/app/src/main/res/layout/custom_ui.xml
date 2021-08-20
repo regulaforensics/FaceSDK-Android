@@ -19,6 +19,7 @@
         android:background="@drawable/hind_view_background"
         android:textAlignment="center"
         android:textSize="30sp"
+        android:textStyle="bold"
         android:textColor="@android:color/holo_blue_dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

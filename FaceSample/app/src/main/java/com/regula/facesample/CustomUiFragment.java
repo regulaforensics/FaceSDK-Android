@@ -15,23 +15,13 @@ public class CustomUiFragment extends FaceUiFragment {
     }
 
     @Override
-    protected int getLightButtonId() {
+    protected int getFlashLightButtonId() {
         return 0;
     }
 
     @Override
     protected int getNotificationTextViewId() {
         return R.id.notificationView;
-    }
-
-    @Override
-    protected int getLightButtonOnDrawableId() {
-        return 0;
-    }
-
-    @Override
-    protected int getLightButtonOffDrawableId() {
-        return 0;
     }
 
     @Override
