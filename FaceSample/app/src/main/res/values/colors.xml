@@ -8,4 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#DDDDDE</color>
+
+    <!-- Custom colors for overlay-->
+    <color name="faceOverlayBackgroundDark">#A605424C</color>
+    <color name="faceOverlayBackgroundWhite">#F0C0C0C0</color>
+    <color name="faceOverlayBorderDefault">#E8F0ED</color>
+    <color name="faceOverlayBorderActive">#65C0A4</color>
 </resources>

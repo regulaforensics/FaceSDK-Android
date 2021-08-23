@@ -1,5 +1,6 @@
-package com.regula.facesample;
+package com.regula.facesample.items.customization.fragment;
 
+import com.regula.facesample.R;
 import com.regula.facesdk.fragment.FaceUiFragment;
 
 /**
@@ -7,7 +8,7 @@ import com.regula.facesdk.fragment.FaceUiFragment;
  * Copyright (c) 2021 Regula. All rights reserved.
  */
 
-public class CustomUiFragment extends FaceUiFragment {
+public class LivenessHintViewAppearanceFragment extends FaceUiFragment {
 
     @Override
     protected int getSwapCameraButtonId() {
@@ -26,7 +27,7 @@ public class CustomUiFragment extends FaceUiFragment {
 
     @Override
     protected int getResourceLayoutId() {
-        return R.layout.custom_ui;
+        return R.layout.custom_hint_view_appearance;
     }
 
     @Override

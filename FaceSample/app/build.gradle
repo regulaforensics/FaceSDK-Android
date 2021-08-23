@@ -37,7 +37,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation ('com.regula.face:api:5.4.1266@aar'){
+    implementation ('com.regula.face:api:5.4.1278@aar'){
         transitive = true
     }
 }
