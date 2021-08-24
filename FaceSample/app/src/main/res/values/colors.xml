@@ -9,9 +9,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#DDDDDE</color>
 
-    <!-- Custom colors for overlay-->
-    <color name="faceOverlayBackgroundDark">#A605424C</color>
-    <color name="faceOverlayBackgroundWhite">#F0C0C0C0</color>
-    <color name="faceOverlayBorderDefault">#E8F0ED</color>
-    <color name="faceOverlayBorderActive">#65C0A4</color>
+    <!-- Custom colors for overlay -->
+    <!--<color name="reg_face_overlay_background_dark">#A605424C</color>
+    <color name="reg_face_overlay_background_white">#F0C0C0C0</color>
+    <color name="reg_face_overlay_border_default">#E8F0ED</color>
+    <color name="reg_face_overlay_border_active">#65C0A4</color>-->
 </resources>

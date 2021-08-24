@@ -16,7 +16,7 @@ public class LivenessHintAnimationItem extends CategoryItem {
     @Override
     public void onItemSelected(Context context) {
         LivenessConfiguration configuration = new LivenessConfiguration.Builder()
-                .setShowHelpTextAnimation(true)
+                .setShowHelpTextAnimation(false)
                 .build();
         FaceSDK.Instance().startLiveness(context, configuration, livenessResponse -> {});
     }

@@ -12,7 +12,7 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.15" />
 
-    <com.regula.facesdk.view.HintView
+    <TextView
         android:id="@+id/notificationView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,14 +25,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/notificationGuideline" />
 
-    <ImageButton
+    <Button
         android:id="@+id/closeButton"
-        android:layout_width="@dimen/reg_img_button_size"
-        android:layout_height="@dimen/reg_img_button_size"
-        android:background="@android:color/transparent"
-        android:scaleType="centerInside"
-        android:src="@drawable/close_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:padding="@dimen/reg_small_img_button_padding"
+        android:textColor="@android:color/white"
+        android:text="Close"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 

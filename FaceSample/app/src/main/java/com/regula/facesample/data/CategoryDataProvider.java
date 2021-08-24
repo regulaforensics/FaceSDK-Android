@@ -4,13 +4,15 @@ import com.regula.facesample.items.CategoryItem;
 import com.regula.facesample.items.basic.FaceCaptureDefaultItem;
 import com.regula.facesample.items.basic.LivenessDefaultItem;
 import com.regula.facesample.items.basic.MatchFacesRequestItem;
-import com.regula.facesample.items.customization.LivenessHintViewAppearanceItem;
-import com.regula.facesample.items.customization.LivenessToolbarAppearanceItem;
+import com.regula.facesample.items.customization.BasicCustomItem;
+import com.regula.facesample.items.customization.AdvancedCustomItem;
+import com.regula.facesample.items.customization.OverlayCustomItem;
 import com.regula.facesample.items.features.FaceCaptureCameraPositionItem;
 import com.regula.facesample.items.features.FaceCaptureHintAnimationItem;
 import com.regula.facesample.items.features.LivenessAttemptsCountItem;
 import com.regula.facesample.items.features.LivenessCameraSwitchItem;
 import com.regula.facesample.items.features.LivenessHintAnimationItem;
+import com.regula.facesample.items.other.LocalizationItem;
 import com.regula.facesample.items.other.URLRequestInterceptorItem;
 
 import java.util.ArrayList;
@@ -34,8 +36,10 @@ public class CategoryDataProvider {
                 new LivenessHintAnimationItem(),
                 new FaceCaptureCameraPositionItem(),
                 new FaceCaptureHintAnimationItem(),
-                new LivenessHintViewAppearanceItem(),
-                new LivenessToolbarAppearanceItem(),
+                new BasicCustomItem(),
+                new AdvancedCustomItem(),
+                new OverlayCustomItem(),
+                new LocalizationItem(),
                 new URLRequestInterceptorItem()
         ));
     }

@@ -16,7 +16,7 @@ public class FaceCaptureHintAnimationItem extends CategoryItem {
     @Override
     public void onItemSelected(Context context) {
         FaceCaptureConfiguration configuration = new FaceCaptureConfiguration.Builder()
-                .setShowHelpTextAnimation(true)
+                .setShowHelpTextAnimation(false)
                 .build();
         FaceSDK.Instance().presentFaceCaptureActivity(context, configuration, faceCaptureResponse -> { });
     }

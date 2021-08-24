@@ -2,5 +2,5 @@
     <string name="app_name">FaceSample</string>
 
     <!-- Custom text statuses -->
-    <string name="hint.fit">Fit your face in the oval (custom)</string>
+<!--    <string name="hint.fit">Fit your face in the oval (custom)</string>-->
 </resources>

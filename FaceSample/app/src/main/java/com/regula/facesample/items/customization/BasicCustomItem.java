@@ -3,7 +3,7 @@ package com.regula.facesample.items.customization;
 import android.content.Context;
 
 import com.regula.facesample.items.CategoryItem;
-import com.regula.facesample.items.customization.fragment.LivenessToolbarAppearanceFragment;
+import com.regula.facesample.items.customization.fragment.BasicCustomUiFragment;
 import com.regula.facesdk.FaceSDK;
 import com.regula.facesdk.configuration.LivenessConfiguration;
 
@@ -12,24 +12,23 @@ import com.regula.facesdk.configuration.LivenessConfiguration;
  * Copyright (c) 2021 Regula. All rights reserved.
  */
 
-public class LivenessToolbarAppearanceItem extends CategoryItem {
+public class BasicCustomItem extends CategoryItem {
 
     @Override
     public void onItemSelected(Context context) {
         LivenessConfiguration configuration = new LivenessConfiguration.Builder()
-                .setCameraSwitchEnabled(true)
-                .setUiFragmentClass(LivenessToolbarAppearanceFragment.class)
+                .setUiFragmentClass(BasicCustomUiFragment.class)
                 .build();
         FaceSDK.Instance().startLiveness(context, configuration, livenessResponse -> {});
     }
 
     @Override
     public String getTitle() {
-        return "Liveness toolbar appearance";
+        return "Basic custom UI fragment";
     }
 
     @Override
     public String getDescription() {
-        return "Usage example for toolbar.";
+        return "Custom UI with basic functionality";
     }
 }
