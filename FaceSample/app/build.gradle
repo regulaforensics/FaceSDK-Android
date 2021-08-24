@@ -36,6 +36,7 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
 
     implementation ('com.regula.face:api:5.4.1287@aar'){
         transitive = true

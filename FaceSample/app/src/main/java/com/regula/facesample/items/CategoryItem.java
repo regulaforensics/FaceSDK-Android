@@ -7,8 +7,12 @@ import android.content.Context;
  * Copyright (c) 2021 Regula. All rights reserved.
  */
 
-public abstract class CategoryItem {
+public abstract class CategoryItem implements ICategoryItem {
     public abstract void onItemSelected(Context context);
-    public abstract String getTitle();
     public abstract String getDescription();
+
+    @Override
+    public boolean isHeader() {
+        return false;
+    }
 }

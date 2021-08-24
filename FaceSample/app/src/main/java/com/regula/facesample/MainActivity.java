@@ -6,6 +6,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.regula.facesample.adapter.CategoryAdapter;
 import com.regula.facesample.data.CategoryDataProvider;
 
@@ -18,14 +21,11 @@ public class MainActivity extends Activity {
 
         CategoryDataProvider dataProvider = new CategoryDataProvider();
 
-        ListView listView = findViewById(R.id.listView);
-        listView.setAdapter(new CategoryAdapter(this, dataProvider));
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                dataProvider.getCategoryItems().get(position).onItemSelected(MainActivity.this);
-            }
-        });
+        recyclerView.setAdapter(new CategoryAdapter(this, dataProvider));
     }
 }

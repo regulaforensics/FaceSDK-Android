@@ -1,6 +1,6 @@
 package com.regula.facesample.data;
 
-import com.regula.facesample.items.CategoryItem;
+import com.regula.facesample.items.ICategoryItem;
 import com.regula.facesample.items.basic.FaceCaptureDefaultItem;
 import com.regula.facesample.items.basic.LivenessDefaultItem;
 import com.regula.facesample.items.basic.MatchFacesRequestItem;
@@ -26,21 +26,53 @@ import java.util.List;
 
 public class CategoryDataProvider {
 
-    public List<CategoryItem> getCategoryItems() {
+    public List<ICategoryItem> getCategoryItems() {
         return new ArrayList<>(Arrays.asList(
+                new HeaderItem() {
+                    @Override
+                    public String getTitle() {
+                        return "Basic";
+                    }
+                },
                 new LivenessDefaultItem(),
                 new FaceCaptureDefaultItem(),
                 new MatchFacesRequestItem(),
+                new HeaderItem() {
+                    @Override
+                    public String getTitle() {
+                        return "Feature Customization";
+                    }
+                },
                 new LivenessCameraSwitchItem(),
                 new LivenessAttemptsCountItem(),
                 new LivenessHintAnimationItem(),
                 new FaceCaptureCameraPositionItem(),
                 new FaceCaptureHintAnimationItem(),
+                new HeaderItem() {
+                    @Override
+                    public String getTitle() {
+                        return "UI Customization";
+                    }
+                },
                 new BasicCustomItem(),
                 new AdvancedCustomItem(),
                 new OverlayCustomItem(),
+                new HeaderItem() {
+                    @Override
+                    public String getTitle() {
+                        return "Other";
+                    }
+                },
                 new LocalizationItem(),
                 new URLRequestInterceptorItem()
         ));
+    }
+
+    abstract class HeaderItem implements ICategoryItem {
+
+        @Override
+        public boolean isHeader() {
+            return true;
+        }
     }
 }

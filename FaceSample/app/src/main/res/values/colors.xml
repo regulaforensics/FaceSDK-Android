@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#DDDDDE</color>
+    <color name="dark_gray">#2a2a2a</color>
 
     <!-- Custom colors for overlay -->
     <!--<color name="reg_face_overlay_background_dark">#A605424C</color>
