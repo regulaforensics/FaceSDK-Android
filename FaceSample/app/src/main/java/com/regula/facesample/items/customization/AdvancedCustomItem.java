@@ -18,7 +18,7 @@ public class AdvancedCustomItem extends CategoryItem {
     public void onItemSelected(Context context) {
         LivenessConfiguration configuration = new LivenessConfiguration.Builder()
                 .setCameraSwitchEnabled(true)
-                .setUiFragmentClass(AdvancedCustomUiFragment.class)
+                .registerUiFragmentClass(AdvancedCustomUiFragment.class)
                 .build();
         FaceSDK.Instance().startLiveness(context, configuration, livenessResponse -> {});
     }

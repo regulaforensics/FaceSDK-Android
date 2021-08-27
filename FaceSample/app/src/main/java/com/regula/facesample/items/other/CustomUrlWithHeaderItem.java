@@ -11,7 +11,7 @@ import com.regula.facesdk.configuration.LivenessConfiguration;
  * Copyright (c) 2021 Regula. All rights reserved.
  */
 
-public class URLRequestInterceptorItem extends CategoryItem {
+public class CustomUrlWithHeaderItem extends CategoryItem {
 
     @Override
     public void onItemSelected(Context context) {

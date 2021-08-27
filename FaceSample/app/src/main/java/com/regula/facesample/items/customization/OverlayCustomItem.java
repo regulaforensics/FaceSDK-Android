@@ -20,7 +20,7 @@ public class OverlayCustomItem extends CategoryItem {
         // reg_face_overlay_background_white
         // reg_face_overlay_border_default
         // reg_face_overlay_border_active
-        FaceSDK.Instance().startLiveness(context, livenessResponse -> { });
+        FaceSDK.Instance().presentFaceCaptureActivity(context, faceCatureResponse -> { });
     }
 
     @Override

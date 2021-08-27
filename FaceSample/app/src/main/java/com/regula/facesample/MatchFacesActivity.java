@@ -14,7 +14,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.regula.facesample.items.customization.fragment.BasicCustomUiFragment;
 import com.regula.facesdk.FaceSDK;
 import com.regula.facesdk.configuration.FaceCaptureConfiguration;
 import com.regula.facesdk.configuration.LivenessConfiguration;
@@ -188,7 +187,6 @@ public class MatchFacesActivity extends Activity {
     private void startLiveness() {
         LivenessConfiguration configuration = new LivenessConfiguration.Builder()
                 .setCameraSwitchEnabled(true)
-                .setUiFragmentClass(BasicCustomUiFragment.class)
                 .build();
 
         FaceSDK.Instance().startLiveness(MatchFacesActivity.this, configuration, livenessResponse -> {

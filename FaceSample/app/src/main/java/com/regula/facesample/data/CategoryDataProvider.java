@@ -13,7 +13,7 @@ import com.regula.facesample.items.features.LivenessAttemptsCountItem;
 import com.regula.facesample.items.features.LivenessCameraSwitchItem;
 import com.regula.facesample.items.features.LivenessHintAnimationItem;
 import com.regula.facesample.items.other.LocalizationItem;
-import com.regula.facesample.items.other.URLRequestInterceptorItem;
+import com.regula.facesample.items.other.CustomUrlWithHeaderItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,7 +64,7 @@ public class CategoryDataProvider {
                     }
                 },
                 new LocalizationItem(),
-                new URLRequestInterceptorItem()
+                new CustomUrlWithHeaderItem()
         ));
     }
 

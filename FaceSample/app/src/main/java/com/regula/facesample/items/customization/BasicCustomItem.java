@@ -17,7 +17,7 @@ public class BasicCustomItem extends CategoryItem {
     @Override
     public void onItemSelected(Context context) {
         LivenessConfiguration configuration = new LivenessConfiguration.Builder()
-                .setUiFragmentClass(BasicCustomUiFragment.class)
+                .registerUiFragmentClass(BasicCustomUiFragment.class)
                 .build();
         FaceSDK.Instance().startLiveness(context, configuration, livenessResponse -> {});
     }
