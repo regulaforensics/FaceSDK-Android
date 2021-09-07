@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 
 import com.regula.facesample.R;
 import com.regula.facesdk.fragment.FaceUiFragment;
-import com.regula.facesdk.view.HintView;
+import com.regula.facesdk.view.NotificationTextView;
 
 /**
  * Created by Sergey Yakimchik on 23.08.21.
@@ -22,7 +22,7 @@ public class AdvancedCustomUiFragment extends FaceUiFragment {
     private ImageButton mSwapCameraBtn;
     private ImageButton mFlashLightBtn;
     private ImageButton mCloseBtn;
-    private HintView mHintView;
+    private NotificationTextView mNotificationTextView;
 
     @Override
     protected View getSwapCameraButton(@NonNull View v) {
@@ -38,8 +38,8 @@ public class AdvancedCustomUiFragment extends FaceUiFragment {
 
     @Override
     protected TextView getNotificationView(@NonNull View v) {
-        mHintView = v.findViewById(com.regula.facesdk.R.id.notificationTv);
-        return mHintView;
+        mNotificationTextView = v.findViewById(com.regula.facesdk.R.id.notificationTv);
+        return mNotificationTextView;
     }
 
     @Override

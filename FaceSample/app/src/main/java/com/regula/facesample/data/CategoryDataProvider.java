@@ -6,14 +6,21 @@ import com.regula.facesample.items.basic.LivenessDefaultItem;
 import com.regula.facesample.items.basic.MatchFacesRequestItem;
 import com.regula.facesample.items.customization.BasicCustomItem;
 import com.regula.facesample.items.customization.AdvancedCustomItem;
+import com.regula.facesample.items.customization.ButtonsColorItem;
+import com.regula.facesample.items.customization.FlashButtonItem;
+import com.regula.facesample.items.customization.HideCloseButtonItem;
+import com.regula.facesample.items.customization.HideNotificationViewItem;
+import com.regula.facesample.items.customization.NotificationViewItem;
+import com.regula.facesample.items.customization.NotificationViewPositionItem;
 import com.regula.facesample.items.customization.OverlayCustomItem;
+import com.regula.facesample.items.customization.SwapButtonItem;
 import com.regula.facesample.items.features.FaceCaptureCameraPositionItem;
 import com.regula.facesample.items.features.FaceCaptureHintAnimationItem;
 import com.regula.facesample.items.features.LivenessAttemptsCountItem;
 import com.regula.facesample.items.features.LivenessCameraSwitchItem;
 import com.regula.facesample.items.features.LivenessHintAnimationItem;
 import com.regula.facesample.items.other.LocalizationItem;
-import com.regula.facesample.items.other.CustomUrlWithHeaderItem;
+import com.regula.facesample.items.other.NetworkInterceptorItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,6 +61,13 @@ public class CategoryDataProvider {
                         return "UI Customization";
                     }
                 },
+                new HideCloseButtonItem(),
+                new HideNotificationViewItem(),
+                new NotificationViewItem(),
+                new ButtonsColorItem(),
+                new NotificationViewPositionItem(),
+                new FlashButtonItem(),
+                new SwapButtonItem(),
                 new BasicCustomItem(),
                 new AdvancedCustomItem(),
                 new OverlayCustomItem(),
@@ -64,11 +78,11 @@ public class CategoryDataProvider {
                     }
                 },
                 new LocalizationItem(),
-                new CustomUrlWithHeaderItem()
+                new NetworkInterceptorItem()
         ));
     }
 
-    abstract class HeaderItem implements ICategoryItem {
+    abstract static class HeaderItem implements ICategoryItem {
 
         @Override
         public boolean isHeader() {
