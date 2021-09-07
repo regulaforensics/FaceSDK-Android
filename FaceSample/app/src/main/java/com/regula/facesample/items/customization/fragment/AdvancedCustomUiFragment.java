@@ -26,25 +26,25 @@ public class AdvancedCustomUiFragment extends FaceUiFragment {
 
     @Override
     protected View getSwapCameraButton(@NonNull View v) {
-        mSwapCameraBtn = v.findViewById(com.regula.facesdk.R.id.swapCameraBtn);
+        mSwapCameraBtn = v.findViewById(R.id.swapCameraButton);
         return mSwapCameraBtn;
     }
 
     @Override
     protected View getFlashLightButton(@NonNull View v) {
-        mFlashLightBtn = v.findViewById(com.regula.facesdk.R.id.lightBtn);
+        mFlashLightBtn = v.findViewById(R.id.lightButton);
         return mFlashLightBtn;
     }
 
     @Override
     protected TextView getNotificationView(@NonNull View v) {
-        mNotificationTextView = v.findViewById(com.regula.facesdk.R.id.notificationTv);
+        mNotificationTextView = v.findViewById(R.id.notificationTextView);
         return mNotificationTextView;
     }
 
     @Override
     protected View getCloseButton(View v) {
-        mCloseBtn = v.findViewById(com.regula.facesdk.R.id.exitBtn);
+        mCloseBtn = v.findViewById(R.id.exitButton);
         return mCloseBtn;
     }
 

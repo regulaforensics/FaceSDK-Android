@@ -23,11 +23,11 @@ public class LivenessHintAnimationItem extends CategoryItem {
 
     @Override
     public String getTitle() {
-        return "Disable Liveness HintView animation";
+        return "Disable Liveness NotificationTextView animation";
     }
 
     @Override
     public String getDescription() {
-        return "Disables blinking HintView animation for Liveness.";
+        return "Disables blinking NotificationTextView animation for Liveness.";
     }
 }

@@ -23,11 +23,11 @@ public class FaceCaptureHintAnimationItem extends CategoryItem {
 
     @Override
     public String getTitle() {
-        return "Disable FaceCapture HintView animation";
+        return "Disable FaceCapture NotificationTextView animation";
     }
 
     @Override
     public String getDescription() {
-        return "Disables blinking HintView animation for FaceCapture.";
+        return "Disables blinking NotificationTextView animation for FaceCapture.";
     }
 }

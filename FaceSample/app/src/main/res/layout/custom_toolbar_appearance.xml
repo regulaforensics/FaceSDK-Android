@@ -12,8 +12,8 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.15" />
 
-    <com.regula.facesdk.view.HintView
-        android:id="@+id/notificationTv"
+    <com.regula.facesdk.view.NotificationTextView
+        android:id="@+id/notificationTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/hind_view_background"
@@ -26,7 +26,7 @@
         app:layout_constraintTop_toBottomOf="@id/notificationGuideline" />
 
     <ImageButton
-        android:id="@+id/lightBtn"
+        android:id="@+id/lightButton"
         android:layout_width="@dimen/reg_img_button_size"
         android:layout_height="@dimen/reg_img_button_size"
         android:background="@android:color/transparent"
@@ -38,7 +38,7 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <ImageButton
-        android:id="@+id/swapCameraBtn"
+        android:id="@+id/swapCameraButton"
         android:layout_width="@dimen/reg_img_button_size"
         android:layout_height="@dimen/reg_img_button_size"
         android:background="@android:color/transparent"
@@ -47,10 +47,10 @@
         android:src="@drawable/swap_button"
         android:tint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/exitBtn" />
+        app:layout_constraintEnd_toStartOf="@id/exitButton" />
 
     <ImageButton
-        android:id="@+id/exitBtn"
+        android:id="@+id/exitButton"
         android:layout_width="@dimen/reg_img_button_size"
         android:layout_height="@dimen/reg_img_button_size"
         android:background="@android:color/transparent"
