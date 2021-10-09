@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/rounded_background"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_margin="3dp">
+
+    <TextView
+        android:id="@+id/headerTitleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Header"
+        android:textAllCaps="true"
+        android:textColor="@color/dark_gray"/>
+
+</LinearLayout>
