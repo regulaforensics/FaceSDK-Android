@@ -6,7 +6,7 @@ plugins {
 allprojects {
     repositories {
         maven {
-            url "http://maven.regulaforensics.com/RegulaDocumentReader"
+            url "https://maven.regulaforensics.com/RegulaDocumentReader"
         }
     }
 }
@@ -51,7 +51,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation ('com.regula.face:api:3.0.+@aar'){
+    implementation ('com.regula.face:api:3.1.+@aar'){
         transitive = true
     }
 }
