@@ -50,10 +50,10 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    implementation ('com.regula.face:api:5.4.1526@aar'){
+    implementation ('com.regula.face:api:5.4.1527@aar'){
         transitive = true
     }
-    implementation ('com.regula.face:huawei-vision:1.0.2@aar'){
+    implementation ('com.regula.face:huawei-vision:1.0.4@aar'){
         transitive = true
     }
 }

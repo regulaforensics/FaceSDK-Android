@@ -22,9 +22,6 @@ allprojects {
         maven {
             url "https://maven.regulaforensics.com/RegulaDocumentReader"
         }
-        maven {
-            url "http://ftp.regula.local/RegulaDocumentReaderGit"
-        }
     }
 }
 
