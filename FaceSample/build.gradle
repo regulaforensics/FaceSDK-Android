@@ -17,7 +17,13 @@ allprojects {
         google()
         mavenCentral()
         maven {
+            url 'https://developer.huawei.com/repo/'
+        }
+        maven {
             url "https://maven.regulaforensics.com/RegulaDocumentReader"
+        }
+        maven {
+            url "http://ftp.regula.local/RegulaDocumentReaderGit"
         }
     }
 }
