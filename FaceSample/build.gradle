@@ -22,6 +22,9 @@ allprojects {
         maven {
             url "https://maven.regulaforensics.com/RegulaDocumentReader"
         }
+        maven {
+            url "https://maven.regulaforensics.com/RegulaDocumentReader/Beta"
+        }
     }
 }
 
