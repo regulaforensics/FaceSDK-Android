@@ -20,6 +20,7 @@ import com.regula.facesdk.configuration.LivenessConfiguration;
 import com.regula.facesdk.enums.ImageType;
 import com.regula.facesdk.enums.LivenessStatus;
 import com.regula.facesdk.model.Image;
+import com.regula.facesdk.model.MatchFacesImage;
 import com.regula.facesdk.request.MatchFacesRequest;
 
 import java.util.ArrayList;
@@ -165,9 +166,9 @@ public class MatchFacesActivity extends Activity {
     }
 
     private void matchFaces(Bitmap first, Bitmap second) {
-        List<Image> imageList = new ArrayList<>();
-        imageList.add(new Image((Integer) imageView1.getTag(), first));
-        imageList.add(new Image((Integer) imageView2.getTag(), second));
+        List<MatchFacesImage> imageList = new ArrayList<>();
+        imageList.add(new MatchFacesImage((Integer) imageView1.getTag(), first));
+        imageList.add(new MatchFacesImage((Integer) imageView2.getTag(), second));
         MatchFacesRequest matchRequest = new MatchFacesRequest(imageList);
 
         FaceSDK.Instance().matchFaces(matchRequest, matchFacesResponse -> {

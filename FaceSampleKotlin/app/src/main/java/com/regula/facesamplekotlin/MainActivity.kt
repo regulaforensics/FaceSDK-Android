@@ -8,17 +8,16 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.MenuItem
-import android.view.View
 import android.widget.*
 import com.regula.facesdk.FaceSDK
 import com.regula.facesdk.configuration.FaceCaptureConfiguration
 import com.regula.facesdk.configuration.LivenessConfiguration
 import com.regula.facesdk.enums.ImageType
 import com.regula.facesdk.enums.LivenessStatus
-import com.regula.facesdk.model.Image
+import com.regula.facesdk.model.MatchFacesImage
 import com.regula.facesdk.model.results.FaceCaptureResponse
 import com.regula.facesdk.model.results.LivenessResponse
-import com.regula.facesdk.model.results.MatchFacesResponse
+import com.regula.facesdk.model.results.matchfaces.MatchFacesResponse
 import com.regula.facesdk.request.MatchFacesRequest
 
 
@@ -144,12 +143,12 @@ class MainActivity : Activity() {
     }
 
     private fun matchFaces(first: Bitmap, second: Bitmap) {
-        val firstImage = Image(imageView1.tag as Int, first)
-        val secondImage = Image(imageView2.tag as Int, second)
+        val firstImage = MatchFacesImage(imageView1.tag as Int, first)
+        val secondImage = MatchFacesImage(imageView2.tag as Int, second)
 
         FaceSDK.Instance().matchFaces(MatchFacesRequest(arrayListOf(firstImage, secondImage))) { matchFacesResponse: MatchFacesResponse ->
-            if (matchFacesResponse.matchedFaces.size > 0) {
-                val similarity = matchFacesResponse.matchedFaces[0].similarity
+            if (matchFacesResponse.results.size > 0) {
+                val similarity = matchFacesResponse.results[0].similarity
                 textViewSimilarity.text = "Similarity: " + String.format("%.2f", similarity * 100) + "%"
             } else {
                 textViewSimilarity.text = "Similarity: null"
