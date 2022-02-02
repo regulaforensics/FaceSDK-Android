@@ -19,8 +19,8 @@ import com.regula.facesdk.configuration.FaceCaptureConfiguration;
 import com.regula.facesdk.configuration.LivenessConfiguration;
 import com.regula.facesdk.enums.ImageType;
 import com.regula.facesdk.enums.LivenessStatus;
-import com.regula.facesdk.model.Image;
 import com.regula.facesdk.model.MatchFacesImage;
+import com.regula.facesdk.model.results.matchfaces.MatchFacesSimilarityThresholdSplit;
 import com.regula.facesdk.request.MatchFacesRequest;
 
 import java.util.ArrayList;
@@ -137,12 +137,12 @@ public class MatchFacesActivity extends Activity {
                 return;
 
             imageView.setImageBitmap(faceCaptureResponse.getImage().getBitmap());
-            imageView.setTag(ImageType.IMAGE_TYPE_LIVE);
+            imageView.setTag(ImageType.LIVE);
         });
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode != RESULT_OK)
@@ -162,18 +162,20 @@ public class MatchFacesActivity extends Activity {
             return;
 
         imageView.setImageURI(imageUri);
-        imageView.setTag(ImageType.IMAGE_TYPE_PRINTED);
+        imageView.setTag(ImageType.PRINTED);
     }
 
     private void matchFaces(Bitmap first, Bitmap second) {
         List<MatchFacesImage> imageList = new ArrayList<>();
-        imageList.add(new MatchFacesImage((Integer) imageView1.getTag(), first));
-        imageList.add(new MatchFacesImage((Integer) imageView2.getTag(), second));
+        imageList.add(new MatchFacesImage(first, (ImageType) imageView1.getTag(), true));
+        imageList.add(new MatchFacesImage(second, (ImageType) imageView2.getTag(), true));
         MatchFacesRequest matchRequest = new MatchFacesRequest(imageList);
 
         FaceSDK.Instance().matchFaces(matchRequest, matchFacesResponse -> {
-            if (matchFacesResponse.getMatchedFaces().size() > 0) {
-                double similarity = matchFacesResponse.getMatchedFaces().get(0).getSimilarity();
+            MatchFacesSimilarityThresholdSplit  split =
+                    new MatchFacesSimilarityThresholdSplit(matchFacesResponse.getResults(), 0.75d);
+            if (split.getMatchedFaces().size() > 0) {
+                double similarity = split.getMatchedFaces().get(0).getSimilarity();
                 textViewSimilarity.setText("Similarity: " + String.format("%.2f", similarity * 100) + "%");
             } else {
                 textViewSimilarity.setText("Similarity: null");
@@ -193,7 +195,7 @@ public class MatchFacesActivity extends Activity {
         FaceSDK.Instance().startLiveness(MatchFacesActivity.this, configuration, livenessResponse -> {
             if (livenessResponse.getBitmap() != null) {
                 imageView1.setImageBitmap(livenessResponse.getBitmap());
-                imageView1.setTag(ImageType.IMAGE_TYPE_LIVE);
+                imageView1.setTag(ImageType.LIVE);
 
                 if (livenessResponse.getLiveness() == LivenessStatus.PASSED) {
                     textViewLiveness.setText("Liveness: passed");
