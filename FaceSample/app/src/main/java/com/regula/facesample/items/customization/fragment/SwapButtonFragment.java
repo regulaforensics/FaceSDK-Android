@@ -16,7 +16,7 @@ import com.regula.facesdk.fragment.FaceDefaultUiFragment;
 public class SwapButtonFragment extends FaceDefaultUiFragment {
 
     @Override
-    protected View getSwapCameraButton(@NonNull View v) {
+    public View getSwapCameraButton(@NonNull View v) {
         View swapCameraBtn = super.getSwapCameraButton(v);
         if (swapCameraBtn instanceof ImageButton) {
             ((ImageButton) swapCameraBtn).setImageResource(R.drawable.swap_button);

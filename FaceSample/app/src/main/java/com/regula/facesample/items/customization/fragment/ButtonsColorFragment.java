@@ -12,7 +12,7 @@ import com.regula.facesdk.fragment.FaceDefaultUiFragment;
 public class ButtonsColorFragment extends FaceDefaultUiFragment {
 
     @Override
-    protected int getButtonsColor(boolean isLightOn) {
+    public int getButtonsColor(boolean isLightOn) {
         return isLightOn ? Color.RED : Color.GREEN;
     }
 }

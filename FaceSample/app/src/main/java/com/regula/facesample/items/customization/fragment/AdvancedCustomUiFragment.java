@@ -25,31 +25,31 @@ public class AdvancedCustomUiFragment extends FaceUiFragment {
     private NotificationTextView mNotificationTextView;
 
     @Override
-    protected View getSwapCameraButton(@NonNull View v) {
+    public View getSwapCameraButton(@NonNull View v) {
         mSwapCameraBtn = v.findViewById(R.id.swapCameraButton);
         return mSwapCameraBtn;
     }
 
     @Override
-    protected View getFlashLightButton(@NonNull View v) {
+    public View getFlashLightButton(@NonNull View v) {
         mFlashLightBtn = v.findViewById(R.id.lightButton);
         return mFlashLightBtn;
     }
 
     @Override
-    protected TextView getNotificationView(@NonNull View v) {
+    public TextView getNotificationView(@NonNull View v) {
         mNotificationTextView = v.findViewById(R.id.notificationTextView);
         return mNotificationTextView;
     }
 
     @Override
-    protected View getCloseButton(View v) {
+    public View getCloseButton(View v) {
         mCloseBtn = v.findViewById(R.id.exitButton);
         return mCloseBtn;
     }
 
     @Override
-    protected int getResourceLayoutId() {
+    public int getResourceLayoutId() {
         return R.layout.custom_toolbar_appearance;
     }
 

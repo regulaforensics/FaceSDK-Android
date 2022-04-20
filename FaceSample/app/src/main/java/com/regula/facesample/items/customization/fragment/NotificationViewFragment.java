@@ -15,12 +15,13 @@ import com.regula.facesdk.fragment.FaceDefaultUiFragment;
 
 public class NotificationViewFragment extends FaceDefaultUiFragment {
 
-    protected Drawable getNotificationBackgroundDrawable(Context context, boolean isLightOn) {
+    @Override
+    public Drawable getNotificationBackgroundDrawable(Context context, boolean isLightOn) {
         return ContextCompat.getDrawable(context, isLightOn ? R.drawable.notification_view_background_dark : R.drawable.notification_view_background_white);
     }
 
     @Override
-    protected int getNotificationTextColor(boolean isLightOn) {
+    public int getNotificationTextColor(boolean isLightOn) {
         return getResources().getColor(isLightOn ? R.color.notification_view_text_color_light_on : R.color.notification_view_text_color_light_off);
     }
 }

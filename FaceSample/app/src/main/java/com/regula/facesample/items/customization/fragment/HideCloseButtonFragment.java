@@ -12,7 +12,7 @@ import com.regula.facesdk.fragment.FaceDefaultUiFragment;
 public class HideCloseButtonFragment extends FaceDefaultUiFragment {
 
     @Override
-    protected View getCloseButton(View view) {
+    public View getCloseButton(View view) {
         View button = super.getCloseButton(view);
         button.setVisibility(View.INVISIBLE);
         return button;

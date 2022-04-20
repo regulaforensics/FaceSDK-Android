@@ -18,13 +18,13 @@ public class FlashButtonFragment extends FaceDefaultUiFragment {
     View mFlashLightBtn;
 
     @Override
-    protected View getFlashLightButton(@NonNull View view) {
+    public View getFlashLightButton(@NonNull View view) {
         mFlashLightBtn = super.getFlashLightButton(view);
         return mFlashLightBtn;
     }
 
     @Override
-    protected void updateFlashLightButton(boolean isLightOn) {
+    public void updateFlashLightButton(boolean isLightOn) {
         if (mFlashLightBtn == null)
             return;
 

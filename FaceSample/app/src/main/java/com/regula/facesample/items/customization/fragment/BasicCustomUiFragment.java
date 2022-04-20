@@ -16,27 +16,27 @@ import com.regula.facesdk.fragment.FaceUiFragment;
 public class BasicCustomUiFragment extends FaceUiFragment {
 
     @Override
-    protected View getSwapCameraButton(@NonNull View view) {
+    public View getSwapCameraButton(@NonNull View view) {
         return null;
     }
 
     @Override
-    protected View getFlashLightButton(@NonNull View view) {
+    public View getFlashLightButton(@NonNull View view) {
         return null;
     }
 
     @Override
-    protected TextView getNotificationView(@NonNull View view) {
+    public TextView getNotificationView(@NonNull View view) {
         return view.findViewById(R.id.notificationView);
     }
 
     @Override
-    protected int getResourceLayoutId() {
+    public int getResourceLayoutId() {
         return R.layout.custom_hint_view_appearance;
     }
 
     @Override
-    protected View getCloseButton(View view) {
+    public View getCloseButton(View view) {
         return view.findViewById(R.id.closeButton);
     }
 }

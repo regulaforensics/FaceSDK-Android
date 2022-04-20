@@ -15,7 +15,7 @@ import com.regula.facesdk.fragment.FaceDefaultUiFragment;
 public class HideNotificationViewFragment extends FaceDefaultUiFragment {
 
     @Override
-    protected TextView getNotificationView(@NonNull View view) {
+    public TextView getNotificationView(@NonNull View view) {
         TextView textView = super.getNotificationView(view);
         textView.setVisibility(View.INVISIBLE);
         return textView;
