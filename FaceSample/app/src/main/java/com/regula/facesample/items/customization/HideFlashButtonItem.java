@@ -11,23 +11,24 @@ import com.regula.facesdk.configuration.FaceCaptureConfiguration;
  * Copyright (c) 2021 Regula. All rights reserved.
  */
 
-public class HideCloseButtonItem extends CategoryItem {
+public class HideFlashButtonItem extends CategoryItem {
 
     @Override
     public void onItemSelected(Context context) {
         FaceCaptureConfiguration configuration = new FaceCaptureConfiguration.Builder()
-                .setCloseButtonEnabled(false)
+                .setTorchButtonEnabled(false)
+                .setCameraId(0)
                 .build();
         FaceSDK.Instance().presentFaceCaptureActivity(context, configuration, faceCaptureResponse -> { });
     }
 
     @Override
     public String getDescription() {
-        return "Hide close button using default UI";
+        return "Hide flash button using default UI";
     }
 
     @Override
     public String getTitle() {
-        return "Hide close button";
+        return "Hide flash button";
     }
 }
