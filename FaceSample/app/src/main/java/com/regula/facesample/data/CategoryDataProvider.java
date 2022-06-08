@@ -9,7 +9,9 @@ import com.regula.facesample.items.customization.AdvancedCustomItem;
 import com.regula.facesample.items.customization.ButtonsColorItem;
 import com.regula.facesample.items.customization.FlashButtonItem;
 import com.regula.facesample.items.customization.HideCloseButtonItem;
+import com.regula.facesample.items.customization.HideFlashButtonItem;
 import com.regula.facesample.items.customization.HideNotificationViewItem;
+import com.regula.facesample.items.customization.LivenessProcessingCustomItem;
 import com.regula.facesample.items.customization.NotificationViewItem;
 import com.regula.facesample.items.customization.NotificationViewPositionItem;
 import com.regula.facesample.items.customization.OverlayCustomItem;
@@ -62,6 +64,7 @@ public class CategoryDataProvider {
                     }
                 },
                 new HideCloseButtonItem(),
+                new HideFlashButtonItem(),
                 new HideNotificationViewItem(),
                 new NotificationViewItem(),
                 new ButtonsColorItem(),
@@ -71,6 +74,7 @@ public class CategoryDataProvider {
                 new BasicCustomItem(),
                 new AdvancedCustomItem(),
                 new OverlayCustomItem(),
+                new LivenessProcessingCustomItem(),
                 new HeaderItem() {
                     @Override
                     public String getTitle() {
