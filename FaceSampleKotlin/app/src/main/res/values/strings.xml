@@ -21,7 +21,9 @@
     <string name="fc_disable_notification">Disable FaceCapture NotificationTextView animation</string>
     <string name="fc_disable_notification_description">Disables blinking Notification TextView animation for FaceCapture</string>
     <string name="hide_close_button">Hide close button</string>
-    <string name="hide_close_button_description">"Hide close button using default UI fragment"</string>
+    <string name="hide_close_button_description">"Hide close button using default UI"</string>
+    <string name="hide_flash_button">Hide flash button</string>
+    <string name="hide_flash_button_description">"Hide flash button using default UI"</string>
     <string name="hide_notification_text">Hide notification text view</string>
     <string name="hide_notification_text_description">Hide notification text view using default UI fragment</string>
     <string name="custom_notification_background">Custom notification background</string>
@@ -38,6 +40,8 @@
     <string name="custom_ui_fragment_description">Custom UI with basic functionality</string>
     <string name="ln_toolbar_appearance">Liveness toolbar appearance</string>
     <string name="ln_toolbar_appearance_description">Usage example for toolbar</string>
+    <string name="customize_liveness_process">Customize liveness process</string>
+    <string name="customize_liveness_process_description">Customize liveness processing and retry screens</string>
     <string name="custom_overlay">Custom Overlay</string>
     <string name="custom_overlay_description">Change colors for overlay</string>
     <string name="custom_localization">Custom localization</string>

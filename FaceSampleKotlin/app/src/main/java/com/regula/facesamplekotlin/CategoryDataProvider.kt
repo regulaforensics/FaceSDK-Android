@@ -52,6 +52,11 @@ class CategoryDataProvider {
                     hideCloseButtonConfigFc()
                 ),
                 FaceCaptureDefaultItem(
+                    R.string.hide_flash_button,
+                    R.string.hide_flash_button_description,
+                    hideFlashButtonConfigFc()
+                ),
+                FaceCaptureDefaultItem(
                     R.string.hide_notification_text,
                     R.string.hide_notification_text_description,
                     hideNotificationViewConfigFc()
@@ -100,6 +105,11 @@ class CategoryDataProvider {
                     // facesdk_overlay_border_active
                     R.string.custom_overlay,
                     R.string.custom_overlay_description
+                ),
+                LivenessDefaultItem(
+                    R.string.customize_liveness_process,
+                    R.string.customize_liveness_process_description,
+                    livenessProcessingCustomConfigLn()
                 ),
                 HeaderItem(R.string.other),
                 LivenessDefaultItem(
@@ -180,6 +190,12 @@ class CategoryDataProvider {
                 .build()
         }
 
+        private fun livenessProcessingCustomConfigLn(): LivenessConfiguration {
+            return LivenessConfiguration.Builder()
+                .registerProcessingFragment(LivenessProcessingCustomFragment::class.java)
+                .build()
+        }
+
         private fun switchCameraConfigFc(): FaceCaptureConfiguration {
             return FaceCaptureConfiguration.Builder()
                 .setCameraSwitchEnabled(true)
@@ -192,10 +208,15 @@ class CategoryDataProvider {
                 .build()
         }
 
-
         private fun hideCloseButtonConfigFc(): FaceCaptureConfiguration {
             return FaceCaptureConfiguration.Builder()
-                .registerUiFragmentClass(HideCloseButtonFragment::class.java)
+                .setCloseButtonEnabled(false)
+                .build()
+        }
+
+        private fun hideFlashButtonConfigFc(): FaceCaptureConfiguration {
+            return FaceCaptureConfiguration.Builder()
+                .setTorchButtonEnabled(false)
                 .build()
         }
 
