@@ -34,7 +34,7 @@ dependencies {
 
     implementation "androidx.recyclerview:recyclerview:1.2.1"
 
-    implementation ('com.regula.face:api:3.2.+@aar'){
+    implementation ('com.regula.face:api:4.1.+@aar'){
         transitive = true
     }
 
