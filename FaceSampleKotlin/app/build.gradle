@@ -45,7 +45,7 @@ dependencies {
     }
 
     // include this library only if you want to support Huawei devices which does not have Google Mobile Services
-    implementation ('com.regula.face:huawei-vision:3.2.+@aar'){
+    implementation ('com.regula.face:huawei-vision:4.1.+@aar'){
         transitive = true
     }
 
