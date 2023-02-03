@@ -15,7 +15,7 @@ public class NetworkInterceptorItem extends CategoryItem {
     @Override
     public void onItemSelected(Context context) {
         FaceSDK.Instance().setNetworkInterceptorListener(httpURLConnection -> {
-            httpURLConnection.setRequestProperty("customFiels", "TestValue");
+            httpURLConnection.getConnection().setRequestProperty("customFiels", "TestValue");
         });
         FaceSDK.Instance().setServiceUrl(FaceSDK.Instance().getServiceUrl());
         FaceSDK.Instance().startLiveness(context, livenessResponse -> {});

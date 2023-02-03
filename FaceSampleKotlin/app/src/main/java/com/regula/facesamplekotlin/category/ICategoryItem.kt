@@ -1,6 +1,6 @@
 package com.regula.facesamplekotlin.category
 
 interface ICategoryItem {
-    fun getTitle(): Int
+    val title: String
     fun isHeader(): Boolean
 }

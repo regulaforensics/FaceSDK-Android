@@ -34,12 +34,9 @@ dependencies {
 
     implementation "androidx.recyclerview:recyclerview:1.2.1"
 
-    implementation ('com.regula.face:api:4.1.+@aar'){
+    implementation ('com.regula.face:api:5.1.2248@aar'){
         transitive = true
     }
 
-    // include this library only if you want to support Huawei devices which does not have Google Mobile Services
-    implementation ('com.regula.face:huawei-vision:4.1.+@aar'){
-        transitive = true
-    }
+    implementation ('com.regula.face:core:0.1.151@aar')
 }

@@ -17,6 +17,7 @@ public class HideFlashButtonItem extends CategoryItem {
     public void onItemSelected(Context context) {
         FaceCaptureConfiguration configuration = new FaceCaptureConfiguration.Builder()
                 .setTorchButtonEnabled(false)
+                .setCameraId(0)
                 .build();
         FaceSDK.Instance().presentFaceCaptureActivity(context, configuration, faceCaptureResponse -> { });
     }
