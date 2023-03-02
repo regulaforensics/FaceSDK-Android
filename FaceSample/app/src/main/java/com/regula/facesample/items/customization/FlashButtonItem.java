@@ -5,6 +5,7 @@ import android.content.Context;
 import com.regula.facesample.items.CategoryItem;
 import com.regula.facesample.items.customization.fragment.FlashButtonFragment;
 import com.regula.facesdk.FaceSDK;
+import com.regula.facesdk.configuration.FaceCaptureConfiguration;
 import com.regula.facesdk.configuration.LivenessConfiguration;
 
 /**
@@ -16,11 +17,11 @@ public class FlashButtonItem extends CategoryItem {
 
     @Override
     public void onItemSelected(Context context) {
-        LivenessConfiguration configuration = new LivenessConfiguration.Builder()
+        FaceCaptureConfiguration configuration = new FaceCaptureConfiguration.Builder()
                 .registerUiFragmentClass(FlashButtonFragment.class)
                 .setCameraSwitchEnabled(true)
                 .build();
-        FaceSDK.Instance().startLiveness(context, configuration, livenessResponse -> {});
+        FaceSDK.Instance().presentFaceCaptureActivity(context, configuration, livenessResponse -> {});
     }
 
     @Override

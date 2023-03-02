@@ -17,6 +17,7 @@ public class FaceCaptureCameraPositionItem extends CategoryItem {
     public void onItemSelected(Context context) {
         FaceCaptureConfiguration configuration = new FaceCaptureConfiguration.Builder()
                 .setCameraSwitchEnabled(true)
+                .setCameraId(0)
                 .build();
         FaceSDK.Instance().presentFaceCaptureActivity(context, configuration, faceCaptureResponse -> { });
     }

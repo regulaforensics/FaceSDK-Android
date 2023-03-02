@@ -1,10 +1,6 @@
 package com.regula.facesamplekotlin.category
 
-class HeaderItem(private val title: Int) : ICategoryItem {
-
-    override fun getTitle(): Int {
-        return title
-    }
+class HeaderItem(override val title: String) : ICategoryItem {
 
     override fun isHeader(): Boolean {
         return true

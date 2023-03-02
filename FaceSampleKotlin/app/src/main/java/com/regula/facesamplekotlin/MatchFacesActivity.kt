@@ -11,7 +11,6 @@ import android.view.MenuItem
 import android.widget.*
 import com.regula.facesdk.FaceSDK
 import com.regula.facesdk.configuration.FaceCaptureConfiguration
-import com.regula.facesdk.configuration.LivenessConfiguration
 import com.regula.facesdk.enums.ImageType
 import com.regula.facesdk.enums.LivenessStatus
 import com.regula.facesdk.model.MatchFacesImage
@@ -37,7 +36,7 @@ class MatchFacesActivity : Activity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_match_faces)
 
         imageView1 = findViewById(R.id.imageView1)
         imageView1.layoutParams.height = 400
@@ -57,7 +56,7 @@ class MatchFacesActivity : Activity() {
 
         buttonMatch.setOnClickListener {
             if (imageView1.drawable != null && imageView2.drawable != null) {
-                textViewSimilarity.text = getString(R.string.processing)
+                textViewSimilarity.text = "Processing…"
 
                 matchFaces(getImageBitmap(imageView1), getImageBitmap(imageView2))
                 buttonMatch.isEnabled = false
@@ -66,7 +65,7 @@ class MatchFacesActivity : Activity() {
             } else {
                 Toast.makeText(
                     this@MatchFacesActivity,
-                    getString(R.string.both_images_compulsory),
+                    "Having both images are compulsory",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -77,8 +76,8 @@ class MatchFacesActivity : Activity() {
         buttonClear.setOnClickListener {
             imageView1.setImageDrawable(null)
             imageView2.setImageDrawable(null)
-            textViewSimilarity.text = getString(R.string.similarity_null)
-            textViewLiveness.text = getString(R.string.liveness_null)
+            textViewSimilarity.text = "Similarity: null"
+            textViewLiveness.text = "Liveness: null"
         }
     }
 
@@ -131,7 +130,7 @@ class MatchFacesActivity : Activity() {
             return
 
         imageUri = data.data
-        textViewSimilarity.text = getString(R.string.similarity_null)
+        textViewSimilarity.text = "Similarity: null"
 
         var imageView: ImageView? = null
         if (requestCode == PICK_IMAGE_1)
@@ -151,9 +150,9 @@ class MatchFacesActivity : Activity() {
             val split = MatchFacesSimilarityThresholdSplit(matchFacesResponse.results, 0.75)
             if (split.matchedFaces.size > 0) {
                 val similarity = split.matchedFaces[0].similarity
-                textViewSimilarity.text = getString(R.string.similarity_result,  String.format("%.2f", similarity * 100))
+                textViewSimilarity.text = "Similarity: " +  String.format("%.2f", similarity * 100) + "%"
             } else {
-                textViewSimilarity.text = getString(R.string.similarity_null)
+                textViewSimilarity.text = "Similarity: null"
             }
 
             buttonMatch.isEnabled = true
@@ -163,23 +162,21 @@ class MatchFacesActivity : Activity() {
     }
 
     private fun startLiveness() {
-        val configuration = LivenessConfiguration.Builder().setCameraSwitchEnabled(true).build()
-
-        FaceSDK.Instance().startLiveness(this@MatchFacesActivity, configuration) { livenessResponse: LivenessResponse ->
+        FaceSDK.Instance().startLiveness(this@MatchFacesActivity) { livenessResponse: LivenessResponse ->
             if (livenessResponse.bitmap != null) {
                 imageView1.setImageBitmap(livenessResponse.bitmap)
                 imageView1.tag = ImageType.LIVE
 
                 if (livenessResponse.liveness == LivenessStatus.PASSED) {
-                    textViewLiveness.text = getString(R.string.liveness_passed)
+                    textViewLiveness.text = "Liveness: passed"
                 } else {
-                    textViewLiveness.text = getString(R.string.liveness_unknown)
+                    textViewLiveness.text = "Liveness: unknown"
                 }
             } else {
-                textViewLiveness.text = getString(R.string.liveness_null)
+                textViewLiveness.text = "Liveness: null"
             }
 
-            textViewSimilarity.text = getString(R.string.similarity_null)
+            textViewSimilarity.text = "Similarity: null"
         }
     }
 
