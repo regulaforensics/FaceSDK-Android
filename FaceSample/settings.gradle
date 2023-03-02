@@ -7,7 +7,7 @@ dependencyResolutionManagement {
         mavenCentral()
         jcenter() // Warning: this repository is going to shut down soon
         maven {
-            url = uri("https://maven.regulaforensics.com/RegulaDocumentReader/Beta")
+            url = uri("https://maven.regulaforensics.com/RegulaDocumentReader")
         }
     }
 }
