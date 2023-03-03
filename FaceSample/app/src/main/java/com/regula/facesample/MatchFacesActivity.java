@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.regula.facesdk.FaceSDK;
 import com.regula.facesdk.configuration.FaceCaptureConfiguration;
-import com.regula.facesdk.configuration.LivenessConfiguration;
 import com.regula.facesdk.enums.ImageType;
 import com.regula.facesdk.enums.LivenessStatus;
 import com.regula.facesdk.model.MatchFacesImage;
@@ -171,6 +170,9 @@ public class MatchFacesActivity extends Activity {
             case DOCUMENT_WITH_LIVE:
                 group.check(group.getChildAt(3).getId());
                 break;
+            case GHOST_PORTRAIT:
+                group.check(group.getChildAt(5).getId());
+                break;
         }
     }
 
@@ -188,6 +190,8 @@ public class MatchFacesActivity extends Activity {
                 return ImageType.EXTERNAL;
             case 3:
                 return ImageType.DOCUMENT_WITH_LIVE;
+            case 5:
+                return ImageType.GHOST_PORTRAIT;
         }
         return ImageType.PRINTED;
     }
