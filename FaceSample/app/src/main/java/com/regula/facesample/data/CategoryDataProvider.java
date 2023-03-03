@@ -18,11 +18,15 @@ import com.regula.facesample.items.customization.OverlayCustomItem;
 import com.regula.facesample.items.customization.SwapButtonItem;
 import com.regula.facesample.items.features.FaceCaptureCameraPositionItem;
 import com.regula.facesample.items.features.FaceCaptureHintAnimationItem;
+import com.regula.facesample.items.features.FaceSdkDeinitItem;
+import com.regula.facesample.items.features.FaceSdkInitItem;
 import com.regula.facesample.items.features.LivenessAttemptsCountItem;
-import com.regula.facesample.items.features.LivenessCameraSwitchItem;
+import com.regula.facesample.items.features.LivenessDisableStepItem;
 import com.regula.facesample.items.features.LivenessHintAnimationItem;
+import com.regula.facesample.items.features.LivenessSessionIdItem;
 import com.regula.facesample.items.other.LocalizationItem;
 import com.regula.facesample.items.other.NetworkInterceptorItem;
+import com.regula.facesample.items.other.VideoCompletionItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,11 +56,14 @@ public class CategoryDataProvider {
                         return "Feature Customization";
                     }
                 },
-                new LivenessCameraSwitchItem(),
                 new LivenessAttemptsCountItem(),
                 new LivenessHintAnimationItem(),
                 new FaceCaptureCameraPositionItem(),
                 new FaceCaptureHintAnimationItem(),
+                new LivenessDisableStepItem(),
+                new LivenessSessionIdItem(),
+                new FaceSdkInitItem(),
+                new FaceSdkDeinitItem(),
                 new HeaderItem() {
                     @Override
                     public String getTitle() {
@@ -82,7 +89,8 @@ public class CategoryDataProvider {
                     }
                 },
                 new LocalizationItem(),
-                new NetworkInterceptorItem()
+                new NetworkInterceptorItem(),
+                new VideoCompletionItem()
         ));
     }
 

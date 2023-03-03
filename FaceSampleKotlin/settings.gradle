@@ -9,10 +9,6 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://maven.regulaforensics.com/RegulaDocumentReader")
         }
-        // include this repo only if you want to support Huawei devices
-        maven {
-            url = uri('https://developer.huawei.com/repo/')
-        }
     }
 }
 include ':app'

@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/reg_small_img_button_padding"
         android:textColor="@android:color/white"
-        android:text="@string/close"
+        android:text="Close"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

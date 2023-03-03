@@ -245,11 +245,8 @@ public class MatchFacesActivity extends Activity {
     }
 
     private void startLiveness() {
-        LivenessConfiguration configuration = new LivenessConfiguration.Builder()
-                .setCameraSwitchEnabled(true)
-                .build();
 
-        FaceSDK.Instance().startLiveness(MatchFacesActivity.this, configuration, livenessResponse -> {
+        FaceSDK.Instance().startLiveness(MatchFacesActivity.this, livenessResponse -> {
             if (livenessResponse.getBitmap() != null) {
                 imageView1.setImageBitmap(livenessResponse.getBitmap());
                 imageView1.setTag(ImageType.LIVE);

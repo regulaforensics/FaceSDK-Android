@@ -2,15 +2,18 @@ package com.regula.facesample;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.regula.facesample.adapter.CategoryAdapter;
 import com.regula.facesample.data.CategoryDataProvider;
+import com.regula.facesdk.FaceSDK;
+import com.regula.facesdk.callback.InitCallback;
+import com.regula.facesdk.exception.InitException;
 
 public class MainActivity extends Activity {
 
@@ -27,5 +30,13 @@ public class MainActivity extends Activity {
         recyclerView.setLayoutManager(mLayoutManager);
 
         recyclerView.setAdapter(new CategoryAdapter(this, dataProvider));
+
+        FaceSDK.Instance().init(this, (status, e) -> {
+            if (!status) {
+                Toast.makeText(MainActivity.this, "Init finished with error: " + (e != null ? e.getMessage() : ""), Toast.LENGTH_LONG).show();
+                return;
+            }
+            Log.d("MainActivity", "FaceSDK init completed successfully");
+        });
     }
 }

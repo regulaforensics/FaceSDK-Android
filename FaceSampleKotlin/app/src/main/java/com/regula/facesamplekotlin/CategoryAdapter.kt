@@ -24,7 +24,7 @@ class CategoryAdapter(private val context: Context, var list: List<ICategoryItem
         var title: TextView = itemView.findViewById(R.id.headerTitleTextView)
         fun bind(position: Int) {
             val item = list[position]
-            title.setText(item.getTitle())
+            title.setText(item.title)
         }
     }
 
@@ -34,7 +34,7 @@ class CategoryAdapter(private val context: Context, var list: List<ICategoryItem
         var description: TextView = itemView.findViewById(R.id.descriptionTv)
         fun bind(position: Int) {
             val item = list[position] as CategoryItem
-            title.setText(item.getTitle())
+            title.text = item.title
             item.description?.let { description.setText(it) }
 
             itemView.setOnClickListener { v: View? ->

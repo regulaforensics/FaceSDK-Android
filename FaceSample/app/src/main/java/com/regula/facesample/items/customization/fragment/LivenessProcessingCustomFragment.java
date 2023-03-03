@@ -76,6 +76,11 @@ public final class LivenessProcessingCustomFragment extends BaseFaceLivenessProc
     }
 
     @Override
+    public View getVerifyLayout(View view) {
+        return view.findViewById(R.id.verifiedLayout);
+    }
+
+    @Override
     public View getCloseButton(View v) {
         return v.findViewById(R.id.close_button);
     }
