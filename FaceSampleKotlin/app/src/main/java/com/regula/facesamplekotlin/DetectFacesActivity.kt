@@ -141,6 +141,7 @@ class DetectFacesActivity : AppCompatActivity() {
     private fun detectFaces(request: DetectFacesRequest) {
         buttonEnable(false)
         binding.progressBar.visibility = View.VISIBLE;
+        FaceSDK.Instance().serviceUrl = "https://faceapi.regulaforensics.com/"
         FaceSDK.Instance().detectFaces(request) { response: DetectFacesResponse ->
             buttonEnable(true)
             binding.progressBar.visibility = View.GONE;

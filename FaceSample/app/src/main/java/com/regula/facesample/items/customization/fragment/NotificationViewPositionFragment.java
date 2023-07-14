@@ -5,6 +5,7 @@ import android.view.View;
 
 import androidx.constraintlayout.widget.Guideline;
 
+import com.regula.facesample.R;
 import com.regula.facesdk.fragment.FaceDefaultUiFragment;
 
 /**
@@ -23,7 +24,8 @@ public class NotificationViewPositionFragment extends FaceDefaultUiFragment {
         int topMargin = (int) rect.top;
         topMargin += rect.height() * 0.4;
 
-        Guideline notificationGuideline = view.findViewById(com.regula.facesdk.R.id.notificationGuideline);
+        Guideline notificationGuideline = view.findViewById(R.id.topNotificationGuideline);
+        notificationGuideline.setGuidelinePercent(-1);
         notificationGuideline.setGuidelineBegin(topMargin);
     }
 }

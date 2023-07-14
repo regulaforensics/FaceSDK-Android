@@ -10,6 +10,19 @@ class LocalizationItem : CategoryItem() {
     override fun onItemSelected(context: Context) {
         // uncomment in res/values/strings.xml:
         // hint.fit resource
+
+        //This is another approach of customizing localization by overriding strings in callback
+
+        // uncomment in res/values/strings.xml:
+        // hint.fit resource
+
+
+        //This is another approach of customizing localization by overriding strings in callback
+        FaceSDK.Instance().setLocalizationCallback { stringId ->
+            if (stringId.equals("livenessGuide.head")) return@setLocalizationCallback "this is custom selfie time string string"
+            null
+        }
+
         FaceSDK.Instance().startLiveness(context) { livenessResponse: LivenessResponse? -> }
     }
 

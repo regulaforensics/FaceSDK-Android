@@ -1,0 +1,29 @@
+{
+  "objects": [
+    {
+      "label": {
+        "text": "",
+        "fontStyle": "normal",
+        "fontColor": "#FF000000",
+        "background": "#FFFF8080",
+        "fontSize": 16,
+        "fontName": "Arial",
+        "alignment": "center",
+        "borderRadius": 5,
+        "padding": {
+          "start": 8,
+          "end": 8,
+          "top": 8,
+          "bottom": 8
+        },
+        "margin": {
+          "top": 20
+        },
+        "position": {
+          "h": 1
+        }
+      }
+    }
+  ],
+  "version": "1.0"
+}

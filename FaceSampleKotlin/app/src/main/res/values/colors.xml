@@ -18,4 +18,10 @@
 
     <color name="notification_view_text_color_light_on">#03DAC5</color>
     <color name="notification_view_text_color_light_off">#3700B3</color>
+
+    <color name="title_color">#469597</color>
+    <color name="message_color">#5BA199</color>
+    <color name="background_color">#E5E3E4</color>
+    <color name="image_color">#DDBEAA</color>
+    <color name="light_gray">#BBC6C8</color>
 </resources>

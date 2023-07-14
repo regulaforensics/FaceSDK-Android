@@ -6,17 +6,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.regula.facesdk.FaceSDK;
 import com.regula.facesdk.configuration.FaceCaptureConfiguration;
-import com.regula.facesdk.configuration.LivenessConfiguration;
 import com.regula.facesdk.enums.ImageType;
 import com.regula.facesdk.enums.LivenessStatus;
 import com.regula.facesdk.model.MatchFacesImage;
@@ -39,6 +41,8 @@ public class MatchFacesActivity extends Activity {
     ImageView imageView1;
     ImageView imageView2;
 
+    RadioGroup group0, group1;
+
     Button buttonMatch;
     Button buttonLiveness;
     Button buttonClear;
@@ -58,6 +62,9 @@ public class MatchFacesActivity extends Activity {
 
         imageView2 = findViewById(R.id.imageView2);
         imageView2.getLayoutParams().height = 400;
+
+        group0 = findViewById(R.id.rbGroup0);
+        group1 = findViewById(R.id.rbGroup1);
 
         buttonMatch = findViewById(R.id.buttonMatch);
         buttonLiveness = findViewById(R.id.buttonLiveness);
@@ -107,7 +114,12 @@ public class MatchFacesActivity extends Activity {
                     openGallery(i);
                     return true;
                 case R.id.camera:
-                    startFaceCaptureActivity(imageView);
+                    RadioGroup radioGroup;
+                    if(i == PICK_IMAGE_1)
+                        radioGroup = group0;
+                    else //if PICK_IMAGE_2
+                        radioGroup = group1;
+                    startFaceCaptureActivity(imageView, radioGroup);
                     return true;
                 default:
                     return false;
@@ -129,7 +141,7 @@ public class MatchFacesActivity extends Activity {
         startActivityForResult(gallery, id);
     }
 
-    private void startFaceCaptureActivity(ImageView imageView) {
+    private void startFaceCaptureActivity(ImageView imageView, RadioGroup group) {
         FaceCaptureConfiguration configuration = new FaceCaptureConfiguration.Builder().setCameraSwitchEnabled(true).build();
 
         FaceSDK.Instance().presentFaceCaptureActivity(MatchFacesActivity.this, configuration, faceCaptureResponse -> {
@@ -137,8 +149,52 @@ public class MatchFacesActivity extends Activity {
                 return;
 
             imageView.setImageBitmap(faceCaptureResponse.getImage().getBitmap());
-            imageView.setTag(ImageType.LIVE);
+
+            setGroupSelection(group, ImageType.LIVE);
         });
+    }
+
+    private void setGroupSelection(RadioGroup group, ImageType type) {
+        switch (type){
+            case LIVE:
+                group.check(group.getChildAt(2).getId());
+                break;
+            case RFID:
+                group.check(group.getChildAt(1).getId());
+                break;
+            case PRINTED:
+                group.check(group.getChildAt(0).getId());
+                break;
+            case EXTERNAL:
+                group.check(group.getChildAt(4).getId());
+                break;
+            case DOCUMENT_WITH_LIVE:
+                group.check(group.getChildAt(3).getId());
+                break;
+            case GHOST_PORTRAIT:
+                group.check(group.getChildAt(5).getId());
+                break;
+        }
+    }
+
+    private ImageType getGroupSelection(RadioGroup group){
+        RadioButton button = group.findViewById(group.getCheckedRadioButtonId());
+        int index = group.indexOfChild(button);
+        switch (index){
+            case 2:
+                return ImageType.LIVE;
+            case 1:
+                return ImageType.RFID;
+            case 0:
+                return ImageType.PRINTED;
+            case 4:
+                return ImageType.EXTERNAL;
+            case 3:
+                return ImageType.DOCUMENT_WITH_LIVE;
+            case 5:
+                return ImageType.GHOST_PORTRAIT;
+        }
+        return ImageType.PRINTED;
     }
 
     @Override
@@ -152,23 +208,29 @@ public class MatchFacesActivity extends Activity {
         textViewSimilarity.setText("Similarity: null");
 
         ImageView imageView = null;
+        RadioGroup group = null;
 
-        if (requestCode == PICK_IMAGE_1)
+        if (requestCode == PICK_IMAGE_1) {
             imageView = imageView1;
-        else if (requestCode == PICK_IMAGE_2)
+            group = group0;
+        }
+        else if (requestCode == PICK_IMAGE_2) {
             imageView = imageView2;
+            group = group1;
+        }
 
         if (imageView == null)
             return;
 
         imageView.setImageURI(imageUri);
-        imageView.setTag(ImageType.PRINTED);
+
+        setGroupSelection(group, ImageType.PRINTED);
     }
 
     private void matchFaces(Bitmap first, Bitmap second) {
         List<MatchFacesImage> imageList = new ArrayList<>();
-        imageList.add(new MatchFacesImage(first, (ImageType) imageView1.getTag(), true));
-        imageList.add(new MatchFacesImage(second, (ImageType) imageView2.getTag(), true));
+        imageList.add(new MatchFacesImage(first, getGroupSelection(group0), true));
+        imageList.add(new MatchFacesImage(second, getGroupSelection(group1), true));
         MatchFacesRequest matchRequest = new MatchFacesRequest(imageList);
 
         FaceSDK.Instance().matchFaces(matchRequest, matchFacesResponse -> {

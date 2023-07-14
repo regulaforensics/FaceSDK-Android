@@ -11,7 +11,7 @@ class LivenessDisableStepItem : CategoryItem() {
 
     override fun onItemSelected(context: Context) {
         val configuration = LivenessConfiguration.Builder()
-            .setSkipStep(LivenessSkipStep.START_STEP, LivenessSkipStep.DONE_STEP)
+            .setSkipStep(LivenessSkipStep.ONBOARDING_STEP, LivenessSkipStep.SUCCESS_STEP)
             .build()
         FaceSDK.Instance().startLiveness(
             context, configuration

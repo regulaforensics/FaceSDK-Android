@@ -7,6 +7,8 @@ import com.regula.facesamplekotlin.items.basic.FaceImageQualityRequestItem
 import com.regula.facesamplekotlin.items.basic.FaceCaptureDefaultItem
 import com.regula.facesamplekotlin.items.basic.LivenessDefaultItem
 import com.regula.facesamplekotlin.items.basic.MatchFacesRequestItem
+import com.regula.facesamplekotlin.items.configuration.FaceCaptureConfigurationItem
+import com.regula.facesamplekotlin.items.configuration.LivenessScreenConfigurationItem
 import com.regula.facesamplekotlin.items.customization.*
 import com.regula.facesamplekotlin.items.features.*
 import com.regula.facesamplekotlin.items.other.LocalizationItem
@@ -25,15 +27,15 @@ class CategoryDataProvider {
                 FaceImageQualityRequestItem(),
                 HeaderItem( "Feature Customization"),
                 LivenessAttemptsCountItem(),
-                LivenessHintAnimationItem(),
                 FaceCaptureCameraPositionItem(),
 
-                FaceCaptureHintAnimationItem(),
                 LivenessDisableStepItem(),
                 LivenessSessionIdItem(),
                 FaceSdkInitItem(),
                 FaceSdkDeinitItem(),
                 HeaderItem("UI Customization"),
+                LivenessScreenConfigurationItem(),
+                FaceCaptureConfigurationItem(),
 
                 HideCloseButtonItem(),
                 HideFlashButtonItem(),
@@ -47,6 +49,7 @@ class CategoryDataProvider {
                 AdvancedCustomItem(),
                 OverlayCustomItem(),
                 LivenessProcessingCustomItem(),
+                UICustomizationItem(),
 
                 HeaderItem("Other"),
 

@@ -16,13 +16,12 @@ import com.regula.facesample.items.customization.NotificationViewItem;
 import com.regula.facesample.items.customization.NotificationViewPositionItem;
 import com.regula.facesample.items.customization.OverlayCustomItem;
 import com.regula.facesample.items.customization.SwapButtonItem;
+import com.regula.facesample.items.customization.UICustomizationItem;
 import com.regula.facesample.items.features.FaceCaptureCameraPositionItem;
-import com.regula.facesample.items.features.FaceCaptureHintAnimationItem;
 import com.regula.facesample.items.features.FaceSdkDeinitItem;
 import com.regula.facesample.items.features.FaceSdkInitItem;
 import com.regula.facesample.items.features.LivenessAttemptsCountItem;
 import com.regula.facesample.items.features.LivenessDisableStepItem;
-import com.regula.facesample.items.features.LivenessHintAnimationItem;
 import com.regula.facesample.items.features.LivenessSessionIdItem;
 import com.regula.facesample.items.other.LocalizationItem;
 import com.regula.facesample.items.other.NetworkInterceptorItem;
@@ -57,9 +56,7 @@ public class CategoryDataProvider {
                     }
                 },
                 new LivenessAttemptsCountItem(),
-                new LivenessHintAnimationItem(),
                 new FaceCaptureCameraPositionItem(),
-                new FaceCaptureHintAnimationItem(),
                 new LivenessDisableStepItem(),
                 new LivenessSessionIdItem(),
                 new FaceSdkInitItem(),
@@ -82,6 +79,7 @@ public class CategoryDataProvider {
                 new AdvancedCustomItem(),
                 new OverlayCustomItem(),
                 new LivenessProcessingCustomItem(),
+                new UICustomizationItem(),
                 new HeaderItem() {
                     @Override
                     public String getTitle() {

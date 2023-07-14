@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:background="@color/gray"
-        android:maxHeight="350dp"
+        android:maxHeight="300dp"
         android:scaleType="fitCenter"
         android:src="@drawable/detect_face1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -80,7 +80,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -136,7 +136,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="10dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/buttonDetect">
 
@@ -169,7 +168,7 @@
         android:id="@+id/buttonDetect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
+        android:layout_margin="20dp"
         android:text="Detect Faces"
         app:layout_constraintBottom_toBottomOf="parent" />
 

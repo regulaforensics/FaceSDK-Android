@@ -11,7 +11,8 @@ class NotificationViewPositionFragment : FaceDefaultUiFragment() {
         val view = view ?: return
         var topMargin = rect.top.toInt()
         topMargin += (rect.height() * 0.4).toInt()
-        val notificationGuideline: Guideline = view.findViewById(R.id.notificationGuideline)
+        val notificationGuideline: Guideline = view.findViewById(R.id.topNotificationGuideline)
+        notificationGuideline.setGuidelinePercent(-1f)
         notificationGuideline.setGuidelineBegin(topMargin)
     }
 }

@@ -24,6 +24,8 @@ import com.regula.facesdk.request.MatchFacesRequest
 class MatchFacesActivity : Activity() {
     private lateinit var imageView1: ImageView
     private lateinit var imageView2: ImageView
+    private lateinit var group0: RadioGroup
+    private lateinit var group1:RadioGroup
 
     private lateinit var buttonMatch: Button
     private lateinit var buttonLiveness: Button
@@ -43,6 +45,9 @@ class MatchFacesActivity : Activity() {
 
         imageView2 = findViewById(R.id.imageView2)
         imageView2.layoutParams.height = 400
+
+        group0 = findViewById(R.id.rbGroup0)
+        group1 = findViewById(R.id.rbGroup1)
 
         buttonMatch = findViewById(R.id.buttonMatch)
         buttonLiveness = findViewById(R.id.buttonLiveness)
@@ -90,7 +95,12 @@ class MatchFacesActivity : Activity() {
                     return@setOnMenuItemClickListener true
                 }
                 R.id.camera -> {
-                    startFaceCaptureActivity(imageView)
+                    val radioGroup: RadioGroup
+                    if (i == PICK_IMAGE_1)
+                        radioGroup = group0
+                    else  //if PICK_IMAGE_2
+                        radioGroup = group1
+                    startFaceCaptureActivity(imageView, radioGroup)
                     return@setOnMenuItemClickListener true
                 }
                 else -> return@setOnMenuItemClickListener false
@@ -112,13 +122,14 @@ class MatchFacesActivity : Activity() {
         startActivityForResult(gallery, id)
     }
 
-    private fun startFaceCaptureActivity(imageView: ImageView?) {
+    private fun startFaceCaptureActivity(imageView: ImageView?, group: RadioGroup) {
         val configuration = FaceCaptureConfiguration.Builder().setCameraSwitchEnabled(true).build()
 
         FaceSDK.Instance().presentFaceCaptureActivity(this@MatchFacesActivity, configuration) { faceCaptureResponse: FaceCaptureResponse? ->
             if (faceCaptureResponse?.image != null) {
                 imageView!!.setImageBitmap(faceCaptureResponse.image!!.bitmap)
-                imageView.tag = ImageType.LIVE
+
+                setGroupSelection(group, ImageType.LIVE)
             }
         }
     }
@@ -133,18 +144,24 @@ class MatchFacesActivity : Activity() {
         textViewSimilarity.text = "Similarity: null"
 
         var imageView: ImageView? = null
-        if (requestCode == PICK_IMAGE_1)
-            imageView = imageView1;
-        else if (requestCode == PICK_IMAGE_2)
-            imageView = imageView2;
+        var group: RadioGroup? = null
+
+        if (requestCode == PICK_IMAGE_1) {
+            imageView = imageView1
+            group = group0
+        } else if (requestCode == PICK_IMAGE_2) {
+            imageView = imageView2
+            group = group1
+        }
 
         imageView?.setImageURI(imageUri)
-        imageView?.tag = ImageType.PRINTED
+
+        setGroupSelection(group, ImageType.PRINTED)
     }
 
     private fun matchFaces(first: Bitmap, second: Bitmap) {
-        val firstImage = MatchFacesImage(first, imageView1.tag as ImageType, true)
-        val secondImage = MatchFacesImage(second, imageView2.tag as ImageType, true)
+        val firstImage = MatchFacesImage(first, getGroupSelection(group0), true)
+        val secondImage = MatchFacesImage(second, getGroupSelection(group1), true)
         val matchFacesRequest = MatchFacesRequest(arrayListOf(firstImage, secondImage));
         FaceSDK.Instance().matchFaces(matchFacesRequest) { matchFacesResponse: MatchFacesResponse ->
             val split = MatchFacesSimilarityThresholdSplit(matchFacesResponse.results, 0.75)
@@ -177,6 +194,31 @@ class MatchFacesActivity : Activity() {
             }
 
             textViewSimilarity.text = "Similarity: null"
+        }
+    }
+
+    private fun getGroupSelection(group: RadioGroup): ImageType? {
+        val button = group.findViewById<RadioButton>(group.checkedRadioButtonId)
+        val index = group.indexOfChild(button)
+        when (index) {
+            2 -> return ImageType.LIVE
+            1 -> return ImageType.RFID
+            0 -> return ImageType.PRINTED
+            4 -> return ImageType.EXTERNAL
+            3 -> return ImageType.DOCUMENT_WITH_LIVE
+            5 -> return ImageType.GHOST_PORTRAIT
+        }
+        return ImageType.PRINTED
+    }
+
+    private fun setGroupSelection(group: RadioGroup?, type: ImageType) {
+        when (type) {
+            ImageType.LIVE -> group?.check(group.getChildAt(2).id)
+            ImageType.RFID -> group?.check(group.getChildAt(1).id)
+            ImageType.PRINTED -> group?.check(group.getChildAt(0).id)
+            ImageType.EXTERNAL -> group?.check(group.getChildAt(4).id)
+            ImageType.DOCUMENT_WITH_LIVE -> group?.check(group.getChildAt(3).id)
+            ImageType.GHOST_PORTRAIT -> group?.check(group.getChildAt(5).id)
         }
     }
 

@@ -138,6 +138,7 @@ class FaceImageQualityFragment : Fragment() {
         buttonEnable(false)
         binding.textResult.text = ""
         binding.progressBar.visibility = View.VISIBLE;
+        FaceSDK.Instance().serviceUrl = "https://faceapi.regulaforensics.com/"
         FaceSDK.Instance().detectFaces(request) { response: DetectFacesResponse ->
             binding.progressBar.visibility = View.GONE;
             buttonEnable(true)

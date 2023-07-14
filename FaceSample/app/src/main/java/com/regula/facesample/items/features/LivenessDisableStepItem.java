@@ -12,7 +12,7 @@ public class LivenessDisableStepItem extends CategoryItem {
    @Override
    public void onItemSelected(Context context) {
       LivenessConfiguration configuration = new LivenessConfiguration.Builder()
-              .setSkipStep(LivenessSkipStep.START_STEP, LivenessSkipStep.DONE_STEP)
+              .setSkipStep(LivenessSkipStep.ONBOARDING_STEP, LivenessSkipStep.SUCCESS_STEP)
               .build();
       FaceSDK.Instance().startLiveness(context, configuration, livenessResponse -> {});
    }
