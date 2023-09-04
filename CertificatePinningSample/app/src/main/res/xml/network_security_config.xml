@@ -1,0 +1,8 @@
+<network-security-config>
+    <domain-config>
+        <domain includeSubdomains="true">faceapi.regulaforensics.com</domain>
+        <pin-set>
+            <pin digest="SHA-256">/5RKFaPkCjAzvsEZHOlYqncYADaLIG5VfTmhsBbkaBk=</pin>
+        </pin-set>
+    </domain-config>
+</network-security-config>
