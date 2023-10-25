@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.regula.facesample.items.CategoryItem;
 import com.regula.facesample.items.customization.fragment.NotificationViewFragment;
+import com.regula.facesample.util.FaceCaptureResponseUtil;
 import com.regula.facesdk.FaceSDK;
 import com.regula.facesdk.configuration.FaceCaptureConfiguration;
 import com.regula.facesdk.configuration.LivenessConfiguration;
@@ -20,7 +21,7 @@ public class NotificationViewItem extends CategoryItem {
                 .registerUiFragmentClass(NotificationViewFragment.class)
                 .setCameraSwitchEnabled(true)
                 .build();
-        FaceSDK.Instance().presentFaceCaptureActivity(context, configuration, faceCaptureResponse -> { });
+        FaceSDK.Instance().presentFaceCaptureActivity(context, configuration, faceCaptureResponse -> FaceCaptureResponseUtil.response(context, faceCaptureResponse));
     }
 
     @Override

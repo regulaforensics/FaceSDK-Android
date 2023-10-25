@@ -20,7 +20,7 @@ public class SwapButtonItem extends CategoryItem {
                 .registerUiFragmentClass(SwapButtonFragment.class)
                 .setCameraSwitchEnabled(true)
                 .build();
-        FaceSDK.Instance().presentFaceCaptureActivity(context, configuration, livenessResponse -> {});
+        FaceSDK.Instance().presentFaceCaptureActivity(context, configuration, faceCaptureResponse -> {});
     }
 
     @Override

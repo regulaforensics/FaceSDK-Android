@@ -3,6 +3,7 @@ package com.regula.facesample.items.features;
 import android.content.Context;
 
 import com.regula.facesample.items.CategoryItem;
+import com.regula.facesample.util.FaceCaptureResponseUtil;
 import com.regula.facesdk.FaceSDK;
 import com.regula.facesdk.configuration.FaceCaptureConfiguration;
 
@@ -19,7 +20,7 @@ public class FaceCaptureCameraPositionItem extends CategoryItem {
                 .setCameraSwitchEnabled(true)
                 .setCameraId(0)
                 .build();
-        FaceSDK.Instance().presentFaceCaptureActivity(context, configuration, faceCaptureResponse -> { });
+        FaceSDK.Instance().presentFaceCaptureActivity(context, configuration, faceCaptureResponse -> FaceCaptureResponseUtil.response(context, faceCaptureResponse));
     }
 
     @Override

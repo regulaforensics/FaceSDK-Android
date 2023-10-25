@@ -21,6 +21,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    aaptOptions {
+        noCompress "Regula/faceSdkResource.dat"
+    }
 }
 
 dependencies {
@@ -34,9 +38,9 @@ dependencies {
 
     implementation "androidx.recyclerview:recyclerview:1.2.1"
 
-    implementation ('com.regula.face:api:5.2.+@aar'){
+    implementation ('com.regula.face:api:5.3.2840@aar'){
         transitive = true
     }
 
-    implementation ('com.regula.face:core:5.2.+@aar')
+    implementation ('com.regula.face.core:full:6.3.296@aar')
 }

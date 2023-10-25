@@ -3,6 +3,7 @@ package com.regula.facesample.items.customization;
 import android.content.Context;
 
 import com.regula.facesample.items.CategoryItem;
+import com.regula.facesample.util.FaceCaptureResponseUtil;
 import com.regula.facesdk.FaceSDK;
 
 /**
@@ -20,7 +21,7 @@ public class OverlayCustomItem extends CategoryItem {
         // facesdk_overlay_background_white
         // facesdk_overlay_border_default
         // facesdk_overlay_border_active
-        FaceSDK.Instance().presentFaceCaptureActivity(context, faceCaptureResponse -> { });
+        FaceSDK.Instance().presentFaceCaptureActivity(context, faceCaptureResponse -> FaceCaptureResponseUtil.response(context, faceCaptureResponse));
     }
 
     @Override

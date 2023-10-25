@@ -9,6 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#DDDDDE</color>
     <color name="dark_gray">#2a2a2a</color>
+    <color name="item_title">#4d4d4d</color>
+    <color name="item_description">#4d4d4d</color>
 
     <!-- Custom colors for overlay -->
     <!--<color name="facesdk_overlay_background_dark">#A605424C</color>
