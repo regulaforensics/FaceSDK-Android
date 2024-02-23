@@ -3,6 +3,7 @@ package com.regula.facesamplekotlin.items.customization
 import android.content.Context
 import com.regula.facesamplekotlin.category.CategoryItem
 import com.regula.facesamplekotlin.items.fragments.FlashButtonFragment
+import com.regula.facesamplekotlin.util.FaceCaptureResponseUtil
 import com.regula.facesdk.FaceSDK
 import com.regula.facesdk.configuration.FaceCaptureConfiguration
 import com.regula.facesdk.configuration.LivenessConfiguration
@@ -18,7 +19,7 @@ class FlashButtonItem : CategoryItem() {
             .build()
         FaceSDK.Instance().presentFaceCaptureActivity(
             context, configuration
-        ) { faceCaptureResponse: FaceCaptureResponse? -> }
+        ) { faceCaptureResponse: FaceCaptureResponse -> FaceCaptureResponseUtil.response(context, faceCaptureResponse) }
     }
 
     override val title: String

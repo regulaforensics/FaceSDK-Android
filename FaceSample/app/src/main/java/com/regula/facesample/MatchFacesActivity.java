@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.Button;
@@ -236,12 +235,17 @@ public class MatchFacesActivity extends Activity {
         FaceSDK.Instance().matchFaces(matchRequest, matchFacesResponse -> {
             MatchFacesSimilarityThresholdSplit  split =
                     new MatchFacesSimilarityThresholdSplit(matchFacesResponse.getResults(), 0.75d);
+            Double similarity = null;
             if (split.getMatchedFaces().size() > 0) {
-                double similarity = split.getMatchedFaces().get(0).getSimilarity();
-                textViewSimilarity.setText("Similarity: " + String.format("%.2f", similarity * 100) + "%");
-            } else {
-                textViewSimilarity.setText("Similarity: null");
+                similarity = split.getMatchedFaces().get(0).getSimilarity();
+            } else if (split.getUnmatchedFaces().size() > 0) {
+                similarity = split.getUnmatchedFaces().get(0).getSimilarity();
             }
+
+            if (similarity != null)
+                textViewSimilarity.setText("Similarity: " + String.format("%.2f", similarity * 100) + "%");
+            else
+                textViewSimilarity.setText("Similarity: null");
 
             buttonMatch.setEnabled(true);
             buttonLiveness.setEnabled(true);

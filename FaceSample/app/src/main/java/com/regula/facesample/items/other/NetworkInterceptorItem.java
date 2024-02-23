@@ -3,6 +3,7 @@ package com.regula.facesample.items.other;
 import android.content.Context;
 
 import com.regula.facesample.items.CategoryItem;
+import com.regula.facesample.util.LivenessResponseUtil;
 import com.regula.facesdk.FaceSDK;
 
 /**
@@ -18,7 +19,7 @@ public class NetworkInterceptorItem extends CategoryItem {
             httpURLConnection.getConnection().setRequestProperty("customFiels", "TestValue");
         });
         FaceSDK.Instance().setServiceUrl(FaceSDK.Instance().getServiceUrl());
-        FaceSDK.Instance().startLiveness(context, livenessResponse -> {});
+        FaceSDK.Instance().startLiveness(context, livenessResponse -> LivenessResponseUtil.response(context, livenessResponse));
     }
 
     @Override

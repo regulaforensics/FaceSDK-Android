@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import com.regula.facesamplekotlin.FaceImageQualityActivity
 import com.regula.facesamplekotlin.R
 import com.regula.facesamplekotlin.databinding.FragmentFaceQualityBinding
+import com.regula.facesamplekotlin.util.ResizeTransformation
 import com.regula.facesdk.FaceSDK
 import com.regula.facesdk.configuration.FaceCaptureConfiguration
 import com.regula.facesdk.detection.request.*
@@ -36,7 +37,7 @@ class FaceImageQualityFragment : Fragment() {
     private lateinit var binding: FragmentFaceQualityBinding
     private lateinit var scenario: Scenario
     private lateinit var bitmapToDetect: Bitmap
-
+    private lateinit var externalBitmap: Bitmap
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,11 +46,29 @@ class FaceImageQualityFragment : Fragment() {
 
         binding = FragmentFaceQualityBinding.inflate(inflater, container, false)
         setImage(R.drawable.face_image_quality1)
+        binding.imageViewBackground1.setBackgroundColor(Color.BLUE)
         binding.imageViewMain.setOnClickListener { showMenu(binding.imageViewMain) }
-        binding.imageViewSample1.setOnClickListener { setImage(R.drawable.face_image_quality1) }
-        binding.imageViewSample2.setOnClickListener { setImage(R.drawable.face_image_quality2) }
-        binding.imageViewSample3.setOnClickListener { setImage(R.drawable.face_image_quality3) }
-        binding.imageViewSample4.setOnClickListener { setImage(R.drawable.face_image_quality4) }
+        binding.imageViewSample1.setOnClickListener {
+            setImage(R.drawable.face_image_quality1)
+            binding.imageViewBackground1.setBackgroundColor(Color.BLUE)
+        }
+        binding.imageViewSample2.setOnClickListener {
+            setImage(R.drawable.face_image_quality2)
+            binding.imageViewBackground2.setBackgroundColor(Color.BLUE)
+        }
+        binding.imageViewSample3.setOnClickListener {
+            setImage(R.drawable.face_image_quality3)
+            binding.imageViewBackground3.setBackgroundColor(Color.BLUE)
+        }
+        binding.imageViewSample4.setOnClickListener {
+            setImage(R.drawable.face_image_quality4)
+            binding.imageViewBackground4.setBackgroundColor(Color.BLUE)
+        }
+
+        binding.imageViewSample5.setOnClickListener {
+            setImage(externalBitmap)
+            binding.imageViewBackground5.setBackgroundColor(Color.BLUE)
+        }
 
         binding.button1.setOnClickListener { updateScenario(Scenario.ICAO, it) }
         binding.button2.setOnClickListener { updateScenario(Scenario.VISA_USA, it) }
@@ -72,16 +91,24 @@ class FaceImageQualityFragment : Fragment() {
     }
 
     private fun setImage(res: Int) {
+        clearImageBackground()
+
+        binding.textResult.text = ""
         val option = BitmapFactory.Options()
         option.inScaled = false
         val bitmap = BitmapFactory.decodeResource(resources, res, option)
-        bitmapToDetect = bitmap;
+        bitmapToDetect = bitmap
         binding.imageViewMain.setImageResource(res)
     }
 
     private fun setImage(bitmap: Bitmap) {
-        bitmapToDetect = bitmap;
-        binding.imageViewMain.setImageBitmap(bitmapToDetect);
+        clearImageBackground()
+        externalBitmap = bitmap
+        binding.imageViewSample5.setImageBitmap(bitmap)
+        binding.imageViewBackground5.setBackgroundColor(Color.BLUE)
+        binding.imageViewBackground5.visibility = View.VISIBLE
+        bitmapToDetect = bitmap
+        binding.imageViewMain.setImageBitmap(bitmapToDetect)
     }
 
     private fun updateScenario(scenario: Scenario, view: View) {
@@ -91,6 +118,14 @@ class FaceImageQualityFragment : Fragment() {
         binding.button3.setBackgroundColor(0)
         binding.button4.setBackgroundColor(0)
         view.setBackgroundResource(R.drawable.rounded_background)
+    }
+
+    private fun clearImageBackground() {
+        binding.imageViewBackground1.setBackgroundColor(0)
+        binding.imageViewBackground2.setBackgroundColor(0)
+        binding.imageViewBackground3.setBackgroundColor(0)
+        binding.imageViewBackground4.setBackgroundColor(0)
+        binding.imageViewBackground5.setBackgroundColor(0)
     }
 
 
@@ -198,6 +233,10 @@ class FaceImageQualityFragment : Fragment() {
                     startFaceCaptureActivity()
                     return@setOnMenuItemClickListener true
                 }
+                R.id.photo -> {
+                    openDefaultCamera()
+                    return@setOnMenuItemClickListener  true
+                }
                 else -> return@setOnMenuItemClickListener false
             }
         }
@@ -212,21 +251,40 @@ class FaceImageQualityFragment : Fragment() {
     }
 
     private fun openGallery() {
-        startForResult.launch(
-            Intent(
-                Intent.ACTION_PICK,
-                MediaStore.Images.Media.INTERNAL_CONTENT_URI
-            )
+        val intent = Intent(
+            Intent.ACTION_PICK
         )
+        intent.type = "image/*"
+        startForResult.launch(intent)
     }
 
     private val startForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val intent = result.data
-                binding.imageViewMain.setImageURI(intent?.data)
-                setImage(getImageBitmap(binding.imageViewMain))
+                intent?.data?.let {
+                    val bitmap = context?.contentResolver?.openInputStream(it).use { data ->
+                        BitmapFactory.decodeStream(data)
+                    }
+                    val resizedBitmap = ResizeTransformation(1080).transform(bitmap)
+                    binding.imageViewMain.setImageBitmap(resizedBitmap)
+                    resizedBitmap?.let {
+                        setImage(resizedBitmap)
+                    } ?: binding.imageViewSample1.callOnClick()
+                }
             }
+        }
+
+    private fun openDefaultCamera() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startCameraForResult.launch(cameraIntent)
+    }
+
+    private val startCameraForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            val photo = result.data?.extras?.get("data")
+            if (photo is Bitmap)
+                setImage(photo)
         }
 
     private fun startFaceCaptureActivity() {

@@ -1,8 +1,10 @@
 package com.regula.facesample.items.basic;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.regula.facesample.items.CategoryItem;
+import com.regula.facesample.util.FaceCaptureResponseUtil;
 import com.regula.facesdk.FaceSDK;
 
 /**
@@ -14,7 +16,7 @@ public class FaceCaptureDefaultItem extends CategoryItem {
 
     @Override
     public void onItemSelected(Context context) {
-        FaceSDK.Instance().presentFaceCaptureActivity(context, faceCaptureResponse -> { });
+        FaceSDK.Instance().presentFaceCaptureActivity(context, faceCaptureResponse -> FaceCaptureResponseUtil.response(context, faceCaptureResponse));
     }
 
     @Override

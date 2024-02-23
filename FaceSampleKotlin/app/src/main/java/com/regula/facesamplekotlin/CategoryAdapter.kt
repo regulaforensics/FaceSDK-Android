@@ -35,9 +35,9 @@ class CategoryAdapter(private val context: Context, var list: List<ICategoryItem
         fun bind(position: Int) {
             val item = list[position] as CategoryItem
             title.text = item.title
-            item.description?.let { description.setText(it) }
+            description.setText(item.description)
 
-            itemView.setOnClickListener { v: View? ->
+            itemView.setOnClickListener {
                 item.onItemSelected(
                     context
                 )

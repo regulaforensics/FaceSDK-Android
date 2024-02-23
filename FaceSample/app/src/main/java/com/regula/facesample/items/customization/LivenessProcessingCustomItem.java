@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.regula.facesample.items.CategoryItem;
 import com.regula.facesample.items.customization.fragment.LivenessProcessingCustomFragment;
+import com.regula.facesample.util.LivenessResponseUtil;
 import com.regula.facesdk.FaceSDK;
 import com.regula.facesdk.configuration.LivenessConfiguration;
 
@@ -19,7 +20,7 @@ public class LivenessProcessingCustomItem extends CategoryItem {
       LivenessConfiguration configuration = new LivenessConfiguration.Builder()
               .registerProcessingFragment(LivenessProcessingCustomFragment.class)
               .build();
-      FaceSDK.Instance().startLiveness(context, configuration, livenessResponse -> {});
+      FaceSDK.Instance().startLiveness(context, configuration, livenessResponse -> LivenessResponseUtil.response(context, livenessResponse));
    }
 
    @Override

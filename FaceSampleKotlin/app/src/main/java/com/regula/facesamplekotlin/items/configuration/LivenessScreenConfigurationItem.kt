@@ -20,7 +20,8 @@ class LivenessScreenConfigurationItem : CategoryItem() {
             .setColor(CustomizationColor.ONBOARDING_SCREEN_START_BUTTON_BACKGROUND, R.drawable.custom_button_drawable)
             .setColor(CustomizationColor.ONBOARDING_SCREEN_START_BUTTON_TITLE, R.color.background_color)
             .setColor(CustomizationColor.ONBOARDING_SCREEN_TITLE_LABEL_TEXT, R.color.title_color)
-            .setColor(CustomizationColor.ONBOARDING_SCREEN_MESSAGE_LABEL_TEXT, R.color.message_color)
+            .setColor(CustomizationColor.ONBOARDING_SCREEN_SUBTITLE_LABEL_TEXT, R.color.light_gray)
+            .setColor(CustomizationColor.ONBOARDING_SCREEN_MESSAGE_LABELS_TEXT, R.color.message_color)
             .setImage(CustomizationImage.ONBOARDING_SCREEN_CLOSE_BUTTON, R.drawable.close_button)
 
             .setImage(CustomizationImage.ONBOARDING_SCREEN_ILLUMINATION, R.drawable.ic_looks_1)
@@ -28,8 +29,14 @@ class LivenessScreenConfigurationItem : CategoryItem() {
             .setImage(CustomizationImage.ONBOARDING_SCREEN_CAMERA_LEVEL, R.drawable.ic_looks_3)
 
             .setFont(CustomizationFont.ONBOARDING_SCREEN_TITLE_LABEL, R.font.roboto_italic)
-            .setFont(CustomizationFont.ONBOARDING_SCREEN_MESSAGE_LABEL, R.font.roboto)
+            .setFont(CustomizationFont.ONBOARDING_SCREEN_SUBTITLE_LABEL, R.font.roboto_italic)
+            .setFont(CustomizationFont.ONBOARDING_SCREEN_MESSAGE_LABELS, R.font.roboto)
             .setFont(CustomizationFont.ONBOARDING_SCREEN_START_BUTTON, R.font.roboto)
+
+            .setFontSize(CustomizationFont.ONBOARDING_SCREEN_TITLE_LABEL, 35)
+            .setFontSize(CustomizationFont.ONBOARDING_SCREEN_SUBTITLE_LABEL, 30)
+            .setFontSize(CustomizationFont.ONBOARDING_SCREEN_MESSAGE_LABELS, 25)
+            .setFontSize(CustomizationFont.ONBOARDING_SCREEN_START_BUTTON, 40)
 
 
             //Configuration camera screen
@@ -45,6 +52,7 @@ class LivenessScreenConfigurationItem : CategoryItem() {
             .setImage(CustomizationImage.CAMERA_SCREEN_CLOSE_BUTTON, R.drawable.close_button)
 
             .setFont(CustomizationFont.CAMERA_SCREEN_HINT_LABEL, R.font.roboto)
+            .setFontSize(CustomizationFont.RETRY_SCREEN_TITLE_LABEL, 35)
 
 
             //Configuration processing screen
@@ -52,6 +60,7 @@ class LivenessScreenConfigurationItem : CategoryItem() {
             .setColor(CustomizationColor.PROCESSING_SCREEN_PROGRESS, R.color.title_color)
             .setColor(CustomizationColor.PROCESSING_SCREEN_PROGRESS, R.color.message_color)
             .setFont(CustomizationFont.PROCESSING_SCREEN, R.font.roboto)
+            .setFontSize(CustomizationFont.PROCESSING_SCREEN, 30)
 
 
             //Configuration retry screen
@@ -61,13 +70,17 @@ class LivenessScreenConfigurationItem : CategoryItem() {
 
             .setColor(CustomizationColor.RETRY_SCREEN_BACKGROUND, R.color.background_color)
             .setColor(CustomizationColor.RETRY_SCREEN_TITLE_LABEL_TEXT, R.color.title_color)
+            .setColor(CustomizationColor.RETRY_SCREEN_SUBTITLE_LABEL_TEXT, R.color.light_gray)
             .setColor(CustomizationColor.RETRY_SCREEN_HINT_LABELS_TEXT, R.color.message_color)
             .setColor(CustomizationColor.RETRY_SCREEN_RETRY_BUTTON_BACKGROUND, R.color.title_color)
             .setColor(CustomizationColor.RETRY_SCREEN_RETRY_BUTTON_TITLE, R.color.image_color)
 
             .setFont(CustomizationFont.RETRY_SCREEN_TITLE_LABEL, R.font.roboto)
+            .setFont(CustomizationFont.RETRY_SCREEN_SUBTITLE_LABEL, R.font.roboto_italic)
             .setFont(CustomizationFont.RETRY_SCREEN_HINT_LABELS, R.font.roboto)
             .setFont(CustomizationFont.RETRY_SCREEN_RETRY_BUTTON, R.font.roboto)
+
+            .setFontSize(CustomizationFont.RETRY_SCREEN_TITLE_LABEL, 25)
 
 
             //Configuration success screen

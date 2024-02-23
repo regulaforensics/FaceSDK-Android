@@ -29,6 +29,7 @@ import com.regula.facesdk.model.results.personDb.PageableItemList;
 import com.regula.facesdk.model.results.personDb.Person;
 import com.regula.facesdk.model.results.personDb.PersonImage;
 import com.regula.facesdk.model.results.personDb.SearchPerson;
+import com.regula.facesdk.request.personDb.ImageUpload;
 import com.regula.facesdk.request.personDb.SearchPersonRequest;
 
 import java.io.InputStream;
@@ -37,7 +38,7 @@ import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
 
-    Button browseBtn, searchBtn;
+    Button browseBtn, searchBtn, searchByUlrBtn;
     ImageView searchImg;
     Common.ImageUploadWithThumbnail image;
     RecyclerView personsRv;
@@ -54,6 +55,7 @@ public class SearchActivity extends AppCompatActivity {
 
         browseBtn = findViewById(R.id.browseBtn);
         searchBtn = findViewById(R.id.searchBtn);
+        searchByUlrBtn = findViewById(R.id.searchByUlrBtn);
         searchImg = findViewById(R.id.searchIV);
         personsRv = findViewById(R.id.personRV);
 
@@ -77,26 +79,43 @@ public class SearchActivity extends AppCompatActivity {
                 searchPersonRequest.setGroupIdsForSearch(groupIds);
             searchPersonRequest.setImageUpload(image);
             searchPersonRequest.setDetectAll(true);
-            FaceSDK.Instance().personDatabase().searchPerson(searchPersonRequest,
-                    new PersonDBCallback<List<SearchPerson>>() {
-                        @Override
-                        public void onSuccess(List<SearchPerson> response) {
-                            persons.clear();
-                            persons.addAll(response);
-                            personsRv.getAdapter().notifyDataSetChanged();
-                        }
+            searchPerson(searchPersonRequest);
+        });
 
-                        @Override
-                        public void onFailure(String message) {
-                            Toast.makeText(SearchActivity.this, "ERROR: " + message, Toast.LENGTH_LONG).show();
-                        }
-                    });
+        searchByUlrBtn.setOnClickListener(v -> {
+            SearchPersonRequest searchPersonRequest = new SearchPersonRequest();
+            if(groupIds != null)
+                searchPersonRequest.setGroupIdsForSearch(groupIds);
+            searchPersonRequest.setImageUpload(image);
+
+            ImageUpload imageUpload = new ImageUpload();
+            imageUpload.setImageUrl("https://faceapi.regulaforensics.com/face-demo/detection/04.jpg");
+            searchPersonRequest.setImageUpload(imageUpload);
+
+            searchPerson(searchPersonRequest);
         });
 
         personsRv.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
         personsRv.addItemDecoration(new DividerItemDecoration(SearchActivity.this,
                 DividerItemDecoration.HORIZONTAL));
         personsRv.setAdapter(new PersonsAdapter(persons));
+    }
+
+    private void searchPerson(SearchPersonRequest searchPersonRequest) {
+        FaceSDK.Instance().personDatabase().searchPerson(searchPersonRequest,
+                new PersonDBCallback<List<SearchPerson>>() {
+                    @Override
+                    public void onSuccess(List<SearchPerson> response) {
+                        persons.clear();
+                        persons.addAll(response);
+                        personsRv.getAdapter().notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(SearchActivity.this, "ERROR: " + message, Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     @Override

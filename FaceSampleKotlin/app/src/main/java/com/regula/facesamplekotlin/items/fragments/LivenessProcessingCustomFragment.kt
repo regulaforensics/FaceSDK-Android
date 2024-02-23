@@ -1,11 +1,11 @@
 package com.regula.facesamplekotlin.items.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.regula.common.utils.RegulaLog
 import com.regula.facesamplekotlin.R
 import com.regula.facesdk.fragment.BaseFaceLivenessProcessingFragment
 
@@ -43,7 +43,7 @@ class LivenessProcessingCustomFragment : BaseFaceLivenessProcessingFragment() {
                 R.string.livenessRetry_text_environment,
                 R.string.livenessRetry_text_subject
             )
-            RegulaLog.e("Not defined error caught")
+            Log.e("CustomFragment", "Not defined error caught")
         }
         for (strId in stringResourceId) {
             guidelineTextBuilder.append(String.format("- %s\n", getString(strId)))

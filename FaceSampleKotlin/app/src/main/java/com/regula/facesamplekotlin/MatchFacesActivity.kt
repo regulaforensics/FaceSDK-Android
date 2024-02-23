@@ -3,6 +3,7 @@ package com.regula.facesamplekotlin
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -11,8 +12,11 @@ import android.view.MenuItem
 import android.widget.*
 import com.regula.facesdk.FaceSDK
 import com.regula.facesdk.configuration.FaceCaptureConfiguration
+import com.regula.facesdk.detection.request.OutputImageCrop
+import com.regula.facesdk.detection.request.OutputImageParams
 import com.regula.facesdk.enums.ImageType
 import com.regula.facesdk.enums.LivenessStatus
+import com.regula.facesdk.enums.OutputImageCropAspectRatio
 import com.regula.facesdk.model.MatchFacesImage
 import com.regula.facesdk.model.results.FaceCaptureResponse
 import com.regula.facesdk.model.results.LivenessResponse
@@ -24,6 +28,8 @@ import com.regula.facesdk.request.MatchFacesRequest
 class MatchFacesActivity : Activity() {
     private lateinit var imageView1: ImageView
     private lateinit var imageView2: ImageView
+    private lateinit var imageViewResult1: ImageView
+    private lateinit var imageViewResult2: ImageView
     private lateinit var group0: RadioGroup
     private lateinit var group1:RadioGroup
 
@@ -46,6 +52,9 @@ class MatchFacesActivity : Activity() {
         imageView2 = findViewById(R.id.imageView2)
         imageView2.layoutParams.height = 400
 
+        imageViewResult1 = findViewById(R.id.imageViewResult1)
+        imageViewResult2 = findViewById(R.id.imageViewResult2)
+
         group0 = findViewById(R.id.rbGroup0)
         group1 = findViewById(R.id.rbGroup1)
 
@@ -62,7 +71,8 @@ class MatchFacesActivity : Activity() {
         buttonMatch.setOnClickListener {
             if (imageView1.drawable != null && imageView2.drawable != null) {
                 textViewSimilarity.text = "Processing…"
-
+                imageViewResult1.setImageBitmap(null)
+                imageViewResult2.setImageBitmap(null)
                 matchFaces(getImageBitmap(imageView1), getImageBitmap(imageView2))
                 buttonMatch.isEnabled = false
                 buttonLiveness.isEnabled = false
@@ -95,11 +105,10 @@ class MatchFacesActivity : Activity() {
                     return@setOnMenuItemClickListener true
                 }
                 R.id.camera -> {
-                    val radioGroup: RadioGroup
-                    if (i == PICK_IMAGE_1)
-                        radioGroup = group0
-                    else  //if PICK_IMAGE_2
-                        radioGroup = group1
+                    val radioGroup = if (i == PICK_IMAGE_1)
+                        group0
+                    else //if PICK_IMAGE_2
+                        group1
                     startFaceCaptureActivity(imageView, radioGroup)
                     return@setOnMenuItemClickListener true
                 }
@@ -134,10 +143,10 @@ class MatchFacesActivity : Activity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode != RESULT_OK)
+        if (resultCode != RESULT_OK || data == null)
             return
 
         imageUri = data.data
@@ -162,14 +171,41 @@ class MatchFacesActivity : Activity() {
     private fun matchFaces(first: Bitmap, second: Bitmap) {
         val firstImage = MatchFacesImage(first, getGroupSelection(group0), true)
         val secondImage = MatchFacesImage(second, getGroupSelection(group1), true)
-        val matchFacesRequest = MatchFacesRequest(arrayListOf(firstImage, secondImage));
+        val matchFacesRequest = MatchFacesRequest(arrayListOf(firstImage, secondImage))
+
+        val crop = OutputImageCrop(
+            OutputImageCropAspectRatio.OUTPUT_IMAGE_CROP_ASPECT_RATIO_3X4
+        )
+        val outputImageParams = OutputImageParams(crop, Color.WHITE)
+        matchFacesRequest.outputImageParams = outputImageParams
+
         FaceSDK.Instance().matchFaces(matchFacesRequest) { matchFacesResponse: MatchFacesResponse ->
             val split = MatchFacesSimilarityThresholdSplit(matchFacesResponse.results, 0.75)
-            if (split.matchedFaces.size > 0) {
-                val similarity = split.matchedFaces[0].similarity
-                textViewSimilarity.text = "Similarity: " +  String.format("%.2f", similarity * 100) + "%"
+            val similarity = if (split.matchedFaces.size > 0) {
+                split.matchedFaces[0].similarity
+            } else if (split.unmatchedFaces.size > 0){
+                split.unmatchedFaces[0].similarity
             } else {
-                textViewSimilarity.text = "Similarity: null"
+                null
+            }
+
+            val text = similarity?.let {
+                "Similarity: " +  String.format("%.2f", it * 100) + "%"
+            } ?: "Similarity: null"
+
+            textViewSimilarity.text = text
+
+            if (matchFacesResponse.detections.size > 0 && matchFacesResponse.detections[0] != null
+                && matchFacesResponse.detections[0].faces.size > 0
+                && matchFacesResponse.detections[0].faces[0].crop != null
+            ) {
+                imageViewResult1.setImageBitmap(matchFacesResponse.detections[0].faces[0].crop)
+            }
+            if (matchFacesResponse.detections.size > 1 && matchFacesResponse.detections[1] != null
+                && matchFacesResponse.detections[1].faces.size > 0
+                && matchFacesResponse.detections[1].faces[0].crop != null
+            ) {
+                imageViewResult2.setImageBitmap(matchFacesResponse.detections[1].faces[0].crop)
             }
 
             buttonMatch.isEnabled = true
@@ -180,19 +216,18 @@ class MatchFacesActivity : Activity() {
 
     private fun startLiveness() {
         FaceSDK.Instance().startLiveness(this@MatchFacesActivity) { livenessResponse: LivenessResponse ->
-            if (livenessResponse.bitmap != null) {
+            val livenessStatus = livenessResponse.bitmap?.let {
                 imageView1.setImageBitmap(livenessResponse.bitmap)
                 imageView1.tag = ImageType.LIVE
 
                 if (livenessResponse.liveness == LivenessStatus.PASSED) {
-                    textViewLiveness.text = "Liveness: passed"
+                    "Liveness: passed"
                 } else {
-                    textViewLiveness.text = "Liveness: unknown"
+                    "Liveness: unknown"
                 }
-            } else {
-                textViewLiveness.text = "Liveness: null"
-            }
+            } ?: "Liveness: null"
 
+            textViewLiveness.text = livenessStatus
             textViewSimilarity.text = "Similarity: null"
         }
     }
@@ -207,6 +242,7 @@ class MatchFacesActivity : Activity() {
             4 -> return ImageType.EXTERNAL
             3 -> return ImageType.DOCUMENT_WITH_LIVE
             5 -> return ImageType.GHOST_PORTRAIT
+            6 -> return ImageType.BARCODE
         }
         return ImageType.PRINTED
     }
@@ -219,6 +255,7 @@ class MatchFacesActivity : Activity() {
             ImageType.EXTERNAL -> group?.check(group.getChildAt(4).id)
             ImageType.DOCUMENT_WITH_LIVE -> group?.check(group.getChildAt(3).id)
             ImageType.GHOST_PORTRAIT -> group?.check(group.getChildAt(5).id)
+            ImageType.BARCODE -> group?.check(group.getChildAt(6).id)
         }
     }
 

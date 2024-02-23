@@ -11,17 +11,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
     <ImageView
         android:id="@+id/imageViewMain"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:adjustViewBounds="true"
-        android:maxHeight="300dp"
         android:background="@color/gray"
         android:src="@drawable/face_image_quality1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline"
         tools:ignore="MissingConstraints" />
 
     <LinearLayout
@@ -33,118 +40,187 @@
         app:layout_constraintTop_toBottomOf="@+id/imageViewMain"
         tools:layout_editor_absoluteX="10dp">
 
-        <ImageView
-            android:id="@+id/imageViewSample1"
+        <FrameLayout
+            android:id="@+id/imageViewBackground1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:background="@color/gray"
-            android:src="@drawable/face_image_quality1" />
+            android:layout_weight="1">
 
-        <ImageView
-            android:id="@+id/imageViewSample2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:background="@color/gray"
-            android:src="@drawable/face_image_quality2" />
+            <ImageView
+                android:id="@+id/imageViewSample1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:adjustViewBounds="true"
+                android:background="@color/gray"
+                android:src="@drawable/face_image_quality1" />
 
-        <ImageView
-            android:id="@+id/imageViewSample3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:background="@color/gray"
-            android:src="@drawable/face_image_quality3" />
+        </FrameLayout>
 
-        <ImageView
-            android:id="@+id/imageViewSample4"
+        <FrameLayout
+            android:id="@+id/imageViewBackground2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="10dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/imageViewSample2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:adjustViewBounds="true"
+                android:background="@color/gray"
+                android:src="@drawable/face_image_quality2" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/imageViewBackground3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/imageViewSample3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:adjustViewBounds="true"
+                android:background="@color/gray"
+                android:src="@drawable/face_image_quality3" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/imageViewBackground4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/imageViewSample4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@color/gray"
+                android:src="@drawable/face_image_quality4" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/imageViewBackground5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:background="@color/gray"
-            android:src="@drawable/face_image_quality4" />
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imageViewSample5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@color/gray"
+                android:src="@drawable/face_image_quality4" />
+
+        </FrameLayout>
     </LinearLayout>
 
     <TextView
         android:id="@+id/textResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:gravity="center"
         android:layout_marginTop="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        android:textColor="@color/purple_700"/>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:gravity="center"
-        android:orientation="vertical"
+        android:padding="8dp"
+        android:textColor="@color/purple_700"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        app:layout_constraintTop_toBottomOf="@id/linearLayout"/>
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonsLayout"
+        app:layout_constraintTop_toBottomOf="@id/textResult">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="Quality ICAO"
-            android:textColor="@color/purple_700" />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="Quality Visa USA"
-            android:textColor="@color/purple_700" />
+            <LinearLayout
+                android:id="@+id/mainLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:scrollbars="vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="Quality Visa Shengen"
-            android:textColor="@color/purple_700" />
+                <TextView
+                    android:id="@+id/button1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Quality ICAO"
+                    android:textColor="@color/text" />
 
-        <TextView
-            android:id="@+id/button4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="Custom scenario"
-            android:textColor="@color/purple_700" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/button2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Quality Visa USA"
+                    android:textColor="@color/text" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/button3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Quality Visa Shengen"
+                    android:textColor="@color/text" />
+
+                <TextView
+                    android:id="@+id/button4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Custom scenario"
+                    android:textColor="@color/text" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
+        android:id="@+id/buttonsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginTop="30dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/buttonDetect">
+        app:layout_constraintBottom_toTopOf="@id/buttonDetect">
 
         <Button
             android:id="@+id/buttonPick"
@@ -154,8 +230,7 @@
             android:layout_weight="1"
             android:text="Pick photo"
             android:textAllCaps="false"
-            android:textColor="@color/purple_700"
-            app:layout_constraintBottom_toTopOf="@+id/buttonDetect" />
+            android:textColor="@color/text" />
 
         <Button
             android:id="@+id/buttonSee"
@@ -165,11 +240,10 @@
             android:layout_weight="1"
             android:text="Quality Results"
             android:textAllCaps="false"
-            android:textColor="@color/purple_700"
+            android:textColor="@color/text"
             android:visibility="gone"
             tools:visibility="visible" />
     </LinearLayout>
-
 
     <Button
         android:id="@+id/buttonDetect"
@@ -177,6 +251,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="Detect Face Image Quality"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:textColor="@color/button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

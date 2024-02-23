@@ -9,7 +9,7 @@ public class FaceSdkInitItem extends CategoryItem {
 
    @Override
    public void onItemSelected(Context context) {
-      FaceSDK.Instance().init(context, (status, exception) -> { });
+      FaceSDK.Instance().initialize(context, (status, exception) -> { });
    }
 
    @Override
