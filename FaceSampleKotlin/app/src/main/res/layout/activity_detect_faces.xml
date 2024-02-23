@@ -11,18 +11,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
     <ImageView
         android:id="@+id/imageViewMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:background="@color/gray"
-        android:maxHeight="300dp"
         android:scaleType="fitCenter"
         android:src="@drawable/detect_face1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline"
         tools:ignore="MissingConstraints" />
 
     <LinearLayout
@@ -94,7 +101,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="Crop central face"
-            android:textColor="@color/purple_700" />
+            android:textColor="@color/text" />
 
         <TextView
             android:id="@+id/button2"
@@ -102,7 +109,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="Crop all faces"
-            android:textColor="@color/purple_700" />
+            android:textColor="@color/text" />
 
         <TextView
             android:id="@+id/button3"
@@ -110,7 +117,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="Custom scenario 1"
-            android:textColor="@color/purple_700" />
+            android:textColor="@color/text" />
 
         <TextView
             android:id="@+id/button4"
@@ -118,7 +125,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="Custom scenario 2"
-            android:textColor="@color/purple_700" />
+            android:textColor="@color/text" />
     </LinearLayout>
 
     <ProgressBar
@@ -147,7 +154,7 @@
             android:layout_weight="1"
             android:text="Pick photo"
             android:textAllCaps="false"
-            android:textColor="@color/purple_700"
+            android:textColor="@color/text"
             app:layout_constraintBottom_toTopOf="@+id/buttonDetect" />
 
         <Button
@@ -158,7 +165,7 @@
             android:layout_weight="1"
             android:text="See Face Images"
             android:textAllCaps="false"
-            android:textColor="@color/purple_700"
+            android:textColor="@color/text"
             android:visibility="gone"
             tools:visibility="visible" />
     </LinearLayout>
@@ -169,6 +176,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        android:textColor="@color/button"
         android:text="Detect Faces"
         app:layout_constraintBottom_toBottomOf="parent" />
 

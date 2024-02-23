@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="gray">#585858</color>
+    <color name="dark_gray">#ddddde</color>
+    <color name="item_title">#b7b7b7</color>
+    <color name="item_description">#828282</color>
+    <color name="facesdk_icon_background"></color>
+</resources>

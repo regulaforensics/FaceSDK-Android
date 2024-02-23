@@ -9,7 +9,7 @@ public class FaceSdkDeinitItem extends CategoryItem {
 
     @Override
     public void onItemSelected(Context context) {
-        FaceSDK.Instance().deinit();
+        FaceSDK.Instance().deinitialize();
     }
 
     @Override

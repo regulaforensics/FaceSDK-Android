@@ -9,4 +9,8 @@
     <item
         android:id="@+id/camera"
         android:title="Camera"/>
+
+    <item
+        android:id="@+id/photo"
+        android:title="Take a photo"/>
 </menu>

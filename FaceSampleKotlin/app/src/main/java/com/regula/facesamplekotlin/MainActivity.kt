@@ -24,14 +24,14 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = CategoryAdapter(this, getCategoryData())
 
-        FaceSDK.Instance().init(this) { status: Boolean, e: InitException? ->
+        FaceSDK.Instance().initialize(this) { status: Boolean, e: InitException? ->
             if (!status) {
                 Toast.makeText(
                     this@MainActivity,
                     "Init finished with error: " + if (e != null) e.message else "",
                     Toast.LENGTH_LONG
                 ).show()
-                return@init
+                return@initialize
             }
             Log.d("MainActivity", "FaceSDK init completed successfully")
         }

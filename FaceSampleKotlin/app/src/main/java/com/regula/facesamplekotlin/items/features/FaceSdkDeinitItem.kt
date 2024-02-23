@@ -7,7 +7,7 @@ import com.regula.facesdk.FaceSDK
 class FaceSdkDeinitItem : CategoryItem() {
 
     override fun onItemSelected(context: Context) {
-        FaceSDK.Instance().deinit()
+        FaceSDK.Instance().deinitialize()
     }
 
     override val title: String

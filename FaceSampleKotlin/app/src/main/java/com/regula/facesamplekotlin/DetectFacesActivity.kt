@@ -20,6 +20,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.regula.facesamplekotlin.databinding.ActivityDetectFacesBinding
+import com.regula.facesamplekotlin.util.RandomColors
+import com.regula.facesamplekotlin.util.ResizeTransformation
 import com.regula.facesdk.FaceSDK
 import com.regula.facesdk.configuration.FaceCaptureConfiguration
 import com.regula.facesdk.detection.request.DetectFacesConfiguration
@@ -164,17 +166,19 @@ class DetectFacesActivity : AppCompatActivity() {
             bitmapToDetect.copy(bitmapToDetect.config, true)
         val canvas = Canvas(mutableBitmap)
         val paint = Paint()
-        paint.color = Color.GREEN
-        paint.strokeWidth = 4f
+        paint.strokeWidth = 7.5f
 
         for (face in faces) {
             paint.style = Paint.Style.STROKE;
-            face.faceRect?.let { canvas.drawRect(it, paint) };
+            face.faceRect?.let {
+                paint.color = RandomColors().color
+                canvas.drawRect(it, paint)
+            }
 
             paint.style = Paint.Style.FILL;
             face.landMarks?.let {
                 for (p in face.landMarks!!) {
-                    canvas.drawCircle(p.x.toFloat(), p.y.toFloat(), 4F, paint);
+                    canvas.drawCircle(p.x.toFloat(), p.y.toFloat(), 6.5F, paint);
                 }
             }
         }
@@ -192,6 +196,10 @@ class DetectFacesActivity : AppCompatActivity() {
                 R.id.camera -> {
                     startFaceCaptureActivity()
                     return@setOnMenuItemClickListener true
+                }
+                R.id.photo -> {
+                    openDefaultCamera()
+                    return@setOnMenuItemClickListener  true
                 }
                 else -> return@setOnMenuItemClickListener false
             }
@@ -219,9 +227,29 @@ class DetectFacesActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val intent = result.data
-                binding.imageViewMain.setImageURI(intent?.data)
-                setImage(getImageBitmap(binding.imageViewMain))
+                intent?.data?.let {
+                    val bitmap = contentResolver?.openInputStream(it).use { data ->
+                        BitmapFactory.decodeStream(data)
+                    }
+                    val resizedBitmap = ResizeTransformation(1080).transform(bitmap)
+                    binding.imageViewMain.setImageBitmap(resizedBitmap)
+                    resizedBitmap?.let {
+                        setImage(resizedBitmap)
+                    } ?: binding.imageViewSample1.callOnClick()
+                }
             }
+        }
+
+    private fun openDefaultCamera() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startCameraForResult.launch(cameraIntent)
+    }
+
+    private val startCameraForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            val photo = result.data?.extras?.get("data")
+            if (photo is Bitmap)
+                setImage(photo)
         }
 
     private fun startFaceCaptureActivity() {

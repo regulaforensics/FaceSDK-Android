@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.regula.facesample.items.CategoryItem;
+import com.regula.facesample.util.LivenessResponseUtil;
 import com.regula.facesdk.FaceSDK;
 import com.regula.facesdk.listener.IVideoEncoderCompletion;
 
@@ -19,7 +20,7 @@ public class VideoCompletionItem extends CategoryItem {
                 Log.d("VideoCompletionItem", "Transaction video: " + transactionId + " success: " + success);
             }
         });
-        FaceSDK.Instance().startLiveness(context, livenessResponse -> { });
+        FaceSDK.Instance().startLiveness(context, livenessResponse -> LivenessResponseUtil.response(context, livenessResponse));
     }
 
     @Override

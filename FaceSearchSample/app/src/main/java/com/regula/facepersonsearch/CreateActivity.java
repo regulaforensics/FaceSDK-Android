@@ -30,7 +30,6 @@ import com.regula.facesdk.callback.PersonDBCallback;
 import com.regula.facesdk.model.results.personDb.PageableItemList;
 import com.regula.facesdk.model.results.personDb.Person;
 import com.regula.facesdk.model.results.personDb.PersonImage;
-import com.regula.facesdk.request.personDb.EditGroupPersonsRequest;
 import com.regula.facesdk.request.personDb.ImageUpload;
 
 import java.io.InputStream;
@@ -144,35 +143,12 @@ public class CreateActivity extends AppCompatActivity {
 
     private void createPerson() {
         String name = binding.nameEt.getText() + " " + binding.surnameEt.getText();
-        FaceSDK.Instance().personDatabase().createPerson(name, new PersonDBCallback<Person>() {
+        FaceSDK.Instance().personDatabase().createPerson(name, new String[]{groupId}, new PersonDBCallback<Person>() {
             @Override
             public void onSuccess(Person response) {
                 for (ImageUpload image : images) {
                     FaceSDK.Instance().personDatabase().addPersonImage(response.getId(), image, imagePersonDBCallback);
                 }
-
-                EditGroupPersonsRequest editGroupPersonsRequest = new EditGroupPersonsRequest();
-                editGroupPersonsRequest.setPersonIdsToAdd(new String[]{response.getId()});
-
-                FaceSDK.Instance().personDatabase().editPersonsInGroup(groupId,
-                        editGroupPersonsRequest,
-                        new PersonDBCallback<Void>() {
-                            @Override
-                            public void onSuccess(Void response) {
-                                Toast.makeText(CreateActivity.this,
-                                        "Person added",
-                                        Toast.LENGTH_LONG).show();
-
-                                CreateActivity.this.finish();
-                            }
-
-                            @Override
-                            public void onFailure(String message) {
-                                Toast.makeText(CreateActivity.this,
-                                        message,
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        });
             }
 
             @Override

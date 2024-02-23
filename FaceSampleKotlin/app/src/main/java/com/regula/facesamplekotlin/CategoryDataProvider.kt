@@ -26,6 +26,9 @@ class CategoryDataProvider {
                 DetectFacesRequestItem(),
                 FaceImageQualityRequestItem(),
                 HeaderItem( "Feature Customization"),
+                LivenessLandscapePortraitItem(p = true, l = false),
+                LivenessLandscapePortraitItem(p = false, l = true),
+                LivenessLandscapePortraitItem(p = true, l = true),
                 LivenessAttemptsCountItem(),
                 FaceCaptureCameraPositionItem(),
 

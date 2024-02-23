@@ -2,6 +2,7 @@ package com.regula.facesamplekotlin.items.features
 
 import android.content.Context
 import com.regula.facesamplekotlin.category.CategoryItem
+import com.regula.facesamplekotlin.util.LivenessResponseUtil
 import com.regula.facesdk.FaceSDK
 import com.regula.facesdk.configuration.LivenessConfiguration
 import com.regula.facesdk.model.results.LivenessResponse
@@ -14,7 +15,7 @@ class LivenessAttemptsCountItem : CategoryItem() {
             .build()
         FaceSDK.Instance().startLiveness(
             context, configuration
-        ) { livenessResponse: LivenessResponse? -> }
+        ) { livenessResponse: LivenessResponse -> LivenessResponseUtil.response(context, livenessResponse) }
     }
 
     override val title: String

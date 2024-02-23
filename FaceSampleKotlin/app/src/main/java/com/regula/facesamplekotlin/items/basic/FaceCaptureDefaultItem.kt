@@ -2,6 +2,7 @@ package com.regula.facesamplekotlin.items.basic
 
 import android.content.Context
 import com.regula.facesamplekotlin.category.CategoryItem
+import com.regula.facesamplekotlin.util.FaceCaptureResponseUtil
 import com.regula.facesdk.FaceSDK
 
 class FaceCaptureDefaultItem : CategoryItem() {
@@ -9,6 +10,7 @@ class FaceCaptureDefaultItem : CategoryItem() {
     override fun onItemSelected(context: Context) {
         FaceSDK.Instance().presentFaceCaptureActivity(context) { response ->
             // ... check response.image for capture result
+            FaceCaptureResponseUtil.response(context, response)
         }
     }
 

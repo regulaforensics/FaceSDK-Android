@@ -14,7 +14,7 @@
         android:textStyle="bold"
         android:lines="1"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#4d4d4d" />
+        android:textColor="@color/item_title" />
 
     <TextView
         android:id="@+id/descriptionTv"
@@ -22,6 +22,6 @@
         android:layout_height="wrap_content"
         tools:text="Description"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#4d4d4d" />
+        android:textColor="@color/item_description" />
 
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.view.animation.AccelerateInterpolator
 import com.regula.facesamplekotlin.category.CategoryItem
+import com.regula.facesamplekotlin.util.LivenessResponseUtil
 import com.regula.facesdk.FaceSDK
 import com.regula.facesdk.configuration.LivenessConfiguration
 import org.json.JSONException
@@ -28,9 +29,10 @@ class UICustomizationItem : CategoryItem() {
                 101 -> FaceSDK.Instance().stopLivenessProcessing(context)
             }
         }
-        FaceSDK.Instance().startLiveness(context, configuration) {
+        FaceSDK.Instance().startLiveness(context, configuration) { livenessResponse ->
             FaceSDK.Instance().customization.setUiCustomizationLayer(null)
             mTimerAnimator?.cancel()
+            LivenessResponseUtil.response(context, livenessResponse)
         }
         initAnimation(json, mTimerAnimator)
     }

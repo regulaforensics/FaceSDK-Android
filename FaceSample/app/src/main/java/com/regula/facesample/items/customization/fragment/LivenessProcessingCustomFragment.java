@@ -1,18 +1,16 @@
 package com.regula.facesample.items.customization.fragment;
 
-import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.regula.facesample.R;
-import com.regula.common.utils.RegulaLog;
 import com.regula.facesdk.fragment.BaseFaceLivenessProcessingFragment;
 
 /**
@@ -55,7 +53,7 @@ public final class LivenessProcessingCustomFragment extends BaseFaceLivenessProc
         StringBuilder guidelineTextBuilder = new StringBuilder();
         if (stringResourceId == null) {
             stringResourceId = new int[] { com.regula.facesdk.R.string.livenessRetry_text_environment, com.regula.facesdk.R.string.livenessRetry_text_subject };
-            RegulaLog.e("Not defined error caught");
+            Log.e("CustomFragment", "Not defined error caught");
         }
 
         for (int strId : stringResourceId) {

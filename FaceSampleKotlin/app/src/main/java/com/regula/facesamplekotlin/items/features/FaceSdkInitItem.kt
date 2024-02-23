@@ -8,7 +8,7 @@ import com.regula.facesdk.exception.InitException
 class FaceSdkInitItem : CategoryItem() {
 
     override fun onItemSelected(context: Context) {
-        FaceSDK.Instance().init(
+        FaceSDK.Instance().initialize(
             context
         ) { status: Boolean, exception: InitException? -> }
     }

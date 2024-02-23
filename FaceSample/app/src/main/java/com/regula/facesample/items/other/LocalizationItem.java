@@ -3,6 +3,7 @@ package com.regula.facesample.items.other;
 import android.content.Context;
 
 import com.regula.facesample.items.CategoryItem;
+import com.regula.facesample.util.LivenessResponseUtil;
 import com.regula.facesdk.FaceSDK;
 
 /**
@@ -25,7 +26,7 @@ public class LocalizationItem extends CategoryItem {
             return null;
         });
 
-        FaceSDK.Instance().startLiveness(context, livenessResponse -> { });
+        FaceSDK.Instance().startLiveness(context, livenessResponse -> LivenessResponseUtil.response(context, livenessResponse));
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.regula.facesample.items.CategoryItem;
 import com.regula.facesample.items.customization.fragment.HideNotificationViewFragment;
+import com.regula.facesample.util.FaceCaptureResponseUtil;
 import com.regula.facesdk.FaceSDK;
 import com.regula.facesdk.configuration.FaceCaptureConfiguration;
 
@@ -19,7 +20,7 @@ public class HideNotificationViewItem extends CategoryItem {
                 .setCameraSwitchEnabled(true)
                 .registerUiFragmentClass(HideNotificationViewFragment.class)
                 .build();
-        FaceSDK.Instance().presentFaceCaptureActivity(context, configuration, faceCaptureResponse -> { });
+        FaceSDK.Instance().presentFaceCaptureActivity(context, configuration, faceCaptureResponse -> FaceCaptureResponseUtil.response(context, faceCaptureResponse));
     }
 
     @Override
