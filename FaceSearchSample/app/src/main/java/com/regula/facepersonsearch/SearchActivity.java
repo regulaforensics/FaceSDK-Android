@@ -25,12 +25,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.regula.facesdk.FaceSDK;
 import com.regula.facesdk.callback.PersonDBCallback;
-import com.regula.facesdk.model.results.personDb.PageableItemList;
-import com.regula.facesdk.model.results.personDb.Person;
-import com.regula.facesdk.model.results.personDb.PersonImage;
-import com.regula.facesdk.model.results.personDb.SearchPerson;
-import com.regula.facesdk.request.personDb.ImageUpload;
-import com.regula.facesdk.request.personDb.SearchPersonRequest;
+import com.regula.facesdk.model.results.person.PageableItemList;
+import com.regula.facesdk.model.results.person.Person;
+import com.regula.facesdk.model.results.person.PersonImage;
+import com.regula.facesdk.model.results.person.SearchPerson;
+import com.regula.facesdk.request.person.ImageUpload;
+import com.regula.facesdk.request.person.SearchPersonRequest;
 
 import java.io.InputStream;
 import java.util.ArrayList;

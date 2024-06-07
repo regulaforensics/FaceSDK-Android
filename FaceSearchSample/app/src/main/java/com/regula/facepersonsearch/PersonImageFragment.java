@@ -12,7 +12,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.regula.facesdk.model.results.personDb.PersonImage;
+import com.regula.facesdk.model.results.person.PersonImage;
 
 import java.util.List;
 

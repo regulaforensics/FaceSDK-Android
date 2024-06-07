@@ -1,7 +1,9 @@
 package com.regula.facesamplekotlin
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -15,9 +17,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.regula.facesamplekotlin.databinding.ActivityDetectFacesBinding
 import com.regula.facesamplekotlin.util.RandomColors
@@ -45,6 +49,7 @@ class DetectFacesActivity : AppCompatActivity() {
     private lateinit var scenario: Scenario
     private lateinit var response: DetectFacesResponse
     private lateinit var bitmapToDetect: Bitmap
+    private lateinit var externalBitmap: Bitmap
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,10 +59,27 @@ class DetectFacesActivity : AppCompatActivity() {
 
         setImage(R.drawable.detect_face1)
         binding.imageViewMain.setOnClickListener { showMenu(binding.imageViewMain) }
-        binding.imageViewSample1.setOnClickListener { setImage(R.drawable.detect_face1) }
-        binding.imageViewSample2.setOnClickListener { setImage(R.drawable.detect_face2) }
-        binding.imageViewSample3.setOnClickListener { setImage(R.drawable.detect_face3) }
-        binding.imageViewSample4.setOnClickListener { setImage(R.drawable.detect_face4) }
+        binding.imageViewSample1.setOnClickListener {
+            setImage(R.drawable.detect_face1)
+            binding.imageViewBackground1.setBackgroundColor(Color.BLUE)
+        }
+        binding.imageViewSample2.setOnClickListener {
+            setImage(R.drawable.detect_face2)
+            binding.imageViewBackground2.setBackgroundColor(Color.BLUE)
+        }
+        binding.imageViewSample3.setOnClickListener {
+            setImage(R.drawable.detect_face3)
+            binding.imageViewBackground3.setBackgroundColor(Color.BLUE)
+        }
+        binding.imageViewSample4.setOnClickListener {
+            setImage(R.drawable.detect_face4)
+            binding.imageViewBackground4.setBackgroundColor(Color.BLUE)
+        }
+        binding.imageViewSample5.setOnClickListener {
+            setImage(externalBitmap)
+        }
+
+        binding.imageViewBackground1.setBackgroundColor(Color.BLUE)
 
         binding.button1.setOnClickListener { updateScenario(Scenario.CROP_CENTER, it) }
         binding.button2.setOnClickListener { updateScenario(Scenario.CROP_ALL, it) }
@@ -79,15 +101,22 @@ class DetectFacesActivity : AppCompatActivity() {
     }
 
     private fun setImage(res: Int) {
+        clearImageBackground()
         val option = BitmapFactory.Options()
         option.inScaled = false
         val bitmap = BitmapFactory.decodeResource(resources, res, option)
-        setImage(bitmap)
+        bitmapToDetect = bitmap;
+        binding.imageViewMain.setImageBitmap(bitmapToDetect);
     }
 
     private fun setImage(bitmap: Bitmap) {
-        bitmapToDetect = bitmap;
-        binding.imageViewMain.setImageBitmap(bitmapToDetect);
+        clearImageBackground()
+        bitmapToDetect = bitmap
+        externalBitmap = bitmap
+        binding.imageViewMain.setImageBitmap(bitmapToDetect)
+        binding.imageViewSample5.setImageBitmap(bitmapToDetect)
+        binding.imageViewBackground5.visibility = View.VISIBLE
+        binding.imageViewBackground5.setBackgroundColor(Color.BLUE)
     }
 
     private fun updateScenario(scenario: Scenario, view: View) {
@@ -240,7 +269,40 @@ class DetectFacesActivity : AppCompatActivity() {
             }
         }
 
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                launchCamera()
+            } else {
+                Toast.makeText(
+                    this@DetectFacesActivity,
+                    "Camera permission denied",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
     private fun openDefaultCamera() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this@DetectFacesActivity,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                launchCamera()
+            }
+
+            else -> {
+                requestPermissionLauncher.launch(
+                    Manifest.permission.CAMERA
+                )
+            }
+        }
+    }
+
+    private fun launchCamera() {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startCameraForResult.launch(cameraIntent)
     }
@@ -267,6 +329,13 @@ class DetectFacesActivity : AppCompatActivity() {
         }
     }
 
+    private fun clearImageBackground() {
+        binding.imageViewBackground1.setBackgroundColor(0)
+        binding.imageViewBackground2.setBackgroundColor(0)
+        binding.imageViewBackground3.setBackgroundColor(0)
+        binding.imageViewBackground4.setBackgroundColor(0)
+        binding.imageViewBackground5.setBackgroundColor(0)
+    }
 
     class ImageDialogFragment : DialogFragment() {
         override fun onCreateView(

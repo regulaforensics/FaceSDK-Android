@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.regula.facepersonsearch.databinding.FragmentItemBinding;
-import com.regula.facesdk.model.results.personDb.PersonImage;
+import com.regula.facesdk.model.results.person.PersonImage;
 
 import java.net.URL;
 import java.util.List;

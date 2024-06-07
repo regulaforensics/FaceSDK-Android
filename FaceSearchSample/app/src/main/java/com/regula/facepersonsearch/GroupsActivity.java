@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.regula.facepersonsearch.databinding.ActivityItemsListBinding;
 import com.regula.facesdk.FaceSDK;
 import com.regula.facesdk.callback.PersonDBCallback;
-import com.regula.facesdk.model.results.personDb.PageableItemList;
-import com.regula.facesdk.model.results.personDb.PersonGroup;
+import com.regula.facesdk.model.results.person.PageableItemList;
+import com.regula.facesdk.model.results.person.PersonGroup;
 
 import java.util.ArrayList;
 import java.util.List;

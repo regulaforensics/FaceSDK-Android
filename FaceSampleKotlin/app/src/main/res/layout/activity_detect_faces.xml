@@ -22,6 +22,7 @@
         android:id="@+id/imageViewMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxHeight="300dp"
         android:adjustViewBounds="true"
         android:background="@color/gray"
         android:scaleType="fitCenter"
@@ -41,47 +42,87 @@
         app:layout_constraintTop_toBottomOf="@+id/imageViewMain"
         tools:layout_editor_absoluteX="10dp">
 
-
-        <ImageView
-            android:id="@+id/imageViewSample1"
+        <FrameLayout
+            android:id="@+id/imageViewBackground1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:background="@color/gray"
-            android:src="@drawable/detect_face1" />
+            android:layout_weight="1">
 
-        <ImageView
-            android:id="@+id/imageViewSample2"
+            <ImageView
+                android:id="@+id/imageViewSample1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:layout_margin="3dp"
+                android:background="@color/gray"
+                android:src="@drawable/detect_face1" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/imageViewBackground2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:background="@color/gray"
-            android:src="@drawable/detect_face2" />
+            android:layout_weight="1">
 
+            <ImageView
+                android:id="@+id/imageViewSample2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:layout_margin="3dp"
+                android:background="@color/gray"
+                android:src="@drawable/detect_face2" />
+        </FrameLayout>
 
-        <ImageView
-            android:id="@+id/imageViewSample3"
+        <FrameLayout
+            android:id="@+id/imageViewBackground3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:background="@color/gray"
-            android:src="@drawable/detect_face3" />
+            android:layout_weight="1">
 
+            <ImageView
+                android:id="@+id/imageViewSample3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:layout_margin="3dp"
+                android:background="@color/gray"
+                android:src="@drawable/detect_face3" />
+        </FrameLayout>
 
-        <ImageView
-            android:id="@+id/imageViewSample4"
+        <FrameLayout
+            android:id="@+id/imageViewBackground4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/imageViewSample4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:adjustViewBounds="true"
+                android:background="@color/gray"
+                android:src="@drawable/detect_face4" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/imageViewBackground5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:background="@color/gray"
-            android:src="@drawable/detect_face4" />
+            android:visibility="gone">
 
-
+            <ImageView
+                android:id="@+id/imageViewSample5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:adjustViewBounds="true"
+                android:background="@color/gray" />
+        </FrameLayout>
     </LinearLayout>
 
     <LinearLayout
