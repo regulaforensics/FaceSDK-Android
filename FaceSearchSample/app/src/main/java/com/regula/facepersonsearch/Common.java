@@ -10,7 +10,7 @@ import android.media.ThumbnailUtils;
 
 import androidx.core.app.ActivityCompat;
 
-import com.regula.facesdk.request.personDb.ImageUpload;
+import com.regula.facesdk.request.person.ImageUpload;
 
 public class Common {
     public static final int PICK_IMAGE = 123;

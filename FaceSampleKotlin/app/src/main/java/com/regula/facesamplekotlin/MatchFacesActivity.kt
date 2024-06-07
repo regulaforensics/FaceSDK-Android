@@ -1,15 +1,30 @@
 package com.regula.facesamplekotlin
 
-import android.app.Activity
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.MenuItem
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.PopupMenu
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.ContextCompat
+import com.regula.facesamplekotlin.util.ResizeTransformation
 import com.regula.facesdk.FaceSDK
 import com.regula.facesdk.configuration.FaceCaptureConfiguration
 import com.regula.facesdk.detection.request.OutputImageCrop
@@ -25,9 +40,11 @@ import com.regula.facesdk.model.results.matchfaces.MatchFacesSimilarityThreshold
 import com.regula.facesdk.request.MatchFacesRequest
 
 
-class MatchFacesActivity : Activity() {
+class MatchFacesActivity : AppCompatActivity() {
     private lateinit var imageView1: ImageView
     private lateinit var imageView2: ImageView
+    private lateinit var switchDetectAll1: SwitchCompat
+    private lateinit var switchDetectAll2: SwitchCompat
     private lateinit var imageViewResult1: ImageView
     private lateinit var imageViewResult2: ImageView
     private lateinit var group0: RadioGroup
@@ -39,6 +56,8 @@ class MatchFacesActivity : Activity() {
 
     private lateinit var textViewSimilarity: TextView
     private lateinit var textViewLiveness: TextView
+
+    private var currentImageView: ImageView? = null
 
     private var imageUri: Uri? = null
 
@@ -54,6 +73,9 @@ class MatchFacesActivity : Activity() {
 
         imageViewResult1 = findViewById(R.id.imageViewResult1)
         imageViewResult2 = findViewById(R.id.imageViewResult2)
+
+        switchDetectAll1 = findViewById(R.id.detectAll1)
+        switchDetectAll2 = findViewById(R.id.detectAll2)
 
         group0 = findViewById(R.id.rbGroup0)
         group1 = findViewById(R.id.rbGroup1)
@@ -112,12 +134,62 @@ class MatchFacesActivity : Activity() {
                     startFaceCaptureActivity(imageView, radioGroup)
                     return@setOnMenuItemClickListener true
                 }
+                R.id.photo -> {
+                    currentImageView = imageView
+                    openDefaultCamera()
+                    return@setOnMenuItemClickListener  true
+                }
                 else -> return@setOnMenuItemClickListener false
             }
         }
         popupMenu.menuInflater.inflate(R.menu.menu, popupMenu.menu)
         popupMenu.show()
     }
+
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                launchCamera()
+            } else {
+                Toast.makeText(
+                    this@MatchFacesActivity,
+                    "Camera permission denied",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+    private fun openDefaultCamera() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this@MatchFacesActivity,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                launchCamera()
+            }
+
+            else -> {
+                requestPermissionLauncher.launch(
+                    Manifest.permission.CAMERA
+                )
+            }
+        }
+    }
+
+    private fun launchCamera() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startCameraForResult.launch(cameraIntent)
+    }
+
+    private val startCameraForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            val photo = result.data?.extras?.get("data")
+            if (photo is Bitmap)
+                currentImageView?.setImageBitmap(photo);
+        }
 
     private fun getImageBitmap(imageView: ImageView?): Bitmap {
         imageView?.invalidate()
@@ -163,14 +235,20 @@ class MatchFacesActivity : Activity() {
             group = group1
         }
 
-        imageView?.setImageURI(imageUri)
+        imageUri?.let {
+            val bitmap = contentResolver?.openInputStream(it).use { data ->
+                BitmapFactory.decodeStream(data)
+            }
+            val resizedBitmap = ResizeTransformation(1080).transform(bitmap)
+            imageView?.setImageBitmap(resizedBitmap)
+        }
 
         setGroupSelection(group, ImageType.PRINTED)
     }
 
     private fun matchFaces(first: Bitmap, second: Bitmap) {
-        val firstImage = MatchFacesImage(first, getGroupSelection(group0), true)
-        val secondImage = MatchFacesImage(second, getGroupSelection(group1), true)
+        val firstImage = MatchFacesImage(first, getGroupSelection(group0), switchDetectAll1.isChecked)
+        val secondImage = MatchFacesImage(second, getGroupSelection(group1), switchDetectAll1.isChecked)
         val matchFacesRequest = MatchFacesRequest(arrayListOf(firstImage, secondImage))
 
         val crop = OutputImageCrop(

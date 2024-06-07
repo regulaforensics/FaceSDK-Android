@@ -1,7 +1,9 @@
 package com.regula.facesamplekotlin.detection.fragment
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -12,8 +14,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.regula.facesamplekotlin.FaceImageQualityActivity
 import com.regula.facesamplekotlin.R
@@ -275,7 +279,40 @@ class FaceImageQualityFragment : Fragment() {
             }
         }
 
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                launchCamera()
+            } else {
+                Toast.makeText(
+                    context,
+                    "Camera permission denied",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
     private fun openDefaultCamera() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                launchCamera()
+            }
+
+            else -> {
+                requestPermissionLauncher.launch(
+                    Manifest.permission.CAMERA
+                )
+            }
+        }
+    }
+
+    private fun launchCamera() {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startCameraForResult.launch(cameraIntent)
     }

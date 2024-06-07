@@ -40,6 +40,7 @@ class CategoryDataProvider {
                 LivenessScreenConfigurationItem(),
                 FaceCaptureConfigurationItem(),
 
+                LivenessNotificationItem(),
                 HideCloseButtonItem(),
                 HideFlashButtonItem(),
                 HideNotificationViewItem(),

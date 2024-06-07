@@ -4,6 +4,8 @@ import android.content.Context
 import com.regula.facesamplekotlin.category.CategoryItem
 import com.regula.facesamplekotlin.util.LivenessResponseUtil
 import com.regula.facesdk.FaceSDK
+import com.regula.facesdk.callback.LivenessNotificationCallback
+import com.regula.facesdk.model.LivenessNotification
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -19,11 +21,13 @@ class LivenessNotificationItem : CategoryItem() {
             { livenessResponse ->
                 FaceSDK.Instance().customization.setUiCustomizationLayer(null)
                 LivenessResponseUtil.response(context, livenessResponse)
-            },
-            { livenessNotification ->
-                println(livenessNotification.status.name)
-                updateState(json, livenessNotification.status.name)
-                FaceSDK.Instance().customization.setUiCustomizationLayer(json)
+
+            }, object : LivenessNotificationCallback() {
+                override fun onLivenessNotification(livenessNotification: LivenessNotification) {
+                    println(livenessNotification.status.name)
+                    updateState(json, livenessNotification.status.name)
+                    FaceSDK.Instance().customization.setUiCustomizationLayer(json)
+                }
             })
     }
 
