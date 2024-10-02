@@ -1,40 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-
-    <LinearLayout
-        android:id="@+id/progressLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Initialization..."
-            android:layout_gravity="center_horizontal" />
-
-    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/mainlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -64,42 +40,49 @@
 
                     <RadioButton
                         android:id="@+id/printedDoc"
+                        android:textColor="@color/text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Document" />
 
                     <RadioButton
                         android:id="@+id/rfid"
+                        android:textColor="@color/text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="RFID" />
 
                     <RadioButton
                         android:id="@+id/live"
+                        android:textColor="@color/text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="LIVE" />
 
                     <RadioButton
                         android:id="@+id/docWithLive"
+                        android:textColor="@color/text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Document with live" />
 
                     <RadioButton
                         android:id="@+id/external"
+                        android:textColor="@color/text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="External" />
 
                     <RadioButton
                         android:id="@+id/ghost"
+                        android:textColor="@color/text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="GHOST" />
 
                     <RadioButton
                         android:id="@+id/barcode"
+                        android:textColor="@color/text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Barcode" />
@@ -140,42 +123,49 @@
 
                     <RadioButton
                         android:id="@+id/printedDoc1"
+                        android:textColor="@color/text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Document" />
 
                     <RadioButton
                         android:id="@+id/rfid1"
+                        android:textColor="@color/text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="RFID" />
 
                     <RadioButton
                         android:id="@+id/live1"
+                        android:textColor="@color/text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="LIVE" />
 
                     <RadioButton
                         android:id="@+id/docWithLive1"
+                        android:textColor="@color/text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Document with live" />
 
                     <RadioButton
                         android:id="@+id/external1"
+                        android:textColor="@color/text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="External" />
 
                     <RadioButton
                         android:id="@+id/ghost1"
+                        android:textColor="@color/text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="GHOST" />
 
                     <RadioButton
                         android:id="@+id/barcode1"
+                        android:textColor="@color/text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Barcode" />
@@ -243,4 +233,4 @@
         </LinearLayout>
 
     </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

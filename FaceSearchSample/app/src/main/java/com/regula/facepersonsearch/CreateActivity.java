@@ -1,37 +1,49 @@
 package com.regula.facepersonsearch;
 
-import static com.regula.facepersonsearch.Common.READ_EXTERNAL_STORAGE_REQUEST_CODE;
-import static com.regula.facepersonsearch.Common.pickImage;
 import static com.regula.facepersonsearch.FaceSearchApp.TAG;
 
-import android.app.Activity;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.regula.facepersonsearch.databinding.ActivityCreateBinding;
 import com.regula.facesdk.FaceSDK;
+import com.regula.facesdk.callback.FaceCaptureCallback;
 import com.regula.facesdk.callback.PersonDBCallback;
+import com.regula.facesdk.configuration.FaceCaptureConfiguration;
+import com.regula.facesdk.model.results.FaceCaptureResponse;
 import com.regula.facesdk.model.results.person.PageableItemList;
 import com.regula.facesdk.model.results.person.Person;
 import com.regula.facesdk.model.results.person.PersonImage;
 import com.regula.facesdk.request.person.ImageUpload;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +64,7 @@ public class CreateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         images = new ArrayList<>();
         existingImages = new ArrayList<>();
         binding = ActivityCreateBinding.inflate(getLayoutInflater());
@@ -81,64 +94,196 @@ public class CreateActivity extends AppCompatActivity {
 
         if(personId != null) {
             binding.createBtn.setText("Update");
-            FaceSDK.Instance().personDatabase().getPerson(personId, new PersonDBCallback<Person>() {
-                @Override
-                public void onSuccess(@Nullable Person response) {
-                    if(response == null)
-                        return;
-                    person = response;
-                    String[] names = response.getName().split(" ");
-                    binding.nameEt.setText(names[0]);
-
-                    if(names.length > 1){
-                        String surname = "";
-                        for(int i=1; i<names.length; i++){
-                            surname += names[i] + " ";
-                        }
-                        binding.surnameEt.setText(surname);
-                    }
-
-                    binding.createBtn.setOnClickListener(view -> updatePerson());
-                }
-
-                @Override
-                public void onFailure(@NonNull String message) {
-                    Toast.makeText(CreateActivity.this,
-                            message,
-                            Toast.LENGTH_LONG).show();
-                }
-            });
-
-
-            FaceSDK.Instance().personDatabase().getPersonImages(personId,
-                    new PersonDBCallback<PageableItemList<List<PersonImage>, PersonImage>>() {
-                @Override
-                public void onSuccess(@Nullable PageableItemList<List<PersonImage>, PersonImage> response) {
-                    if(response == null || response.getItemsList() == null)
-                        return;
-                    existingImages.clear();
-                    existingImages.addAll(response.getItemsList());
-                    handler.post( () -> {
-                        addedImagesAdapter.notifyDataSetChanged();
-                        binding.existingImagesCountTv.setText(String.valueOf(existingImages.size()));
-                    });
-                }
-
-                @Override
-                public void onFailure(@NonNull String message) {
-                    Toast.makeText(CreateActivity.this,
-                            message,
-                            Toast.LENGTH_LONG).show();
-                }
-            });
+            getPerson();
         } else {
             binding.createBtn.setOnClickListener(view -> createPerson());
             binding.existingImagesLayout.setVisibility(View.GONE);
         }
 
         binding.addImageBtn.setOnClickListener(view -> {
-            pickImage(CreateActivity.this);
+            showMenu(binding.addImageBtn);
         });
+    }
+
+    private void showMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.gallery:
+                    openGallery();
+                    return true;
+                case R.id.camera:
+                    startFaceCaptureActivity();
+                    return true;
+                case R.id.photo:
+                    openDefaultCamera();
+                    return true;
+            }
+            return false;
+        });
+        popupMenu.getMenuInflater().inflate(R.menu.menu, popupMenu.getMenu());
+        popupMenu.show();
+    }
+
+
+    private void startFaceCaptureActivity() {
+        FaceCaptureConfiguration configuration = new FaceCaptureConfiguration.Builder()
+                .setCameraSwitchEnabled(true)
+                .build();
+
+        FaceSDK.Instance().presentFaceCaptureActivity(this, configuration, new FaceCaptureCallback() {
+            @Override
+            public void onFaceCaptured(@NonNull FaceCaptureResponse faceCaptureResponse) {
+                if (faceCaptureResponse.getImage() != null && faceCaptureResponse.getImage().getBitmap() != null) {
+                    Bitmap photo = faceCaptureResponse.getImage().getBitmap();
+                    byte[] byteImage = Common.transformBitmapToByte(photo);
+                    addImage(byteImage);
+                }
+            }
+        });
+    }
+
+    private void getPerson() {
+        FaceSDK.Instance().personDatabase().getPerson(personId, new PersonDBCallback<Person>() {
+            @Override
+            public void onSuccess(@Nullable Person response) {
+                if (response == null)
+                    return;
+                person = response;
+                String[] names = response.getName().split(" ");
+                binding.nameEt.setText(names[0]);
+
+                if (names.length > 1) {
+                    String surname = "";
+                    for (int i = 1; i < names.length; i++) {
+                        surname += names[i] + " ";
+                    }
+                    binding.surnameEt.setText(surname);
+                }
+
+                binding.createBtn.setOnClickListener(view -> updatePerson());
+            }
+
+            @Override
+            public void onFailure(@NonNull String message) {
+                Toast.makeText(CreateActivity.this,
+                        message,
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+
+        FaceSDK.Instance().personDatabase().getPersonImages(personId,
+                new PersonDBCallback<PageableItemList<List<PersonImage>, PersonImage>>() {
+                    @Override
+                    public void onSuccess(@Nullable PageableItemList<List<PersonImage>, PersonImage> response) {
+                        if (response == null || response.getItemsList() == null)
+                            return;
+                        existingImages.clear();
+                        existingImages.addAll(response.getItemsList());
+                        handler.post(() -> {
+                            addedImagesAdapter.notifyDataSetChanged();
+                            binding.existingImagesCountTv.setText(String.valueOf(existingImages.size()));
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull String message) {
+                        Toast.makeText(CreateActivity.this,
+                                message,
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    private void openGallery() {
+        startForResult.launch(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI));
+    }
+
+    ActivityResultLauncher<Intent> startForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+
+            if (result.getData() != null && result.getData().getData() != null) {
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(result.getData().getData());
+                    byte[] bytes = new byte[inputStream.available()];
+                    inputStream.read(bytes);
+                    inputStream.close();
+                    addImage(bytes);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    });
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(),
+            isGranted -> {
+                if (isGranted) {
+                    launchCamera();
+                } else {
+                    Toast.makeText(CreateActivity.this, "Camera permission denied", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+    private void openDefaultCamera() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED) {
+            launchCamera();
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA);
+        }
+    }
+
+    private void launchCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startCameraForResult.launch(cameraIntent);
+    }
+
+    ActivityResultLauncher<Intent> startCameraForResult =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result != null && result.getData() != null && result.getData().getExtras() != null) {
+                    Object photo = result.getData().getExtras().get("data");
+
+                    if(photo instanceof Bitmap) {
+                        byte[] byteImage = Common.transformBitmapToByte((Bitmap) photo);
+                        addImage(byteImage);
+                    }
+                }
+            });
+
+    private void addImage(byte[] byteImage) {
+        Common.ImageUploadWithThumbnail image = new Common.ImageUploadWithThumbnail();
+        image.setImageData(byteImage);
+        images.add(0, image);
+        adapter.notifyItemInserted(0);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.reset) {
+            binding.nameEt.setText("");
+            binding.surnameEt.setText("");
+            images.clear();
+            adapter.notifyDataSetChanged();
+            if(personId != null) {
+                getPerson();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_reset, menu);
+        if(personId != null) {
+            MenuItem item = menu.findItem(R.id.reset);
+            item.setTitle("Reset");
+        }
+        return true;
     }
 
     private void createPerson() {
@@ -149,6 +294,10 @@ public class CreateActivity extends AppCompatActivity {
                 for (ImageUpload image : images) {
                     FaceSDK.Instance().personDatabase().addPersonImage(response.getId(), image, imagePersonDBCallback);
                 }
+                if (response != null) {
+                    Toast.makeText(CreateActivity.this, "Person created", Toast.LENGTH_LONG).show();
+                }
+                CreateActivity.this.finish();
             }
 
             @Override
@@ -210,36 +359,6 @@ public class CreateActivity extends AppCompatActivity {
             Log.d(TAG,  message);
         }
     };
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == Common.PICK_IMAGE) {
-
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(data.getData());
-                byte[] bytes = new byte[inputStream.available()];
-                        inputStream.read(bytes);
-                Common.ImageUploadWithThumbnail image = new Common.ImageUploadWithThumbnail();
-                image.setImageData(bytes);
-                images.add(image);
-                adapter.notifyItemInserted(images.size());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == READ_EXTERNAL_STORAGE_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // pick image after request permission success
-                pickImage(CreateActivity.this);
-            }
-        }
-    }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {

@@ -76,8 +76,8 @@ public abstract class ItemsAdapter extends ItemPositionAdapter<ItemsAdapter.Item
         public void onCreateContextMenu(ContextMenu menu, View v,
                                         ContextMenu.ContextMenuInfo menuInfo) {
             menu.setHeaderTitle("Select The Action");
-            menu.add(0, ItemsAdapter.MENU_EDIT, 0, "EDIT");//groupId, itemId, order, title
-            menu.add(0, ItemsAdapter.MENU_DELETE, 0, "DELETE");
+            menu.add(0, ItemsAdapter.MENU_EDIT, 0, "Update Group");//groupId, itemId, order, title
+            menu.add(0, ItemsAdapter.MENU_DELETE, 0, "Delete Group");
         }
 
         @Override

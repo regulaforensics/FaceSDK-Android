@@ -4,24 +4,29 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.MenuItem
-import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.PopupMenu
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
-import com.regula.facesamplekotlin.FileUtil.getLicense
-import com.regula.facesamplekotlin.databinding.ActivityMatchFacesBinding
+import com.regula.facesamplekotlin.util.ResizeTransformation
 import com.regula.facesdk.FaceSDK
 import com.regula.facesdk.configuration.FaceCaptureConfiguration
-import com.regula.facesdk.configuration.InitializationConfiguration
 import com.regula.facesdk.detection.request.OutputImageCrop
 import com.regula.facesdk.detection.request.OutputImageParams
 import com.regula.facesdk.enums.ImageType
@@ -34,36 +39,59 @@ import com.regula.facesdk.request.MatchFacesRequest
 
 
 class MatchFacesActivity : AppCompatActivity() {
+    private lateinit var imageView1: ImageView
+    private lateinit var imageView2: ImageView
+    private lateinit var switchDetectAll1: SwitchCompat
+    private lateinit var switchDetectAll2: SwitchCompat
+    private lateinit var imageViewResult1: ImageView
+    private lateinit var imageViewResult2: ImageView
+    private lateinit var group0: RadioGroup
+    private lateinit var group1:RadioGroup
 
-    private var imageUri: Uri? = null
+    private lateinit var buttonMatch: Button
+    private lateinit var buttonClear: Button
 
-    private lateinit var binding: ActivityMatchFacesBinding
+    private lateinit var textViewSimilarity: TextView
 
     private var currentImageView: ImageView? = null
 
+    private var imageUri: Uri? = null
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMatchFacesBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_match_faces)
 
-        val license = getLicense(this)
-        initFaceSdk(license)
+        imageView1 = findViewById(R.id.imageView1)
+        imageView1.layoutParams.height = 400
 
-        binding.imageView1.layoutParams.height = 400
-        binding.imageView2.layoutParams.height = 400
+        imageView2 = findViewById(R.id.imageView2)
+        imageView2.layoutParams.height = 400
 
-        binding.imageView1.setOnClickListener { showMenu(binding.imageView1, PICK_IMAGE_1) }
-        binding.imageView2.setOnClickListener { showMenu(binding.imageView2, PICK_IMAGE_2) }
+        imageViewResult1 = findViewById(R.id.imageViewResult1)
+        imageViewResult2 = findViewById(R.id.imageViewResult2)
 
-        binding.buttonMatch.setOnClickListener {
-            if (binding.imageView1.drawable != null && binding.imageView2.drawable != null) {
-                binding.textViewSimilarity.text = "Processing…"
+        switchDetectAll1 = findViewById(R.id.detectAll1)
+        switchDetectAll2 = findViewById(R.id.detectAll2)
 
-                binding.imageViewResult1.setImageBitmap(null)
-                binding.imageViewResult2.setImageBitmap(null)
-                matchFaces(getImageBitmap(binding.imageView1), getImageBitmap(binding.imageView2))
-                binding.buttonMatch.isEnabled = false
-                binding.buttonClear.isEnabled = false
+        group0 = findViewById(R.id.rbGroup0)
+        group1 = findViewById(R.id.rbGroup1)
+
+        buttonMatch = findViewById(R.id.buttonMatch)
+        buttonClear = findViewById(R.id.buttonClear)
+
+        textViewSimilarity = findViewById(R.id.textViewSimilarity)
+
+        imageView1.setOnClickListener { showMenu(imageView1, PICK_IMAGE_1) }
+        imageView2.setOnClickListener { showMenu(imageView2, PICK_IMAGE_2) }
+
+        buttonMatch.setOnClickListener {
+            if (imageView1.drawable != null && imageView2.drawable != null) {
+                textViewSimilarity.text = "Processing…"
+                imageViewResult1.setImageBitmap(null)
+                imageViewResult2.setImageBitmap(null)
+                matchFaces(getImageBitmap(imageView1), getImageBitmap(imageView2))
+                buttonMatch.isEnabled = false
+                buttonClear.isEnabled = false
             } else {
                 Toast.makeText(
                     this@MatchFacesActivity,
@@ -73,35 +101,13 @@ class MatchFacesActivity : AppCompatActivity() {
             }
         }
 
-        binding.buttonClear.setOnClickListener {
-            binding.imageView1.setImageDrawable(null)
-            binding.imageView2.setImageDrawable(null)
-            binding.imageViewResult1.setImageDrawable(null)
-            binding.imageViewResult2.setImageDrawable(null)
-            binding.textViewSimilarity.text = "Similarity: null"
+        buttonClear.setOnClickListener {
+            imageView1.setImageDrawable(null)
+            imageView2.setImageDrawable(null)
+            imageViewResult1.setImageDrawable(null)
+            imageViewResult2.setImageDrawable(null)
+            textViewSimilarity.text = "Similarity: null"
         }
-    }
-
-    private fun initFaceSdk(license: ByteArray?) {
-        binding.mainlayout.visibility = View.INVISIBLE
-        license?.let {
-            val initConfig: InitializationConfiguration = InitializationConfiguration.Builder(license).setLicenseUpdate(true).build()
-            FaceSDK.Instance().initialize(this, initConfig) { status, e ->
-                binding.progressLayout.visibility = View.INVISIBLE
-                if (!status) {
-                    Log.d("MainActivity", "FaceSDK error: " + e?.message)
-                    Toast.makeText(
-                        this@MatchFacesActivity,
-                        "Init finished with error: " + if (e != null) e.message else "",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    return@initialize
-                }
-                binding.mainlayout.visibility = View.VISIBLE
-                Log.d("MainActivity", "FaceSDK init succeed ")
-                Log.d("MainActivity", "FaceSDK init completed successfully")
-            }
-        } ?: return
     }
 
     private fun showMenu(imageView: ImageView?, i: Int) {
@@ -113,11 +119,10 @@ class MatchFacesActivity : AppCompatActivity() {
                     return@setOnMenuItemClickListener true
                 }
                 R.id.camera -> {
-                    val radioGroup: RadioGroup
-                    if (i == PICK_IMAGE_1)
-                        radioGroup = binding.rbGroup0
-                    else  //if PICK_IMAGE_2
-                        radioGroup = binding.rbGroup1
+                    val radioGroup = if (i == PICK_IMAGE_1)
+                        group0
+                    else //if PICK_IMAGE_2
+                        group1
                     startFaceCaptureActivity(imageView, radioGroup)
                     return@setOnMenuItemClickListener true
                 }
@@ -133,9 +138,10 @@ class MatchFacesActivity : AppCompatActivity() {
         popupMenu.show()
     }
 
+
     private val requestPermissionLauncher =
         registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
+            RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
                 launchCamera()
@@ -147,6 +153,7 @@ class MatchFacesActivity : AppCompatActivity() {
                 ).show()
             }
         }
+
     private fun openDefaultCamera() {
         when {
             ContextCompat.checkSelfPermission(
@@ -203,31 +210,37 @@ class MatchFacesActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode != RESULT_OK)
+        if (resultCode != RESULT_OK || data == null)
             return
 
-        imageUri = data?.data
-        binding.textViewSimilarity.text = "Similarity: null"
+        imageUri = data.data
+        textViewSimilarity.text = "Similarity: null"
 
         var imageView: ImageView? = null
         var group: RadioGroup? = null
 
         if (requestCode == PICK_IMAGE_1) {
-            imageView = binding.imageView1
-            group = binding.rbGroup0
+            imageView = imageView1
+            group = group0
         } else if (requestCode == PICK_IMAGE_2) {
-            imageView = binding.imageView2
-            group = binding.rbGroup1
+            imageView = imageView2
+            group = group1
         }
 
-        imageView?.setImageURI(imageUri)
+        imageUri?.let {
+            val bitmap = contentResolver?.openInputStream(it).use { data ->
+                BitmapFactory.decodeStream(data)
+            }
+            val resizedBitmap = ResizeTransformation(1080).transform(bitmap)
+            imageView?.setImageBitmap(resizedBitmap)
+        }
 
         setGroupSelection(group, ImageType.PRINTED)
     }
 
     private fun matchFaces(first: Bitmap, second: Bitmap) {
-        val firstImage = MatchFacesImage(first, getGroupSelection(binding.rbGroup0), binding.detectAll1.isChecked)
-        val secondImage = MatchFacesImage(second, getGroupSelection(binding.rbGroup1), binding.detectAll2.isChecked)
+        val firstImage = MatchFacesImage(first, getGroupSelection(group0), switchDetectAll1.isChecked)
+        val secondImage = MatchFacesImage(second, getGroupSelection(group1), switchDetectAll2.isChecked)
         val matchFacesRequest = MatchFacesRequest(arrayListOf(firstImage, secondImage))
 
         val crop = OutputImageCrop(
@@ -237,40 +250,36 @@ class MatchFacesActivity : AppCompatActivity() {
         matchFacesRequest.outputImageParams = outputImageParams
 
         FaceSDK.Instance().matchFaces(matchFacesRequest) { matchFacesResponse: MatchFacesResponse ->
-            matchFacesResponse.exception?.let {
-                val errorBuilder = "Error: ${matchFacesResponse.exception?.message} Details: ${matchFacesResponse.exception?.detailedErrorMessage}"
-                binding.textViewSimilarity.text = errorBuilder
-            } ?: run {
-                val split = MatchFacesSimilarityThresholdSplit(matchFacesResponse.results, 0.75)
-                val similarity = if (split.matchedFaces.size > 0) {
-                    split.matchedFaces[0].similarity
-                } else if (split.unmatchedFaces.size > 0){
-                    split.unmatchedFaces[0].similarity
-                } else {
-                    null
-                }
-
-                val text = similarity?.let {
-                    "Similarity: " +  String.format("%.2f", it * 100) + "%"
-                } ?: "Similarity: null"
-
-                binding.textViewSimilarity.text = text
+            val split = MatchFacesSimilarityThresholdSplit(matchFacesResponse.results, 0.75)
+            val similarity = if (split.matchedFaces.size > 0) {
+                split.matchedFaces[0].similarity
+            } else if (split.unmatchedFaces.size > 0){
+                split.unmatchedFaces[0].similarity
+            } else {
+                null
             }
+
+            val text = similarity?.let {
+                "Similarity: " +  String.format("%.2f", it * 100) + "%"
+            } ?: "Similarity: null"
+
+            textViewSimilarity.text = text
 
             if (matchFacesResponse.detections.size > 0 && matchFacesResponse.detections[0] != null
                 && matchFacesResponse.detections[0].faces.size > 0
                 && matchFacesResponse.detections[0].faces[0].crop != null
             ) {
-                binding.imageViewResult1.setImageBitmap(matchFacesResponse.detections[0].faces[0].crop)
+                imageViewResult1.setImageBitmap(matchFacesResponse.detections[0].faces[0].crop)
             }
             if (matchFacesResponse.detections.size > 1 && matchFacesResponse.detections[1] != null
                 && matchFacesResponse.detections[1].faces.size > 0
                 && matchFacesResponse.detections[1].faces[0].crop != null
             ) {
-                binding.imageViewResult2.setImageBitmap(matchFacesResponse.detections[1].faces[0].crop)
+                imageViewResult2.setImageBitmap(matchFacesResponse.detections[1].faces[0].crop)
             }
-            binding.buttonMatch.isEnabled = true
-            binding.buttonClear.isEnabled = true
+
+            buttonMatch.isEnabled = true
+            buttonClear.isEnabled = true
         }
     }
 

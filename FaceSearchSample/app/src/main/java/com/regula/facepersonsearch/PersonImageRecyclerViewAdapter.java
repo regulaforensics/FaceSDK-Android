@@ -79,7 +79,7 @@ public class PersonImageRecyclerViewAdapter extends ItemPositionAdapter<PersonIm
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
             menu.setHeaderTitle("Select The Action");
-            menu.add(0, ItemsAdapter.MENU_DELETE, 0, "DELETE");
+            menu.add(0, ItemsAdapter.MENU_DELETE, 0, "Delete");
         }
 
         @Override
