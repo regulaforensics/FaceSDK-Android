@@ -1,6 +1,13 @@
 <resources>
-    <string name="app_name">FaceSampleKotlin</string>
+    <string name="app_name">OfflineMatchFaceSample</string>
 
-    <!-- Custom text statuses -->
-    <!--    <string name="hint.fit">Fit your face in the oval (custom)</string>-->
+    <string-array name="type_image_array">
+        <item>PRINTED</item>
+        <item>RFID</item>
+        <item>LIVE</item>
+        <item>DOCUMENT WITH LIVE</item>
+        <item>EXTERNAL</item>
+        <item>GHOST PORTRAIT</item>
+        <item>BARCODE</item>
+    </string-array>
 </resources>

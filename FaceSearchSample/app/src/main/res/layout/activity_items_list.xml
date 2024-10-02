@@ -6,33 +6,36 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/itemsList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:clipToPadding="false"
+        android:layout_marginTop="10dp"
         android:paddingHorizontal="12dp"
-        android:paddingBottom="96dp"/>
+        android:paddingBottom="96dp"
+        app:layout_constraintBottom_toTopOf="@+id/searchBtn"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <Button
+        style="@style/MyButton"
         android:id="@+id/createBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:text="Create person"
         android:layout_marginBottom="24dp"
-        android:src="@android:drawable/ic_menu_add"
-        app:fabSize="normal"
+        android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <Button
+        style="@style/MyButton"
         android:id="@+id/searchBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:src="@android:drawable/ic_menu_search"
-        app:fabSize="normal"
+        android:layout_marginStart="10dp"
+        android:text="Search"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

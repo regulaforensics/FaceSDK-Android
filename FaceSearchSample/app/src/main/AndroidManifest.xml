@@ -24,8 +24,7 @@
             android:label="Person"/>
         <activity
             android:name=".GroupsActivity"
-            android:exported="true"
-            android:label="Groups">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

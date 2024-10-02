@@ -17,6 +17,7 @@
         android:src="@android:drawable/ic_menu_gallery"/>
 
     <Button
+        style="@style/MyButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/browseBtn"
@@ -25,9 +26,10 @@
         app:layout_constraintEnd_toStartOf="@id/searchBtn"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:text="BROWSE"/>
+        android:text="Browse"/>
 
     <Button
+        style="@style/MyButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/searchBtn"
@@ -36,7 +38,7 @@
         app:layout_constraintStart_toEndOf="@id/browseBtn"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:text="SEARCH"/>
+        android:text="Search"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -49,10 +51,11 @@
         app:layout_constraintTop_toBottomOf="@+id/searchBtn" />
 
     <Button
+        style="@style/MyButton"
         android:id="@+id/searchByUlrBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SEARCH BY URL"
+        android:text="Search by URL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/searchBtn"
         app:layout_constraintStart_toStartOf="parent"

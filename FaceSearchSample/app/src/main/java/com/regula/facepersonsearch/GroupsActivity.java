@@ -2,6 +2,7 @@ package com.regula.facepersonsearch;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -28,6 +29,7 @@ import java.util.List;
 @SuppressLint("NotifyDataSetChanged")
 public class GroupsActivity extends AppCompatActivity {
     public static final String GROUP_ID = "groupId";
+    public static final String GROUP_NAME = "groupName";
 
     ActivityItemsListBinding binding;
     List<PersonGroup> groups = new ArrayList<>();
@@ -37,10 +39,13 @@ public class GroupsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         binding = ActivityItemsListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        setTitle("Groups");
         registerForContextMenu(binding.itemsList);
+        FaceSDK.Instance().initialize(this, (b, e) -> {});
     }
 
     @Override
@@ -74,12 +79,16 @@ public class GroupsActivity extends AppCompatActivity {
             }
         });
 
+        binding.createBtn.setText("Create group");
+        binding.searchBtn.setText("Search in all groups");
+
         binding.createBtn.setOnClickListener(view -> {
             new AlertDialog.Builder(GroupsActivity.this)
                     .setCancelable(true)
-                    .setTitle("CREATE GROUP")
+                    .setTitle("Create PerasonGroup")
+                    .setMessage("Enter a name for a new PersonGroup")
                     .setView(R.layout.group_create_update)
-                    .setPositiveButton("CREATE", (dialogInterface, i) -> {
+                    .setPositiveButton("Create", (dialogInterface, i) -> {
                         EditText editText = ((AlertDialog) dialogInterface).findViewById(R.id.groupNameTV);
                         String groupName = editText.getText().toString();
                         FaceSDK.Instance().personDatabase().createGroup(groupName, new PersonDBCallback<PersonGroup>() {
@@ -98,7 +107,7 @@ public class GroupsActivity extends AppCompatActivity {
                             }
                         });
                     })
-                    .setNegativeButton("CANCEL", (dialogInterface, i) -> {
+                    .setNegativeButton("Cancel", (dialogInterface, i) -> {
                         dialogInterface.cancel();
                     }).show();
         });
@@ -127,6 +136,7 @@ public class GroupsActivity extends AppCompatActivity {
         Intent intent = new Intent(GroupsActivity.this, PersonsActivity.class);
         PersonGroup groupEdit = groups.get(itemPosition);
         intent.putExtra(GROUP_ID, groupEdit.getId());
+        intent.putExtra(GROUP_NAME, groupEdit.getName());
          startActivity(intent);
     };
 
@@ -148,9 +158,9 @@ public class GroupsActivity extends AppCompatActivity {
             case ItemsAdapter.MENU_EDIT:
                 AlertDialog dialog = new AlertDialog.Builder(GroupsActivity.this)
                         .setCancelable(true)
-                        .setTitle("EDIT GROUP")
+                        .setTitle("Update PersonGroup")
                         .setView(R.layout.group_create_update)
-                        .setPositiveButton("EDIT", (dialogInterface, i) -> {
+                        .setPositiveButton("Update", (dialogInterface, i) -> {
                             EditText editText = ((AlertDialog) dialogInterface).findViewById(R.id.groupNameTV);
                             String groupName = editText.getText().toString();
                             groupEdit.setName(groupName);
@@ -169,7 +179,7 @@ public class GroupsActivity extends AppCompatActivity {
                                 }
                             });
                         })
-                        .setNegativeButton("CANCEL", (dialogInterface, i) -> {
+                        .setNegativeButton("Cancel", (dialogInterface, i) -> {
                             dialogInterface.cancel();
                         }).show();
                 EditText editText = dialog.findViewById(R.id.groupNameTV);

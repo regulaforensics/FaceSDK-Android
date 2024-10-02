@@ -1,22 +1,35 @@
 package com.regula.facesamplekotlin
 
-import android.app.Activity
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import com.regula.facesamplekotlin.FileUtil.getLicense
 import com.regula.facesamplekotlin.databinding.ActivityMatchFacesBinding
 import com.regula.facesdk.FaceSDK
 import com.regula.facesdk.configuration.FaceCaptureConfiguration
 import com.regula.facesdk.configuration.InitializationConfiguration
+import com.regula.facesdk.detection.request.OutputImageCrop
+import com.regula.facesdk.detection.request.OutputImageParams
 import com.regula.facesdk.enums.ImageType
+import com.regula.facesdk.enums.OutputImageCropAspectRatio
 import com.regula.facesdk.model.MatchFacesImage
 import com.regula.facesdk.model.results.FaceCaptureResponse
 import com.regula.facesdk.model.results.matchfaces.MatchFacesResponse
@@ -24,11 +37,18 @@ import com.regula.facesdk.model.results.matchfaces.MatchFacesSimilarityThreshold
 import com.regula.facesdk.request.MatchFacesRequest
 
 
-class MatchFacesActivity : Activity() {
+class MatchFacesActivity : AppCompatActivity() {
 
     private var imageUri: Uri? = null
 
+    private lateinit var imageType1:ImageType
+    private lateinit var imageType2:ImageType
+
+    private lateinit var faceBitmaps: ArrayList<Bitmap>
+
     private lateinit var binding: ActivityMatchFacesBinding
+
+    private var currentImageView: ImageView? = null
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +85,55 @@ class MatchFacesActivity : Activity() {
             binding.imageView2.setImageDrawable(null)
             binding.textViewSimilarity.text = "Similarity: null"
         }
+
+
+        binding.buttonClear.setOnClickListener {
+            binding.imageView1.setImageDrawable(null)
+            binding.imageView2.setImageDrawable(null)
+            binding.textViewSimilarity.text = "Similarity:"
+            binding.buttonSee.visibility = View.GONE
+        }
+
+        binding.buttonSee.setOnClickListener {
+            val dialog = ImageDialogFragment()
+            dialog.show(supportFragmentManager, "")
+        }
+
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.type_image_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.type1Spinner.adapter = adapter
+        }
+        binding.type1Spinner.onItemSelectedListener =  object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                imageType1 = ImageType.PRINTED
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                imageType1 = getGroupSelection(position)
+            }
+        }
+
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.type_image_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.type2Spinner.adapter = adapter
+        }
+        binding.type2Spinner.onItemSelectedListener =  object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                imageType2 = ImageType.PRINTED
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                imageType2 = getGroupSelection(position)
+            }
+        }
     }
 
     private fun initFaceSdk(license: ByteArray?) {
@@ -98,13 +167,17 @@ class MatchFacesActivity : Activity() {
                     return@setOnMenuItemClickListener true
                 }
                 R.id.camera -> {
-                    val radioGroup: RadioGroup
-                    if (i == PICK_IMAGE_1)
-                        radioGroup = binding.rbGroup0
-                    else  //if PICK_IMAGE_2
-                        radioGroup = binding.rbGroup1
-                    startFaceCaptureActivity(imageView, radioGroup)
+                    val spinner = if (i == PICK_IMAGE_1)
+                        binding.type1Spinner
+                    else //if PICK_IMAGE_2
+                        binding.type2Spinner
+                    startFaceCaptureActivity(imageView, spinner)
                     return@setOnMenuItemClickListener true
+                }
+                R.id.photo -> {
+                    currentImageView = imageView
+                    openDefaultCamera()
+                    return@setOnMenuItemClickListener  true
                 }
                 else -> return@setOnMenuItemClickListener false
             }
@@ -112,6 +185,49 @@ class MatchFacesActivity : Activity() {
         popupMenu.menuInflater.inflate(R.menu.menu, popupMenu.menu)
         popupMenu.show()
     }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                launchCamera()
+            } else {
+                Toast.makeText(
+                    this@MatchFacesActivity,
+                    "Camera permission denied",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    private fun openDefaultCamera() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this@MatchFacesActivity,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                launchCamera()
+            }
+
+            else -> {
+                requestPermissionLauncher.launch(
+                    Manifest.permission.CAMERA
+                )
+            }
+        }
+    }
+
+    private fun launchCamera() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startCameraForResult.launch(cameraIntent)
+    }
+
+    private val startCameraForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            val photo = result.data?.extras?.get("data")
+            if (photo is Bitmap)
+                currentImageView?.setImageBitmap(photo);
+        }
 
     private fun getImageBitmap(imageView: ImageView?): Bitmap {
         imageView?.invalidate()
@@ -125,47 +241,61 @@ class MatchFacesActivity : Activity() {
         startActivityForResult(gallery, id)
     }
 
-    private fun startFaceCaptureActivity(imageView: ImageView?, group: RadioGroup) {
+    private fun startFaceCaptureActivity(imageView: ImageView?, spinner: Spinner) {
         val configuration = FaceCaptureConfiguration.Builder().setCameraSwitchEnabled(true).build()
 
         FaceSDK.Instance().presentFaceCaptureActivity(this@MatchFacesActivity, configuration) { faceCaptureResponse: FaceCaptureResponse? ->
             if (faceCaptureResponse?.image != null) {
                 imageView!!.setImageBitmap(faceCaptureResponse.image!!.bitmap)
-
-                setGroupSelection(group, ImageType.LIVE)
+                spinner.setSelection(2)
             }
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode != RESULT_OK)
             return
 
-        imageUri = data.data
-        binding.textViewSimilarity.text = "Similarity: null"
+        imageUri = data?.data
+        binding.textViewSimilarity.text = "Similarity:"
 
         var imageView: ImageView? = null
-        var group: RadioGroup? = null
+        var spinner: Spinner? = null
 
         if (requestCode == PICK_IMAGE_1) {
             imageView = binding.imageView1
-            group = binding.rbGroup0
+            spinner = binding.type1Spinner
         } else if (requestCode == PICK_IMAGE_2) {
             imageView = binding.imageView2
-            group = binding.rbGroup1
+            spinner = binding.type2Spinner
         }
 
         imageView?.setImageURI(imageUri)
 
-        setGroupSelection(group, ImageType.PRINTED)
+        imageUri?.let {
+            val bitmap = contentResolver?.openInputStream(it).use { data ->
+                BitmapFactory.decodeStream(data)
+            }
+            val resizedBitmap = ResizeTransformation(1080).transform(bitmap)
+            imageView?.setImageBitmap(resizedBitmap)
+        }
+
+        spinner?.setSelection(0)
     }
 
     private fun matchFaces(first: Bitmap, second: Bitmap) {
-        val firstImage = MatchFacesImage(first, getGroupSelection(binding.rbGroup0), true)
-        val secondImage = MatchFacesImage(second, getGroupSelection(binding.rbGroup1), true)
-        val matchFacesRequest = MatchFacesRequest(arrayListOf(firstImage, secondImage));
+        val firstImage = MatchFacesImage(first, imageType1, binding.detectAll1.isChecked)
+        val secondImage = MatchFacesImage(second, imageType2, binding.detectAll2.isChecked)
+        val matchFacesRequest = MatchFacesRequest(arrayListOf(firstImage, secondImage))
+
+        val crop = OutputImageCrop(
+            OutputImageCropAspectRatio.OUTPUT_IMAGE_CROP_ASPECT_RATIO_3X4
+        )
+        val outputImageParams = OutputImageParams(crop, Color.WHITE)
+        matchFacesRequest.outputImageParams = outputImageParams
+
         FaceSDK.Instance().matchFaces(matchFacesRequest) { matchFacesResponse: MatchFacesResponse ->
             matchFacesResponse.exception?.let {
                 val errorBuilder = "Error: ${matchFacesResponse.exception?.message} Details: ${matchFacesResponse.exception?.detailedErrorMessage}"
@@ -180,25 +310,43 @@ class MatchFacesActivity : Activity() {
                     null
                 }
 
+
                 val text = similarity?.let {
-                    "Similarity: " +  String.format("%.2f", it * 100) + "%"
-                } ?: "Similarity: null"
+                    "Similarity: " + String.format("%.2f", it * 100) + "%"
+                } ?: matchFacesResponse.exception?.let {
+                    "Similarity: " + it.message
+                } ?: "Similarity: "
 
                 binding.textViewSimilarity.text = text
-            }
 
-            binding.buttonMatch.isEnabled = true
-            binding.buttonClear.isEnabled = true
+                faceBitmaps = arrayListOf()
+
+                for(matchFaces in matchFacesResponse.detections) {
+                    for (face in matchFaces.faces)
+                        face.crop?.let {
+                            faceBitmaps.add(it) }
+                }
+
+                val l = faceBitmaps.size
+                if (l > 0) {
+                    binding.buttonSee.text = "Detections ($l)"
+                    binding.buttonSee.visibility = View.VISIBLE
+                } else {
+                    binding.buttonSee.visibility = View.GONE
+                }
+
+                binding.buttonMatch.isEnabled = true
+                binding.buttonClear.isEnabled = true
+            }
         }
     }
 
-    private fun getGroupSelection(group: RadioGroup): ImageType? {
-        val button = group.findViewById<RadioButton>(group.checkedRadioButtonId)
-        val index = group.indexOfChild(button)
+
+    private fun getGroupSelection(index: Int): ImageType {
         when (index) {
-            2 -> return ImageType.LIVE
-            1 -> return ImageType.RFID
             0 -> return ImageType.PRINTED
+            1 -> return ImageType.RFID
+            2 -> return ImageType.LIVE
             4 -> return ImageType.EXTERNAL
             3 -> return ImageType.DOCUMENT_WITH_LIVE
             5 -> return ImageType.GHOST_PORTRAIT
@@ -207,20 +355,46 @@ class MatchFacesActivity : Activity() {
         return ImageType.PRINTED
     }
 
-    private fun setGroupSelection(group: RadioGroup?, type: ImageType) {
-        when (type) {
-            ImageType.LIVE -> group?.check(group.getChildAt(2).id)
-            ImageType.RFID -> group?.check(group.getChildAt(1).id)
-            ImageType.PRINTED -> group?.check(group.getChildAt(0).id)
-            ImageType.EXTERNAL -> group?.check(group.getChildAt(4).id)
-            ImageType.DOCUMENT_WITH_LIVE -> group?.check(group.getChildAt(3).id)
-            ImageType.GHOST_PORTRAIT -> group?.check(group.getChildAt(5).id)
-            ImageType.BARCODE -> group?.check(group.getChildAt(6).id)
-        }
-    }
-
     companion object {
         private const val PICK_IMAGE_1 = 1
         private const val PICK_IMAGE_2 = 2
+    }
+
+
+    class ImageDialogFragment : DialogFragment() {
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
+            val rootView = inflater.inflate(
+                R.layout.fragment_image,
+                container,
+                false
+            )
+            val faceBitmaps: ArrayList<Bitmap> =
+                (activity as MatchFacesActivity).faceBitmaps
+
+            val imageView: ImageView =
+                rootView.findViewById(R.id.imageViewCrop)
+            val buttonNext: Button = rootView.findViewById(R.id.buttonNext)
+
+            var num = 0
+            buttonNext.setOnClickListener {
+                num++
+                if (num >= faceBitmaps.size)
+                    num = 0
+                setImage(imageView, faceBitmaps[num])
+            }
+
+            setImage(imageView, faceBitmaps[0])
+            return rootView
+        }
+
+        private fun setImage(imageView: ImageView, image: Bitmap?) {
+            image?.let {
+                imageView.setImageBitmap(it)
+            }
+        }
     }
 }

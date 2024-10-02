@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="Existing images:"
+            android:text="Person images:"
             android:id="@+id/existingImagesTV"
             android:layout_gravity="center_vertical" />
 
@@ -74,49 +74,37 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/newImagesLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/newImagesLayout"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/existingImagesLayout"
-        app:layout_constraintBottom_toTopOf="@id/createBtn">
+        app:layout_constraintBottom_toTopOf="@id/createBtn"
+        app:layout_constraintTop_toBottomOf="@id/existingImagesLayout">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            style="@style/MyButton"
+            android:id="@+id/addImageBtn"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:id="@+id/addImagesLayout"
-            app:layout_constraintTop_toTopOf="parent">
+            android:text="Add Person Image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add images"
-                android:id="@+id/imagesTv"
-                android:layout_gravity="center_vertical"/>
-
-            <ImageButton
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/add_btn"
-                android:scaleType="fitCenter"
-                android:background="@android:color/transparent"
-                android:id="@+id/addImageBtn"
-                android:layout_marginStart="20dp"/>
-
-        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/imagesRV"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/addImagesLayout"
-            android:id="@+id/imagesRV"/>
+            app:layout_constraintTop_toBottomOf="@id/addImageBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
+        style="@style/MyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/createBtn"
@@ -124,6 +112,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="CREATE" />
+        android:text="Create Person" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

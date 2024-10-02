@@ -1,6 +1,7 @@
 package com.regula.facepersonsearch;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -30,17 +31,21 @@ public class PersonsActivity extends AppCompatActivity implements View.OnClickLi
     List<Person> personsInGroup = new ArrayList<>();
 
     String groupId;
+    String groupName;
     ItemsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         binding = ActivityItemsListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         registerForContextMenu(binding.itemsList);
 
         groupId = getIntent().getStringExtra(GroupsActivity.GROUP_ID);
+        groupName = getIntent().getStringExtra(GroupsActivity.GROUP_NAME);
+        setTitle(groupName);
     }
 
     @Override
@@ -88,6 +93,7 @@ public class PersonsActivity extends AppCompatActivity implements View.OnClickLi
         binding.searchBtn.setOnClickListener(view -> {
             Intent intent = new Intent(PersonsActivity.this, SearchActivity.class);
             intent.putExtra(GroupsActivity.GROUP_ID, new String[]{groupId});
+            intent.putExtra(GroupsActivity.GROUP_NAME, groupName);
             startActivity(intent);
         });
     }
@@ -106,6 +112,9 @@ public class PersonsActivity extends AppCompatActivity implements View.OnClickLi
         int finalItemPosition = itemPosition;
 
         switch (item.getItemId()) {
+            case ItemsAdapter.MENU_EDIT:
+                updatePerson(personEdit);
+                break;
             case ItemsAdapter.MENU_DELETE:
                 FaceSDK.Instance().personDatabase().deletePerson(personEdit.getId(), new PersonDBCallback<Void>() {
                     @Override
@@ -152,7 +161,10 @@ public class PersonsActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         Person personEdit = personsInGroup.get(itemPosition);
+        updatePerson(personEdit);
+    }
 
+    private void updatePerson(Person personEdit) {
         Intent intent = new Intent(PersonsActivity.this, CreateActivity.class);
         intent.putExtra(GroupsActivity.GROUP_ID, groupId);
         intent.putExtra(CreateActivity.PERSON_ID, personEdit.getId());
@@ -204,8 +216,9 @@ public class PersonsActivity extends AppCompatActivity implements View.OnClickLi
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
                 menu.setHeaderTitle("Select The Action");
-                menu.add(0, ItemsAdapter.MENU_DELETE_FROM_GROUP, 0, "REMOVE FROM GROUP");
-                menu.add(0, ItemsAdapter.MENU_DELETE, 0, "DELETE");
+                menu.add(0, ItemsAdapter.MENU_EDIT, 0, "Update person");
+                menu.add(0, ItemsAdapter.MENU_DELETE_FROM_GROUP, 0, "Remove from Group");
+                menu.add(0, ItemsAdapter.MENU_DELETE, 0, "Delete person");
             }
         }
     }
