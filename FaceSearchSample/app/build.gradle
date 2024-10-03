@@ -38,7 +38,7 @@ dependencies {
     implementation ('com.regula.face:api:6.3.+@aar'){
         transitive = true
     }
-    implementation ('com.regula.face.core:basic:6.2.+@aar')
+    implementation ('com.regula.face.core:basic:6.3.+@aar')
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
