@@ -144,7 +144,7 @@ public class CreateActivity extends AppCompatActivity {
     }
 
     private void getPerson() {
-        FaceSDK.Instance().personDatabase().getPerson(personId, new PersonDBCallback<Person>() {
+        FaceSDK.Instance().personDatabase(this).getPerson(personId, new PersonDBCallback<Person>() {
             @Override
             public void onSuccess(@Nullable Person response) {
                 if (response == null)
@@ -172,7 +172,7 @@ public class CreateActivity extends AppCompatActivity {
             }
         });
 
-        FaceSDK.Instance().personDatabase().getPersonImages(personId,
+        FaceSDK.Instance().personDatabase(this).getPersonImages(personId,
                 new PersonDBCallback<PageableItemList<List<PersonImage>, PersonImage>>() {
                     @Override
                     public void onSuccess(@Nullable PageableItemList<List<PersonImage>, PersonImage> response) {
@@ -284,11 +284,11 @@ public class CreateActivity extends AppCompatActivity {
 
     private void createPerson() {
         String name = binding.nameEt.getText() + " " + binding.surnameEt.getText();
-        FaceSDK.Instance().personDatabase().createPerson(name, new String[]{groupId}, new PersonDBCallback<Person>() {
+        FaceSDK.Instance().personDatabase(this).createPerson(name, new String[]{groupId}, new PersonDBCallback<Person>() {
             @Override
             public void onSuccess(Person response) {
                 for (ImageUpload image : images) {
-                    FaceSDK.Instance().personDatabase().addPersonImage(response.getId(), image, imagePersonDBCallback);
+                    FaceSDK.Instance().personDatabase(CreateActivity.this).addPersonImage(response.getId(), image, imagePersonDBCallback);
                 }
                 if (response != null) {
                     Toast.makeText(CreateActivity.this, "Person created", Toast.LENGTH_LONG).show();
@@ -308,11 +308,11 @@ public class CreateActivity extends AppCompatActivity {
         person.setName(name);
 
         for (ImageUpload image : images) {
-            FaceSDK.Instance().personDatabase().addPersonImage(person.getId(), image, imagePersonDBCallback);
+            FaceSDK.Instance().personDatabase(this).addPersonImage(person.getId(), image, imagePersonDBCallback);
         }
 
         for(String toRemove : itemsToRemove){
-            FaceSDK.Instance().personDatabase().deletePersonImage(person.getId(), toRemove, new PersonDBCallback<Void>() {
+            FaceSDK.Instance().personDatabase(this).deletePersonImage(person.getId(), toRemove, new PersonDBCallback<Void>() {
                 @Override
                 public void onSuccess(@Nullable Void response) {
                     Log.d(TAG,  "Image removed: " + toRemove);
@@ -325,7 +325,7 @@ public class CreateActivity extends AppCompatActivity {
             });
         }
 
-        FaceSDK.Instance().personDatabase().updatePerson(person, new PersonDBCallback<Void>() {
+        FaceSDK.Instance().personDatabase(this).updatePerson(person, new PersonDBCallback<Void>() {
             @Override
             public void onSuccess(@Nullable Void response) {
                 Toast.makeText(CreateActivity.this,

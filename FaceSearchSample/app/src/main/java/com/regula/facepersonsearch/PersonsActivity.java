@@ -63,7 +63,7 @@ public class PersonsActivity extends AppCompatActivity implements View.OnClickLi
                 new DividerItemDecoration(PersonsActivity.this, DividerItemDecoration.VERTICAL));
         binding.itemsList.setAdapter(adapter);
 
-        FaceSDK.Instance().personDatabase().getPersonsInGroup(groupId, new PersonDBCallback<PageableItemList<List<Person>, Person>>() {
+        FaceSDK.Instance().personDatabase(this).getPersonsInGroup(groupId, new PersonDBCallback<PageableItemList<List<Person>, Person>>() {
             @Override
             public void onSuccess(@Nullable PageableItemList<List<Person>, Person> response) {
                 if(response == null)
@@ -116,7 +116,7 @@ public class PersonsActivity extends AppCompatActivity implements View.OnClickLi
                 updatePerson(personEdit);
                 break;
             case ItemsAdapter.MENU_DELETE:
-                FaceSDK.Instance().personDatabase().deletePerson(personEdit.getId(), new PersonDBCallback<Void>() {
+                FaceSDK.Instance().personDatabase(this).deletePerson(personEdit.getId(), new PersonDBCallback<Void>() {
                     @Override
                     public void onSuccess(@Nullable Void response) {
                         Toast.makeText(PersonsActivity.this, "Success!", Toast.LENGTH_SHORT).show();
@@ -133,7 +133,7 @@ public class PersonsActivity extends AppCompatActivity implements View.OnClickLi
                 case ItemsAdapter.MENU_DELETE_FROM_GROUP:
                     EditGroupPersonsRequest request = new EditGroupPersonsRequest();
                     request.setPersonIdsToRemove(new String[]{personEdit.getId()});
-                    FaceSDK.Instance().personDatabase().editPersonsInGroup(groupId, request, new PersonDBCallback<Void>() {
+                    FaceSDK.Instance().personDatabase(this).editPersonsInGroup(groupId, request, new PersonDBCallback<Void>() {
                         @Override
                         public void onSuccess(@Nullable Void response) {
                             Toast.makeText(PersonsActivity.this, "Success!", Toast.LENGTH_SHORT).show();

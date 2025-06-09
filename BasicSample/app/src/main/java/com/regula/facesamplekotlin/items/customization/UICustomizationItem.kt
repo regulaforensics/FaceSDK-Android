@@ -63,18 +63,18 @@ class UICustomizationItem : CategoryItem() {
         }
         mTimerAnimator.start()
         mTimerAnimator.addListener(object : ValueAnimator(), Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator?) {
+            override fun onAnimationStart(animation: Animator) {
             }
 
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 FaceSDK.Instance().customization.setUiCustomizationLayer(null)
             }
 
-            override fun onAnimationCancel(animation: Animator?) {
+            override fun onAnimationCancel(animation: Animator) {
                 FaceSDK.Instance().customization.setUiCustomizationLayer(null)
             }
 
-            override fun onAnimationRepeat(animation: Animator?) {
+            override fun onAnimationRepeat(animation: Animator) {
             }
         })
     }

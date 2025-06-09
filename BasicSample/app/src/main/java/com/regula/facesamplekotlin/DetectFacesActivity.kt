@@ -21,7 +21,9 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import com.regula.facesamplekotlin.databinding.ActivityDetectFacesBinding
 import com.regula.facesamplekotlin.util.RandomColors
@@ -51,6 +53,8 @@ class DetectFacesActivity : AppCompatActivity() {
     private lateinit var bitmapToDetect: Bitmap
     private lateinit var externalBitmap: Bitmap
 
+    private val photoHelper by lazy { PhotoHelper(this as AppCompatActivity) }
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -60,34 +64,52 @@ class DetectFacesActivity : AppCompatActivity() {
         setImage(R.drawable.detect_face1)
         binding.imageViewMain.setOnClickListener { showMenu(binding.imageViewMain) }
         binding.imageViewSample1.setOnClickListener {
+            resetImageAndResult()
             setImage(R.drawable.detect_face1)
             binding.imageViewBackground1.setBackgroundColor(Color.BLUE)
         }
         binding.imageViewSample2.setOnClickListener {
+            resetImageAndResult()
             setImage(R.drawable.detect_face2)
             binding.imageViewBackground2.setBackgroundColor(Color.BLUE)
         }
         binding.imageViewSample3.setOnClickListener {
+            resetImageAndResult()
             setImage(R.drawable.detect_face3)
             binding.imageViewBackground3.setBackgroundColor(Color.BLUE)
         }
         binding.imageViewSample4.setOnClickListener {
+            resetImageAndResult()
             setImage(R.drawable.detect_face4)
             binding.imageViewBackground4.setBackgroundColor(Color.BLUE)
         }
         binding.imageViewSample5.setOnClickListener {
+            resetImageAndResult()
             setImage(externalBitmap)
         }
 
         binding.imageViewBackground1.setBackgroundColor(Color.BLUE)
 
-        binding.button1.setOnClickListener { updateScenario(Scenario.CROP_CENTER, it) }
-        binding.button2.setOnClickListener { updateScenario(Scenario.CROP_ALL, it) }
-        binding.button3.setOnClickListener { updateScenario(Scenario.SCENARIO_1, it) }
-        binding.button4.setOnClickListener { updateScenario(Scenario.SCENARIO_2, it) }
+        binding.button1.setOnClickListener {
+            resetImageAndResult()
+            updateScenario(Scenario.CROP_CENTER, it)
+        }
+        binding.button2.setOnClickListener {
+            resetImageAndResult()
+            updateScenario(Scenario.CROP_ALL, it)
+        }
+        binding.button3.setOnClickListener {
+            resetImageAndResult()
+            updateScenario(Scenario.SCENARIO_1, it)
+        }
+        binding.button4.setOnClickListener {
+            resetImageAndResult()
+            updateScenario(Scenario.SCENARIO_2, it)
+        }
 
         binding.buttonPick.setOnClickListener {
             showMenu(binding.buttonPick)
+            resetImageAndResult()
         }
         binding.buttonDetect.setOnClickListener {
             when (scenario) {
@@ -117,6 +139,11 @@ class DetectFacesActivity : AppCompatActivity() {
         binding.imageViewSample5.setImageBitmap(bitmapToDetect)
         binding.imageViewBackground5.visibility = View.VISIBLE
         binding.imageViewBackground5.setBackgroundColor(Color.BLUE)
+    }
+
+    private fun resetImageAndResult(){
+        kotlin.run { binding.buttonSee.visibility = View.GONE }
+        binding.imageViewMain.setImageBitmap(bitmapToDetect)
     }
 
     private fun updateScenario(scenario: Scenario, view: View) {
@@ -172,7 +199,7 @@ class DetectFacesActivity : AppCompatActivity() {
     private fun detectFaces(request: DetectFacesRequest) {
         buttonEnable(false)
         binding.progressBar.visibility = View.VISIBLE;
-        FaceSDK.Instance().detectFaces(request) { response: DetectFacesResponse ->
+        FaceSDK.Instance().detectFaces(this@DetectFacesActivity, request) { response: DetectFacesResponse ->
             buttonEnable(true)
             binding.progressBar.visibility = View.GONE;
             response.allDetections?.let {
@@ -191,7 +218,7 @@ class DetectFacesActivity : AppCompatActivity() {
 
     private fun drawLandmark(faces: MutableList<DetectFaceResult>) {
         val mutableBitmap: Bitmap =
-            bitmapToDetect.copy(bitmapToDetect.config, true)
+            bitmapToDetect.copy(bitmapToDetect.config!!, true)
         val canvas = Canvas(mutableBitmap)
         val paint = Paint()
         paint.strokeWidth = 7.5f
@@ -221,14 +248,17 @@ class DetectFacesActivity : AppCompatActivity() {
                     openGallery()
                     return@setOnMenuItemClickListener true
                 }
+
                 R.id.camera -> {
                     startFaceCaptureActivity()
                     return@setOnMenuItemClickListener true
                 }
+
                 R.id.photo -> {
                     openDefaultCamera()
-                    return@setOnMenuItemClickListener  true
+                    return@setOnMenuItemClickListener true
                 }
+
                 else -> return@setOnMenuItemClickListener false
             }
         }
@@ -302,15 +332,13 @@ class DetectFacesActivity : AppCompatActivity() {
     }
 
     private fun launchCamera() {
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startCameraForResult.launch(cameraIntent)
+        photoHelper.makePhoto(startCameraForResult) {}
     }
 
     private val startCameraForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            val photo = result.data?.extras?.get("data")
-            if (photo is Bitmap)
-                setImage(photo)
+            setImage(photoHelper.handleResult(result.resultCode)!!)
+            photoHelper.deleteImageFile()
         }
 
     private fun startFaceCaptureActivity() {

@@ -29,7 +29,7 @@ import javax.net.ssl.X509TrustManager
 
 class MainActivity : AppCompatActivity(), NetworkInterceptorListener {
 
-    val VALID_PINS = setOf("/5RKFaPkCjAzvsEZHOlYqncYADaLIG5VfTmhsBbkaBk=")
+    val VALID_PINS = setOf("66A/u2IP5zXywsUEbkCeZ1YiaO4yVqX0XNWDN0c1ffI=")
 
     @Transient
     private lateinit var binding: ActivityMainBinding
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(), NetworkInterceptorListener {
         }
     }
 
-    override fun onPrepareRequest(connection: HttpRequestBuilder?) {
+    override fun onPrepareRequest(connection: HttpRequestBuilder) {
         val trustManagerFactory = TrustManagerFactory.getInstance(
             TrustManagerFactory.getDefaultAlgorithm()
         )
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity(), NetworkInterceptorListener {
             }
         }
         val trustManagerExt = X509TrustManagerExtensions(x509TrustManager)
-        connection?.connection?.let {
+        connection.connection?.let {
             println("validatePinning")
             try {
                 connection.connection.connect()

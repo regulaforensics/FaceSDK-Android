@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.regula.facesamplekotlin">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:allowBackup="true"
@@ -14,9 +17,11 @@
         android:theme="@style/Theme.FaceSampleKotlin"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".MatchFacesActivity" android:screenOrientation="portrait"
-            android:exported="false" />
-        <activity android:name=".MainActivity"
+            android:name=".MatchFacesActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,10 +29,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetectFacesActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".FaceImageQualityActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".DetectFacesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FaceImageQualityActivity"
+            android:screenOrientation="portrait" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="//${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
 
 </manifest>

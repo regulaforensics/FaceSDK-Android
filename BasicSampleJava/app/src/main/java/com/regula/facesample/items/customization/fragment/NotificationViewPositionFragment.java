@@ -24,7 +24,7 @@ public class NotificationViewPositionFragment extends FaceDefaultUiFragment {
         int topMargin = (int) rect.top;
         topMargin += rect.height() * 0.4;
 
-        Guideline notificationGuideline = view.findViewById(R.id.topNotificationGuideline);
+        Guideline notificationGuideline = view.findViewById(com.regula.facesdk.R.id.topNotificationGuideline);
         notificationGuideline.setGuidelinePercent(-1);
         notificationGuideline.setGuidelineBegin(topMargin);
     }

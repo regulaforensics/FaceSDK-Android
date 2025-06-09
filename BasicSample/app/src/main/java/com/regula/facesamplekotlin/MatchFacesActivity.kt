@@ -32,7 +32,6 @@ import androidx.fragment.app.DialogFragment
 import com.regula.facesamplekotlin.util.ResizeTransformation
 import com.regula.facesdk.FaceSDK
 import com.regula.facesdk.configuration.FaceCaptureConfiguration
-import com.regula.facesdk.configuration.MatchFacesConfiguration
 import com.regula.facesdk.detection.request.OutputImageCrop
 import com.regula.facesdk.detection.request.OutputImageParams
 import com.regula.facesdk.enums.ImageType
@@ -51,8 +50,8 @@ class MatchFacesActivity : AppCompatActivity() {
     private lateinit var switchDetectAll2: SwitchCompat
     private lateinit var spinner1: Spinner
     private lateinit var spinner2: Spinner
-    private lateinit var imageType1:ImageType
-    private lateinit var imageType2:ImageType
+    private lateinit var imageType1: ImageType
+    private lateinit var imageType2: ImageType
 
     private lateinit var buttonMatch: Button
     private lateinit var buttonClear: Button
@@ -65,6 +64,8 @@ class MatchFacesActivity : AppCompatActivity() {
     private var currentImageView: ImageView? = null
 
     private var imageUri: Uri? = null
+
+    private val photoHelper by lazy { PhotoHelper(this as AppCompatActivity) }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,12 +125,17 @@ class MatchFacesActivity : AppCompatActivity() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner1.adapter = adapter
         }
-        spinner1.onItemSelectedListener =  object : AdapterView.OnItemSelectedListener{
+        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 imageType1 = ImageType.PRINTED
             }
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 imageType1 = getGroupSelection(position)
             }
         }
@@ -143,12 +149,17 @@ class MatchFacesActivity : AppCompatActivity() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner2.adapter = adapter
         }
-        spinner2.onItemSelectedListener =  object : AdapterView.OnItemSelectedListener{
+        spinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 imageType2 = ImageType.PRINTED
             }
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 imageType2 = getGroupSelection(position)
             }
         }
@@ -162,6 +173,7 @@ class MatchFacesActivity : AppCompatActivity() {
                     openGallery(i)
                     return@setOnMenuItemClickListener true
                 }
+
                 R.id.camera -> {
                     val spinner = if (i == PICK_IMAGE_1)
                         spinner1
@@ -170,11 +182,13 @@ class MatchFacesActivity : AppCompatActivity() {
                     startFaceCaptureActivity(imageView, spinner)
                     return@setOnMenuItemClickListener true
                 }
+
                 R.id.photo -> {
                     currentImageView = imageView
                     openDefaultCamera()
-                    return@setOnMenuItemClickListener  true
+                    return@setOnMenuItemClickListener true
                 }
+
                 else -> return@setOnMenuItemClickListener false
             }
         }
@@ -216,15 +230,13 @@ class MatchFacesActivity : AppCompatActivity() {
     }
 
     private fun launchCamera() {
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startCameraForResult.launch(cameraIntent)
+        photoHelper.makePhoto(startCameraForResult) {}
     }
 
     private val startCameraForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            val photo = result.data?.extras?.get("data")
-            if (photo is Bitmap)
-                currentImageView?.setImageBitmap(photo);
+            currentImageView?.setImageBitmap(photoHelper.handleResult(result.resultCode)!!)
+            photoHelper.deleteImageFile()
         }
 
     private fun getImageBitmap(imageView: ImageView?): Bitmap {
@@ -292,11 +304,14 @@ class MatchFacesActivity : AppCompatActivity() {
         val outputImageParams = OutputImageParams(crop, Color.WHITE)
         matchFacesRequest.outputImageParams = outputImageParams
 
-        FaceSDK.Instance().matchFaces(this@MatchFacesActivity, matchFacesRequest) { matchFacesResponse: MatchFacesResponse ->
+        FaceSDK.Instance().matchFaces(
+            this@MatchFacesActivity,
+            matchFacesRequest
+        ) { matchFacesResponse: MatchFacesResponse ->
             val split = MatchFacesSimilarityThresholdSplit(matchFacesResponse.results, 0.75)
             val similarity = if (split.matchedFaces.size > 0) {
                 split.matchedFaces[0].similarity
-            } else if (split.unmatchedFaces.size > 0){
+            } else if (split.unmatchedFaces.size > 0) {
                 split.unmatchedFaces[0].similarity
             } else {
                 null
@@ -312,10 +327,11 @@ class MatchFacesActivity : AppCompatActivity() {
 
             faceBitmaps = arrayListOf()
 
-            for(matchFaces in matchFacesResponse.detections) {
+            for (matchFaces in matchFacesResponse.detections) {
                 for (face in matchFaces.faces)
                     face.crop?.let {
-                        faceBitmaps.add(it) }
+                        faceBitmaps.add(it)
+                    }
             }
 
             val l = faceBitmaps.size

@@ -232,7 +232,7 @@ public class MatchFacesActivity extends Activity {
         imageList.add(new MatchFacesImage(second, getGroupSelection(group1), true));
         MatchFacesRequest matchRequest = new MatchFacesRequest(imageList);
 
-        FaceSDK.Instance().matchFaces(matchRequest, matchFacesResponse -> {
+        FaceSDK.Instance().matchFaces(this, matchRequest, matchFacesResponse -> {
             MatchFacesSimilarityThresholdSplit  split =
                     new MatchFacesSimilarityThresholdSplit(matchFacesResponse.getResults(), 0.75d);
             Double similarity = null;

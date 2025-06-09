@@ -296,48 +296,42 @@ class MatchFacesActivity : AppCompatActivity() {
         val outputImageParams = OutputImageParams(crop, Color.WHITE)
         matchFacesRequest.outputImageParams = outputImageParams
 
-        FaceSDK.Instance().matchFaces(matchFacesRequest) { matchFacesResponse: MatchFacesResponse ->
-            matchFacesResponse.exception?.let {
-                val errorBuilder = "Error: ${matchFacesResponse.exception?.message} Details: ${matchFacesResponse.exception?.detailedErrorMessage}"
-                binding.textViewSimilarity.text = errorBuilder
-            } ?: run {
-                val split = MatchFacesSimilarityThresholdSplit(matchFacesResponse.results, 0.75)
-                val similarity = if (split.matchedFaces.size > 0) {
-                    split.matchedFaces[0].similarity
-                } else if (split.unmatchedFaces.size > 0){
-                    split.unmatchedFaces[0].similarity
-                } else {
-                    null
-                }
-
-
-                val text = similarity?.let {
-                    "Similarity: " + String.format("%.2f", it * 100) + "%"
-                } ?: matchFacesResponse.exception?.let {
-                    "Similarity: " + it.message
-                } ?: "Similarity: "
-
-                binding.textViewSimilarity.text = text
-
-                faceBitmaps = arrayListOf()
-
-                for(matchFaces in matchFacesResponse.detections) {
-                    for (face in matchFaces.faces)
-                        face.crop?.let {
-                            faceBitmaps.add(it) }
-                }
-
-                val l = faceBitmaps.size
-                if (l > 0) {
-                    binding.buttonSee.text = "Detections ($l)"
-                    binding.buttonSee.visibility = View.VISIBLE
-                } else {
-                    binding.buttonSee.visibility = View.GONE
-                }
-
-                binding.buttonMatch.isEnabled = true
-                binding.buttonClear.isEnabled = true
+        FaceSDK.Instance().matchFaces(this@MatchFacesActivity, matchFacesRequest) { matchFacesResponse: MatchFacesResponse ->
+            val split = MatchFacesSimilarityThresholdSplit(matchFacesResponse.results, 0.75)
+            val similarity = if (split.matchedFaces.size > 0) {
+                split.matchedFaces[0].similarity
+            } else if (split.unmatchedFaces.size > 0){
+                split.unmatchedFaces[0].similarity
+            } else {
+                null
             }
+
+            val text = similarity?.let {
+                "Similarity: " + String.format("%.2f", it * 100) + "%"
+            } ?: matchFacesResponse.exception?.let {
+                "Similarity: " + it.message
+            } ?: "Similarity: "
+
+            binding.textViewSimilarity.text = text
+
+            faceBitmaps = arrayListOf()
+
+            for(matchFaces in matchFacesResponse.detections) {
+                for (face in matchFaces.faces)
+                    face.crop?.let {
+                        faceBitmaps.add(it) }
+            }
+
+            val l = faceBitmaps.size
+            if (l > 0) {
+                binding.buttonSee.text = "Detections ($l)"
+                binding.buttonSee.visibility = View.VISIBLE
+            } else {
+                binding.buttonSee.visibility = View.GONE
+            }
+
+            binding.buttonMatch.isEnabled = true
+            binding.buttonClear.isEnabled = true
         }
     }
 

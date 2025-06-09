@@ -7,7 +7,7 @@ Face SDK is a framework that is used for face matching, recognition, and livenes
 * [Additional information](#additional-information)
 
 ## How to build the demo application
-1. Download this repository using the command `git clone https://github.com/regulaforensics/FaceSDK-Android.git`.
+1. Download or this repository using the command `git clone https://github.com/regulaforensics/FaceSDK-Android.git`.
 2. Open the project and run it.
 
 ## Documentation

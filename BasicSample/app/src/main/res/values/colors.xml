@@ -22,4 +22,7 @@
     <color name="light_gray">#BBC6C8</color>
     <color name="text">#663399</color>
     <color name="button">#E5E3E4</color>
+
+    <color name="resultText">#FF3700B3</color>
+    <color name="background_items_color">#FFFFFF</color>
 </resources>

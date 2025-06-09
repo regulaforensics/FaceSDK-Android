@@ -2,12 +2,12 @@ package com.regula.facesamplekotlin.detection.fragment
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -17,9 +17,11 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.regula.facesamplekotlin.FaceImageQualityActivity
+import com.regula.facesamplekotlin.PhotoHelper
 import com.regula.facesamplekotlin.R
 import com.regula.facesamplekotlin.databinding.FragmentFaceQualityBinding
 import com.regula.facesamplekotlin.util.ResizeTransformation
@@ -43,6 +45,8 @@ class FaceImageQualityFragment : Fragment() {
     private lateinit var bitmapToDetect: Bitmap
     private lateinit var externalBitmap: Bitmap
 
+    private val photoHelper by lazy { PhotoHelper(requireContext()) }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,32 +59,50 @@ class FaceImageQualityFragment : Fragment() {
         binding.imageViewSample1.setOnClickListener {
             setImage(R.drawable.face_image_quality1)
             binding.imageViewBackground1.setBackgroundColor(Color.BLUE)
+            resetImageAndResult()
         }
         binding.imageViewSample2.setOnClickListener {
             setImage(R.drawable.face_image_quality2)
             binding.imageViewBackground2.setBackgroundColor(Color.BLUE)
+            resetImageAndResult()
         }
         binding.imageViewSample3.setOnClickListener {
             setImage(R.drawable.face_image_quality3)
             binding.imageViewBackground3.setBackgroundColor(Color.BLUE)
+            resetImageAndResult()
         }
         binding.imageViewSample4.setOnClickListener {
             setImage(R.drawable.face_image_quality4)
             binding.imageViewBackground4.setBackgroundColor(Color.BLUE)
+            resetImageAndResult()
         }
 
         binding.imageViewSample5.setOnClickListener {
             setImage(externalBitmap)
             binding.imageViewBackground5.setBackgroundColor(Color.BLUE)
+            resetImageAndResult()
         }
 
-        binding.button1.setOnClickListener { updateScenario(Scenario.ICAO, it) }
-        binding.button2.setOnClickListener { updateScenario(Scenario.VISA_USA, it) }
-        binding.button3.setOnClickListener { updateScenario(Scenario.VISA_SHENGEN, it) }
-        binding.button4.setOnClickListener { updateScenario(Scenario.SCENARIO, it) }
+        binding.button1.setOnClickListener {
+            updateScenario(Scenario.ICAO, it)
+            resetImageAndResult()
+        }
+        binding.button2.setOnClickListener {
+            updateScenario(Scenario.VISA_USA, it)
+            resetImageAndResult()
+        }
+        binding.button3.setOnClickListener {
+            updateScenario(Scenario.VISA_SHENGEN, it)
+            resetImageAndResult()
+        }
+        binding.button4.setOnClickListener {
+            updateScenario(Scenario.SCENARIO, it)
+            resetImageAndResult()
+        }
 
         binding.buttonPick.setOnClickListener {
             showMenu(binding.buttonPick)
+            resetImageAndResult()
         }
         binding.buttonDetect.setOnClickListener {
             when (scenario) {
@@ -177,7 +199,7 @@ class FaceImageQualityFragment : Fragment() {
         buttonEnable(false)
         binding.textResult.text = ""
         binding.progressBar.visibility = View.VISIBLE;
-        FaceSDK.Instance().detectFaces(request) { response: DetectFacesResponse ->
+        FaceSDK.Instance().detectFaces(requireContext(), request) { response: DetectFacesResponse ->
             binding.progressBar.visibility = View.GONE;
             buttonEnable(true)
             response.allDetections?.let {
@@ -210,9 +232,15 @@ class FaceImageQualityFragment : Fragment() {
         }
     }
 
+    private fun resetImageAndResult(){
+        binding.buttonSee.visibility = View.GONE
+        binding.textResult.visibility = View.GONE
+        binding.imageViewMain.setImageBitmap(bitmapToDetect)
+    }
+
     private fun drawLandmark(faces: MutableList<DetectFaceResult>) {
         val mutableBitmap: Bitmap =
-            bitmapToDetect.copy(bitmapToDetect.config, true)
+            bitmapToDetect.copy(bitmapToDetect.config!!, true)
         val canvas = Canvas(mutableBitmap)
         val paint = Paint()
         paint.color = Color.GREEN
@@ -320,15 +348,13 @@ class FaceImageQualityFragment : Fragment() {
     }
 
     private fun launchCamera() {
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startCameraForResult.launch(cameraIntent)
+        photoHelper.makePhoto(startCameraForResult) {}
     }
 
     private val startCameraForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            val photo = result.data?.extras?.get("data")
-            if (photo is Bitmap)
-                setImage(photo)
+            setImage(photoHelper.handleResult(result.resultCode)!!)
+            photoHelper.deleteImageFile()
         }
 
     private fun startFaceCaptureActivity() {

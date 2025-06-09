@@ -58,7 +58,7 @@ public class GroupsActivity extends AppCompatActivity {
                 new DividerItemDecoration(GroupsActivity.this, DividerItemDecoration.VERTICAL));
         binding.itemsList.setAdapter(adapter);
 
-        FaceSDK.Instance().personDatabase().getGroups(new PersonDBCallback<PageableItemList<List<PersonGroup>, PersonGroup>>() {
+        FaceSDK.Instance().personDatabase(this).getGroups(new PersonDBCallback<PageableItemList<List<PersonGroup>, PersonGroup>>() {
             @Override
             public void onSuccess(@Nullable PageableItemList<List<PersonGroup>, PersonGroup> response) {
                 if(response == null)
@@ -91,7 +91,7 @@ public class GroupsActivity extends AppCompatActivity {
                     .setPositiveButton("Create", (dialogInterface, i) -> {
                         EditText editText = ((AlertDialog) dialogInterface).findViewById(R.id.groupNameTV);
                         String groupName = editText.getText().toString();
-                        FaceSDK.Instance().personDatabase().createGroup(groupName, new PersonDBCallback<PersonGroup>() {
+                        FaceSDK.Instance().personDatabase(this).createGroup(groupName, new PersonDBCallback<PersonGroup>() {
                             @Override
                             public void onSuccess(@Nullable PersonGroup response) {
                                 Toast.makeText(GroupsActivity.this, "Success!", Toast.LENGTH_SHORT).show();
@@ -164,7 +164,7 @@ public class GroupsActivity extends AppCompatActivity {
                             EditText editText = ((AlertDialog) dialogInterface).findViewById(R.id.groupNameTV);
                             String groupName = editText.getText().toString();
                             groupEdit.setName(groupName);
-                            FaceSDK.Instance().personDatabase().updateGroup(groupEdit, new PersonDBCallback<Void>() {
+                            FaceSDK.Instance().personDatabase(this).updateGroup(groupEdit, new PersonDBCallback<Void>() {
                                 @Override
                                 public void onSuccess(@Nullable Void response) {
                                     Toast.makeText(GroupsActivity.this, "Success!", Toast.LENGTH_SHORT).show();
@@ -186,7 +186,7 @@ public class GroupsActivity extends AppCompatActivity {
                 editText.setText(groupEdit.getName());
                 break;
             case ItemsAdapter.MENU_DELETE:
-                FaceSDK.Instance().personDatabase().deleteGroup(groupEdit.getId(), new PersonDBCallback<Void>() {
+                FaceSDK.Instance().personDatabase(this).deleteGroup(groupEdit.getId(), new PersonDBCallback<Void>() {
                     @Override
                     public void onSuccess(@Nullable Void response) {
                         Toast.makeText(GroupsActivity.this, "Success!", Toast.LENGTH_SHORT).show();

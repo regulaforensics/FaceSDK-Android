@@ -7,4 +7,7 @@
 
     <color name="text">#ffffff</color>
     <color name="button">#ffffff</color>
+
+    <color name="resultText">#9FA8DA</color>
+    <color name="background_items_color">#161720</color>
 </resources>

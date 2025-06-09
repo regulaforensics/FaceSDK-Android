@@ -1,6 +1,7 @@
 package com.regula.facepersonsearch;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -112,7 +113,7 @@ public class SearchActivity extends AppCompatActivity {
         personsRv.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
         personsRv.addItemDecoration(new DividerItemDecoration(SearchActivity.this,
                 DividerItemDecoration.HORIZONTAL));
-        personsRv.setAdapter(new PersonsAdapter(persons));
+        personsRv.setAdapter(new PersonsAdapter(this, persons));
     }
 
     private void showMenu(View view) {
@@ -213,7 +214,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void searchPerson(SearchPersonRequest searchPersonRequest) {
-        FaceSDK.Instance().personDatabase().searchPerson(searchPersonRequest,
+        FaceSDK.Instance().personDatabase(this).searchPerson(searchPersonRequest,
                 new PersonDBCallback<List<SearchPerson>>() {
                     @Override
                     public void onSuccess(List<SearchPerson> response) {
@@ -232,9 +233,11 @@ public class SearchActivity extends AppCompatActivity {
     static class PersonsAdapter extends RecyclerView.Adapter<PersonHolder>{
 
         List<Person> persons;
+        Context context;
 
-        PersonsAdapter(List<Person> persons){
+        PersonsAdapter(Context context, List<Person> persons){
             this.persons = persons;
+            this.context = context;
         }
 
         @NonNull
@@ -252,7 +255,7 @@ public class SearchActivity extends AppCompatActivity {
 
             Person person = persons.get(position);
             holder.itemView.setOnClickListener(view -> {
-                FaceSDK.Instance().personDatabase().getPersonImages(person.getId(),
+                FaceSDK.Instance().personDatabase(context).getPersonImages(person.getId(),
                         new PersonDBCallback<PageableItemList<List<PersonImage>, PersonImage>>() {
                             @Override
                             public void onSuccess(PageableItemList<List<PersonImage>, PersonImage> response) {
