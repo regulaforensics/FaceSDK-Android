@@ -1,13 +1,16 @@
 # Regula Face SDK (Android version)
-Face SDK is a framework that is used for face matching, recognition, and liveness detection.
-In this sample we demonstrate how configure Certificate Pinning in the Android app
+
+The Face SDK is a framework that is used for face matching, recognition, and liveness detection.
+
+In this sample, we demonstrate how configure Certificate Pinning in the Android application.
 
 ## Steps
 
-Here you can find how to generate key for the android app
-https://nikunj-joshi.medium.com/ssl-pinning-increase-server-identity-trust-656a2fc7e22b
+Here is a detailed instruction on how to generate a key for the Android app: 
+https://docs.regulaforensics.com/develop/face-sdk/mobile/getting-started/web-service-setup/certificate-pinning/
 
-1. In the mobile app you need to create xml file (main/res/xml/network_security_config)
-2. In the AndroidManifest.xml you need to set up config above in the application area:
+1. In your mobile app, create an `.xml` file at the following location:
+   `main/res/xml/network_security_config.xml`
+2. In the `AndroidManifest.xml` file, set up the following config in the application area:
    android:networkSecurityConfig="@xml/network_security_config"
-3. In the network-security-config you need to replace 'domain' to your and replace 'SHA-256'
+3. In `network_security_config.xml`, replace the placeholder 'domain' with your actual domain, and update the `SHA-256` certificate hash accordingly.
