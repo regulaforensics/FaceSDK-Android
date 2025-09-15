@@ -24,6 +24,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
 import com.regula.facesamplekotlin.databinding.ActivityDetectFacesBinding
 import com.regula.facesamplekotlin.util.RandomColors
@@ -127,7 +129,7 @@ class DetectFacesActivity : AppCompatActivity() {
         val option = BitmapFactory.Options()
         option.inScaled = false
         val bitmap = BitmapFactory.decodeResource(resources, res, option)
-        bitmapToDetect = bitmap;
+        bitmapToDetect = bitmap
         binding.imageViewMain.setImageBitmap(bitmapToDetect);
     }
 

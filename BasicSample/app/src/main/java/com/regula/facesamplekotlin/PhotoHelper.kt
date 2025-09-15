@@ -6,15 +6,13 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.media.ExifInterface
 import android.net.Uri
-import android.os.Environment
 import android.provider.MediaStore
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -35,6 +33,22 @@ class PhotoHelper (private val context: Context) {
         activityResultLauncher.launch(cameraIntent)
     }
 
+    fun getBitmapImageByUri(uri: Uri): Bitmap{
+        val file = createImageFile()
+
+        val contentResolver = context.contentResolver
+        val inputStream = contentResolver.openInputStream(uri)
+        val outputStream = FileOutputStream(file)
+
+        inputStream?.use { input ->
+            outputStream.use { output ->
+                input.copyTo(output)
+            }
+        }
+
+        return rotateImageIfRequired(file)
+    }
+
     private fun createImageFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
         val storageDir: File? = this.context.filesDir
@@ -42,15 +56,29 @@ class PhotoHelper (private val context: Context) {
     }
 
     fun handleResult(resultCode: Int) : Bitmap? {
-        if (resultCode == Activity.RESULT_OK) {
-            val photo = BitmapFactory.decodeFile(photoFile.absolutePath)
-            val matrix = Matrix().apply {
-                postRotate(90f)
-            }
-            return Bitmap.createBitmap(photo, 0, 0, photo.width, photo.height, matrix, true)
+        return if (resultCode == Activity.RESULT_OK) {
+            rotateImageIfRequired(photoFile)
         } else {
-            return null
+            null
         }
+    }
+
+    private fun rotateImageIfRequired(imageFile: File): Bitmap {
+        val exif = ExifInterface(imageFile.absolutePath)
+        val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+        val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
+        return when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> rotateBitmap(bitmap, 90)
+            ExifInterface.ORIENTATION_ROTATE_180 -> rotateBitmap(bitmap, 180)
+            ExifInterface.ORIENTATION_ROTATE_270 -> rotateBitmap(bitmap, 270)
+            else -> bitmap
+        }
+    }
+
+    private fun rotateBitmap(bitmap: Bitmap, degrees: Int): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(degrees.toFloat())
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 
     fun deleteImageFile(): Boolean {

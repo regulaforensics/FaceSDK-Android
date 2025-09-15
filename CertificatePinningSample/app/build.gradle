@@ -4,26 +4,32 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.regula.facesamplekotlin"
         minSdk 24
-        targetSdk 32
+        targetSdk 36
         versionCode 1
         versionName "1.0"
     }
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
     buildFeatures {
         viewBinding true
     }
+    namespace 'com.regula.facesamplekotlin'
 }
 
 dependencies {
@@ -34,9 +40,9 @@ dependencies {
     implementation "androidx.core:core-ktx:1.7.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation ('com.regula.face:api:7.1.+@aar'){
+    implementation ('com.regula.face:api:7.2.+@aar'){
         transitive = true
     }
 
-    implementation ('com.regula.face.core:basic:7.1.+@aar')
+    implementation ('com.regula.face.core:basic:7.2.+@aar')
 }

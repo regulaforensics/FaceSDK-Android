@@ -28,6 +28,8 @@ import androidx.activity.result.contract.ActivityResultContracts.RequestPermissi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
 import com.regula.facesamplekotlin.util.ResizeTransformation
 import com.regula.facesdk.FaceSDK
@@ -283,11 +285,7 @@ class MatchFacesActivity : AppCompatActivity() {
         }
 
         imageUri?.let {
-            val bitmap = contentResolver?.openInputStream(it).use { data ->
-                BitmapFactory.decodeStream(data)
-            }
-            val resizedBitmap = ResizeTransformation(1080).transform(bitmap)
-            imageView?.setImageBitmap(resizedBitmap)
+            imageView?.setImageBitmap(photoHelper.getBitmapImageByUri(it))
         }
 
         spinner?.setSelection(0)
@@ -398,6 +396,31 @@ class MatchFacesActivity : AppCompatActivity() {
         private fun setImage(imageView: ImageView, image: Bitmap?) {
             image?.let {
                 imageView.setImageBitmap(it)
+            }
+        }
+    }
+
+    override fun setContentView(layoutResId: Int) {
+        super.setContentView(layoutResId)
+
+        applyEdgeToEdgeInsets()
+    }
+
+    private fun applyEdgeToEdgeInsets() {
+        val rootView = window.decorView.findViewWithTag<View>("content")
+        if (rootView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(rootView) { view, insets ->
+                val systemBars = insets.getInsets(
+                    WindowInsetsCompat.Type.systemBars()
+                            or WindowInsetsCompat.Type.displayCutout()
+                )
+                view.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    systemBars.bottom
+                )
+                insets
             }
         }
     }

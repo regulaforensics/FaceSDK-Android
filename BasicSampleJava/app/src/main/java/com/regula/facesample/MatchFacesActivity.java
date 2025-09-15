@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -15,6 +16,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.regula.facesdk.FaceSDK;
 import com.regula.facesdk.configuration.FaceCaptureConfiguration;
@@ -108,20 +115,20 @@ public class MatchFacesActivity extends Activity {
     private void showMenu(ImageView imageView, int i) {
         PopupMenu popupMenu = new PopupMenu(MatchFacesActivity.this, imageView);
         popupMenu.setOnMenuItemClickListener(menuItem -> {
-            switch (menuItem.getItemId()) {
-                case R.id.gallery:
-                    openGallery(i);
-                    return true;
-                case R.id.camera:
-                    RadioGroup radioGroup;
-                    if(i == PICK_IMAGE_1)
-                        radioGroup = group0;
-                    else //if PICK_IMAGE_2
-                        radioGroup = group1;
-                    startFaceCaptureActivity(imageView, radioGroup);
-                    return true;
-                default:
-                    return false;
+
+            if (menuItem.getItemId() == R.id.gallery) {
+                openGallery(i);
+                return true;
+            } else if (menuItem.getItemId() == R.id.camera) {
+                RadioGroup radioGroup;
+                if(i == PICK_IMAGE_1)
+                    radioGroup = group0;
+                else //if PICK_IMAGE_2
+                    radioGroup = group1;
+                startFaceCaptureActivity(imageView, radioGroup);
+                return true;
+            } else {
+                return false;
             }
         });
         popupMenu.getMenuInflater().inflate(R.menu.menu, popupMenu.getMenu());
@@ -271,5 +278,33 @@ public class MatchFacesActivity extends Activity {
 
             textViewSimilarity.setText("Similarity: null");
         });
+    }
+
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+
+        applyEdgeToEdgeInsets();
+    }
+
+    private void applyEdgeToEdgeInsets() {
+        View rootView = getWindow().getDecorView().findViewWithTag("content");
+        if (rootView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(rootView, new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View view, @NonNull WindowInsetsCompat insets) {
+                    Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars()
+                            | WindowInsetsCompat.Type.displayCutout());
+                    view.setPadding(
+                            systemBars.left,
+                            systemBars.top,
+                            systemBars.right,
+                            systemBars.bottom
+                    );
+                    return insets;
+                }
+            });
+        }
     }
 }

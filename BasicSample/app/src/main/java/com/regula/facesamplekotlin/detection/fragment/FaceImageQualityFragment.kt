@@ -302,14 +302,7 @@ class FaceImageQualityFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val intent = result.data
                 intent?.data?.let {
-                    val bitmap = context?.contentResolver?.openInputStream(it).use { data ->
-                        BitmapFactory.decodeStream(data)
-                    }
-                    val resizedBitmap = ResizeTransformation(1080).transform(bitmap)
-                    binding.imageViewMain.setImageBitmap(resizedBitmap)
-                    resizedBitmap?.let {
-                        setImage(resizedBitmap)
-                    } ?: binding.imageViewSample1.callOnClick()
+                    setImage(photoHelper.getBitmapImageByUri(it))
                 }
             }
         }

@@ -19,7 +19,8 @@
         <activity
             android:name=".MatchFacesActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|screenLayout" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -31,10 +32,12 @@
         </activity>
         <activity
             android:name=".DetectFacesActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|screenLayout" />
         <activity
             android:name=".FaceImageQualityActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|screenLayout" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

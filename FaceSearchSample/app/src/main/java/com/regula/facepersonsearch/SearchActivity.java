@@ -119,18 +119,16 @@ public class SearchActivity extends AppCompatActivity {
     private void showMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.setOnMenuItemClickListener(item -> {
-
-            switch (item.getItemId()) {
-                case R.id.gallery:
-                    openGallery();
-                    return true;
-                case R.id.camera:
-                    startFaceCaptureActivity();
-                    return true;
-                case R.id.photo:
-                    openDefaultCamera();
-                    return true;
+            if (item.getItemId() == R.id.gallery) {
+                openGallery();
+                return true;
+            } else if (item.getItemId() == R.id.camera) {
+                startFaceCaptureActivity();
+                return true;
+            } else if (item.getItemId() == R.id.photo) {
+                openDefaultCamera();
             }
+
             return false;
         });
         popupMenu.getMenuInflater().inflate(R.menu.menu, popupMenu.getMenu());
