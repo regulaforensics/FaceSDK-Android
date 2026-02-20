@@ -2,12 +2,16 @@ package com.regula.facesamplekotlin.detection.fragment
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -17,17 +21,19 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.regula.facesamplekotlin.FaceImageQualityActivity
 import com.regula.facesamplekotlin.PhotoHelper
 import com.regula.facesamplekotlin.R
 import com.regula.facesamplekotlin.databinding.FragmentFaceQualityBinding
-import com.regula.facesamplekotlin.util.ResizeTransformation
 import com.regula.facesdk.FaceSDK
 import com.regula.facesdk.configuration.FaceCaptureConfiguration
-import com.regula.facesdk.detection.request.*
+import com.regula.facesdk.detection.request.DetectFacesConfiguration
+import com.regula.facesdk.detection.request.DetectFacesRequest
+import com.regula.facesdk.detection.request.ImageQualityGroup
+import com.regula.facesdk.detection.request.OutputImageCrop
+import com.regula.facesdk.detection.request.OutputImageParams
 import com.regula.facesdk.detection.response.DetectFaceResult
 import com.regula.facesdk.detection.response.DetectFacesResponse
 import com.regula.facesdk.enums.OutputImageCropAspectRatio
@@ -113,6 +119,7 @@ class FaceImageQualityFragment : Fragment() {
             }
         }
         updateScenario(Scenario.ICAO, binding.button1)
+
         return binding.root
     }
 
@@ -131,6 +138,7 @@ class FaceImageQualityFragment : Fragment() {
         clearImageBackground()
         externalBitmap = bitmap
         binding.imageViewSample5.setImageBitmap(bitmap)
+        binding.imageViewSample5.maxHeight = binding.imageViewSample4.height
         binding.imageViewBackground5.setBackgroundColor(Color.BLUE)
         binding.imageViewBackground5.visibility = View.VISIBLE
         bitmapToDetect = bitmap
@@ -220,6 +228,7 @@ class FaceImageQualityFragment : Fragment() {
                 } else {
                     binding.textResult.text = "❌ NON-COMPLIANT"
                 }
+                binding.textResult.visibility = View.VISIBLE
                 binding.buttonSee.text = "Quality Results ($size)"
                 binding.buttonSee.visibility = View.VISIBLE
                 binding.buttonSee.setOnClickListener { _ ->
@@ -234,7 +243,7 @@ class FaceImageQualityFragment : Fragment() {
 
     private fun resetImageAndResult(){
         binding.buttonSee.visibility = View.GONE
-        binding.textResult.visibility = View.GONE
+        binding.textResult.visibility = View.INVISIBLE
         binding.imageViewMain.setImageBitmap(bitmapToDetect)
     }
 
@@ -244,7 +253,7 @@ class FaceImageQualityFragment : Fragment() {
         val canvas = Canvas(mutableBitmap)
         val paint = Paint()
         paint.color = Color.GREEN
-        paint.strokeWidth = 4f
+        paint.strokeWidth = 7.5f
 
         for (face in faces) {
             paint.style = Paint.Style.STROKE;
@@ -253,7 +262,7 @@ class FaceImageQualityFragment : Fragment() {
             paint.style = Paint.Style.FILL;
             face.landMarks?.let {
                 for (p in face.landMarks!!) {
-                    canvas.drawCircle(p.x.toFloat(), p.y.toFloat(), 4F, paint);
+                    canvas.drawCircle(p.x.toFloat(), p.y.toFloat(), 6.5F, paint);
                 }
             }
         }
@@ -290,11 +299,12 @@ class FaceImageQualityFragment : Fragment() {
     }
 
     private fun openGallery() {
-        val intent = Intent(
-            Intent.ACTION_PICK
+        startForResult.launch(
+            Intent(
+                Intent.ACTION_PICK,
+                MediaStore.Images.Media.INTERNAL_CONTENT_URI
+            )
         )
-        intent.type = "image/*"
-        startForResult.launch(intent)
     }
 
     private val startForResult =
@@ -324,6 +334,7 @@ class FaceImageQualityFragment : Fragment() {
         }
 
     private fun openDefaultCamera() {
+
         when {
             ContextCompat.checkSelfPermission(
                 requireContext(),

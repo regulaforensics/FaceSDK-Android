@@ -1,10 +1,10 @@
 package com.regula.facesamplekotlin
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
@@ -31,7 +31,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
-import com.regula.facesamplekotlin.util.ResizeTransformation
+import com.regula.facesamplekotlin.databinding.ActivityMatchFacesBinding
 import com.regula.facesdk.FaceSDK
 import com.regula.facesdk.configuration.FaceCaptureConfiguration
 import com.regula.facesdk.detection.request.OutputImageCrop
@@ -46,6 +46,9 @@ import com.regula.facesdk.request.MatchFacesRequest
 
 
 class MatchFacesActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMatchFacesBinding
+
     private lateinit var imageView1: ImageView
     private lateinit var imageView2: ImageView
     private lateinit var switchDetectAll1: SwitchCompat
@@ -64,6 +67,7 @@ class MatchFacesActivity : AppCompatActivity() {
     private lateinit var faceBitmaps: ArrayList<Bitmap>
 
     private var currentImageView: ImageView? = null
+    private var currentImageViewId: Int = 1
 
     private var imageUri: Uri? = null
 
@@ -71,7 +75,9 @@ class MatchFacesActivity : AppCompatActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_match_faces)
+
+        binding = ActivityMatchFacesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         imageView1 = findViewById(R.id.imageView1)
         imageView1.layoutParams.height = 400
@@ -249,46 +255,50 @@ class MatchFacesActivity : AppCompatActivity() {
     }
 
     private fun openGallery(id: Int) {
-        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-        startActivityForResult(gallery, id)
+        currentImageViewId = id
+        startForResult.launch(
+            Intent(
+                Intent.ACTION_PICK,
+                MediaStore.Images.Media.INTERNAL_CONTENT_URI
+            )
+        )
     }
+
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+
+                intent?.data?.let {
+
+                    textViewSimilarity.text = "Similarity:"
+                    var spinner: Spinner? = null
+
+                    if (currentImageViewId == PICK_IMAGE_1) {
+                        imageView1.setImageBitmap(photoHelper.getBitmapImageByUri(it))
+                        spinner = spinner1
+                    } else if (currentImageViewId == PICK_IMAGE_2) {
+                        imageView2.setImageBitmap(photoHelper.getBitmapImageByUri(it))
+                        spinner = spinner2
+                    }
+
+                    spinner?.setSelection(0)
+                }
+            }
+        }
 
     private fun startFaceCaptureActivity(imageView: ImageView?, spinner: Spinner) {
         val configuration = FaceCaptureConfiguration.Builder().setCameraSwitchEnabled(true).build()
 
-        FaceSDK.Instance().presentFaceCaptureActivity(this@MatchFacesActivity, configuration) { faceCaptureResponse: FaceCaptureResponse? ->
+        FaceSDK.Instance().presentFaceCaptureActivity(
+            this@MatchFacesActivity,
+            configuration
+        ) { faceCaptureResponse: FaceCaptureResponse? ->
             if (faceCaptureResponse?.image != null) {
                 imageView!!.setImageBitmap(faceCaptureResponse.image!!.bitmap)
                 spinner.setSelection(2)
             }
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode != RESULT_OK || data == null)
-            return
-
-        imageUri = data.data
-        textViewSimilarity.text = "Similarity:"
-
-        var imageView: ImageView? = null
-        var spinner: Spinner? = null
-
-        if (requestCode == PICK_IMAGE_1) {
-            imageView = imageView1
-            spinner = spinner1
-        } else if (requestCode == PICK_IMAGE_2) {
-            imageView = imageView2
-            spinner = spinner2
-        }
-
-        imageUri?.let {
-            imageView?.setImageBitmap(photoHelper.getBitmapImageByUri(it))
-        }
-
-        spinner?.setSelection(0)
     }
 
     private fun matchFaces(first: Bitmap, second: Bitmap) {

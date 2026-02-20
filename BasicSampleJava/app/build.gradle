@@ -39,9 +39,11 @@ dependencies {
 
     implementation "androidx.recyclerview:recyclerview:1.2.1"
 
-    implementation ('com.regula.face:api:7.2.+@aar'){
+    implementation "androidx.core:core-ktx:1.17.0"
+
+    implementation ('com.regula.face:api:8.1.+@aar'){
         transitive = true
     }
 
-    implementation ('com.regula.face.core:basic:7.2.+@aar')
+    implementation ('com.regula.face.core:basic:8.1.+@aar')
 }

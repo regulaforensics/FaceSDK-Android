@@ -11,6 +11,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.FileProvider
+import com.regula.facesamplekotlin.util.ResizeTransformation
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -67,11 +68,12 @@ class PhotoHelper (private val context: Context) {
         val exif = ExifInterface(imageFile.absolutePath)
         val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
         val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
+        val resizedBitmap = ResizeTransformation(1080).transform(bitmap)
         return when (orientation) {
-            ExifInterface.ORIENTATION_ROTATE_90 -> rotateBitmap(bitmap, 90)
-            ExifInterface.ORIENTATION_ROTATE_180 -> rotateBitmap(bitmap, 180)
-            ExifInterface.ORIENTATION_ROTATE_270 -> rotateBitmap(bitmap, 270)
-            else -> bitmap
+            ExifInterface.ORIENTATION_ROTATE_90 -> rotateBitmap(resizedBitmap!!, 90)
+            ExifInterface.ORIENTATION_ROTATE_180 -> rotateBitmap(resizedBitmap!!, 180)
+            ExifInterface.ORIENTATION_ROTATE_270 -> rotateBitmap(resizedBitmap!!, 270)
+            else -> resizedBitmap!!
         }
     }
 

@@ -44,12 +44,12 @@ dependencies {
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation "androidx.recyclerview:recyclerview:1.2.1"
-    implementation "androidx.core:core-ktx:1.7.0"
+    implementation "androidx.core:core-ktx:1.17.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation ('com.regula.face:api:7.2.+@aar'){
+    implementation ('com.regula.face:api:8.1.+@aar'){
         transitive = true
     }
 
-    implementation ('com.regula.face.core:basic:7.2.+@aar')
+    implementation ('com.regula.face.core:basic:8.1.+@aar')
 }

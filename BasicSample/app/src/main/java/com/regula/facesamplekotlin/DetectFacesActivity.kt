@@ -21,9 +21,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
@@ -138,6 +136,7 @@ class DetectFacesActivity : AppCompatActivity() {
         bitmapToDetect = bitmap
         externalBitmap = bitmap
         binding.imageViewMain.setImageBitmap(bitmapToDetect)
+        binding.imageViewSample5.maxHeight = binding.imageViewSample4.height
         binding.imageViewSample5.setImageBitmap(bitmapToDetect)
         binding.imageViewBackground5.visibility = View.VISIBLE
         binding.imageViewBackground5.setBackgroundColor(Color.BLUE)
@@ -410,6 +409,31 @@ class DetectFacesActivity : AppCompatActivity() {
                         decodedString.size
                     )
                 )
+            }
+        }
+    }
+
+    override fun setContentView(view: View?) {
+        super.setContentView(view)
+
+        applyEdgeToEdgeInsets()
+    }
+
+    private fun applyEdgeToEdgeInsets() {
+        val rootView = window.decorView.findViewWithTag<View>("content")
+        if (rootView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(rootView) { view, insets ->
+                val systemBars = insets.getInsets(
+                    WindowInsetsCompat.Type.systemBars()
+                            or WindowInsetsCompat.Type.displayCutout()
+                )
+                view.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    systemBars.bottom
+                )
+                insets
             }
         }
     }
