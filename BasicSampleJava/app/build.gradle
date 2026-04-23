@@ -41,9 +41,9 @@ dependencies {
 
     implementation "androidx.core:core-ktx:1.17.0"
 
-    implementation ('com.regula.face:api:8.1.+@aar'){
+    implementation ('com.regula.face:api:8.2.+@aar'){
         transitive = true
     }
 
-    implementation ('com.regula.face.core:basic:8.1.+@aar')
+    implementation ('com.regula.face.core:basic:8.2.+@aar')
 }
