@@ -4,114 +4,142 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="24dp">
+    android:focusableInTouchMode="true">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Name"
+        android:fitsSystemWindows="true"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/nameTv"/>
+        android:background="?attr/colorPrimary">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/nameEt"
-        app:layout_constraintTop_toBottomOf="@id/nameTv"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Surname"
-        android:id="@+id/surnameTv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nameEt"
-        android:layout_marginTop="16dp"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/surnameEt"
-        app:layout_constraintTop_toBottomOf="@id/surnameTv"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/existingImagesLayout"
-        app:layout_constraintTop_toBottomOf="@id/surnameEt"
-        app:layout_constraintBottom_toTopOf="@id/newImagesLayout"
-        android:layout_marginTop="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="Person images:"
-            android:id="@+id/existingImagesTV"
-            android:layout_gravity="center_vertical" />
+            tools:text="Test"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/existingImagesCountTv"
-            app:layout_constraintStart_toEndOf="@id/existingImagesTV"
-            app:layout_constraintTop_toTopOf="@id/existingImagesTV"
-            tools:text="count"
-            android:layout_marginStart="8dp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/existingImagesTV"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:id="@+id/imagesAddedRv"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/newImagesLayout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@id/createBtn"
-        app:layout_constraintTop_toBottomOf="@id/existingImagesLayout">
-
-        <Button
-            style="@style/MyButton"
-            android:id="@+id/addImageBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="Add Person Image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/imagesRV"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/addImageBtn" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <Button
-        style="@style/MyButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/createBtn"
-        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="Create Person" />
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/nameTv"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameEt"
+            app:layout_constraintTop_toBottomOf="@id/nameTv"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Surname"
+            android:id="@+id/surnameTv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nameEt"
+            android:layout_marginTop="16dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/surnameEt"
+            app:layout_constraintTop_toBottomOf="@id/surnameTv"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/existingImagesLayout"
+            app:layout_constraintTop_toBottomOf="@id/surnameEt"
+            app:layout_constraintBottom_toTopOf="@id/newImagesLayout"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="Person images:"
+                android:id="@+id/existingImagesTV"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/existingImagesCountTv"
+                app:layout_constraintStart_toEndOf="@id/existingImagesTV"
+                app:layout_constraintTop_toTopOf="@id/existingImagesTV"
+                tools:text="count"
+                android:layout_marginStart="8dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/existingImagesTV"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/imagesAddedRv"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/newImagesLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toTopOf="@id/createBtn"
+            app:layout_constraintTop_toBottomOf="@id/existingImagesLayout">
+
+            <Button
+                style="@style/MyButton"
+                android:id="@+id/addImageBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="Add Person Image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/imagesRV"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/addImageBtn" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            style="@style/MyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/createBtn"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Create Person" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

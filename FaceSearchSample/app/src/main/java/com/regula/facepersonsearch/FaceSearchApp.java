@@ -19,7 +19,7 @@ public class FaceSearchApp extends Application {
 
     public static final String TAG = "FaceSearchApp";
 
-    public static final String SERVICE_ADDRESS = "...";
+    public static final String SERVICE_ADDRESS = "https://nightly-faceapi.regula.work";
 
     @Override
     public void onCreate() {

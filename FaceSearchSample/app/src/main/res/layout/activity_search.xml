@@ -6,12 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".SearchActivity">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="?attr/colorPrimary">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:title="Test"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="200dp"
         android:id="@+id/searchIV"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@android:drawable/ic_menu_gallery"/>

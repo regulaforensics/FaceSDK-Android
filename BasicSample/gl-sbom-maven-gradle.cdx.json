@@ -1,0 +1,36 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "serialNumber": "urn:uuid:34b393b4-5489-45c3-bcf4-65e7d15d17d4",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-08-04T13:19:48Z",
+    "tools": [
+      {
+        "vendor": "GitLab",
+        "name": "Gemnasium",
+        "version": "6.6.1"
+      }
+    ],
+    "authors": [
+      {
+        "name": "GitLab",
+        "email": "support@gitlab.com"
+      }
+    ],
+    "properties": [
+      {
+        "name": "gitlab:dependency_scanning:input_file:path",
+        "value": "Samples/BasicSample/build.gradle"
+      },
+      {
+        "name": "gitlab:dependency_scanning:package_manager:name",
+        "value": "gradle"
+      },
+      {
+        "name": "gitlab:meta:schema_version",
+        "value": "1"
+      }
+    ]
+  }
+}

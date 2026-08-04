@@ -17,14 +17,17 @@
         <activity
             android:name=".SearchActivity"
             android:exported="false"
-            android:label="Search"/>
+            android:label="Search"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".CreateActivity"
             android:exported="true"
-            android:label="Person"/>
+            android:label="Create"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".GroupsActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +37,8 @@
         <activity
             android:name=".PersonsActivity"
             android:exported="true"
-            android:label="Persons in group"/>
+            android:label="Persons in group"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

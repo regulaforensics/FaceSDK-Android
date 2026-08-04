@@ -4,9 +4,9 @@ import static com.regula.facepersonsearch.FaceSearchApp.TAG;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,11 +15,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -65,11 +67,14 @@ public class CreateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         images = new ArrayList<>();
         existingImages = new ArrayList<>();
         binding = ActivityCreateBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.toolbar);
 
         groupId = getIntent().getStringExtra(GroupsActivity.GROUP_ID);
         personId = getIntent().getStringExtra(PERSON_ID);
@@ -279,6 +284,30 @@ public class CreateActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.menu_reset, menu);
         return true;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View currentFocusedView = getCurrentFocus();
+
+            if (currentFocusedView instanceof EditText) {
+                Rect outRect = new Rect();
+                currentFocusedView.getGlobalVisibleRect(outRect);
+
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+
+
+                    currentFocusedView.clearFocus();
+
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(currentFocusedView.getWindowToken(), 0);
+                    }
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
     }
 
     private void createPerson() {

@@ -3,7 +3,6 @@ package com.regula.facepersonsearch;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -17,10 +16,12 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -60,8 +61,10 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_search);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         browseBtn = findViewById(R.id.browseBtn);
         searchBtn = findViewById(R.id.searchBtn);
@@ -74,9 +77,7 @@ public class SearchActivity extends AppCompatActivity {
         groupIds = getIntent().getStringArrayExtra(GroupsActivity.GROUP_ID);
         name = getIntent().getStringExtra(GroupsActivity.GROUP_NAME);
 
-        if(getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Search in " + (name != null ? name : "all groups"));
-        }
+        setTitle("Search in " + (name != null ? name : "all groups"));
     }
 
     @Override

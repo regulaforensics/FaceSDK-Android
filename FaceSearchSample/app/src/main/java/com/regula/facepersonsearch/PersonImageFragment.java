@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.regula.facesdk.model.results.person.PersonImage;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public class PersonImageFragment extends DialogFragment {
                 new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(new PersonImageRecyclerViewAdapter(images));
 
-        return new AlertDialog.Builder(requireContext())
+        return new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("PERSON IMAGES: " + images.size())
                 .setView(view)
                 .setPositiveButton("Close", (dialog, which) -> {

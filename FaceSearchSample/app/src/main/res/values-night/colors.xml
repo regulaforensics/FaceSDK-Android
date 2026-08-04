@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_500">#FFBB86FC</color>
+    <color name="teal_700">#FF03DAC5</color>
+    <color name="colorOnPrimary">#FF000000</color>
+    <color name="toolBarTitle">#FF000000</color>
+</resources>

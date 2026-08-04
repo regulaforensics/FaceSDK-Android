@@ -6,12 +6,10 @@ import com.regula.facesample.items.basic.LivenessDefaultItem;
 import com.regula.facesample.items.basic.MatchFacesRequestItem;
 import com.regula.facesample.items.customization.BasicCustomItem;
 import com.regula.facesample.items.customization.AdvancedCustomItem;
-import com.regula.facesample.items.customization.ButtonsColorItem;
 import com.regula.facesample.items.customization.FlashButtonItem;
 import com.regula.facesample.items.customization.HideCloseButtonItem;
 import com.regula.facesample.items.customization.HideFlashButtonItem;
 import com.regula.facesample.items.customization.HideNotificationViewItem;
-import com.regula.facesample.items.customization.LivenessProcessingCustomItem;
 import com.regula.facesample.items.customization.NotificationViewItem;
 import com.regula.facesample.items.customization.NotificationViewPositionItem;
 import com.regula.facesample.items.customization.OverlayCustomItem;
@@ -71,14 +69,12 @@ public class CategoryDataProvider {
                 new HideFlashButtonItem(),
                 new HideNotificationViewItem(),
                 new NotificationViewItem(),
-                new ButtonsColorItem(),
                 new NotificationViewPositionItem(),
                 new FlashButtonItem(),
                 new SwapButtonItem(),
                 new BasicCustomItem(),
                 new AdvancedCustomItem(),
                 new OverlayCustomItem(),
-                new LivenessProcessingCustomItem(),
                 new UICustomizationItem(),
                 new HeaderItem() {
                     @Override

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.regula.facepersonsearch.databinding.ActivityItemsListBinding;
 import com.regula.facesdk.FaceSDK;
 import com.regula.facesdk.callback.PersonDBCallback;
@@ -39,11 +41,11 @@ public class GroupsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         binding = ActivityItemsListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setTitle("Groups");
+        setSupportActionBar(binding.toolbar);
+
         registerForContextMenu(binding.itemsList);
         FaceSDK.Instance().initialize(this, (b, e) -> {});
     }
@@ -83,7 +85,7 @@ public class GroupsActivity extends AppCompatActivity {
         binding.searchBtn.setText("Search in all groups");
 
         binding.createBtn.setOnClickListener(view -> {
-            new AlertDialog.Builder(GroupsActivity.this)
+            new MaterialAlertDialogBuilder(GroupsActivity.this)
                     .setCancelable(true)
                     .setTitle("Create PerasonGroup")
                     .setMessage("Enter a name for a new PersonGroup")
@@ -156,7 +158,7 @@ public class GroupsActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case ItemsAdapter.MENU_EDIT:
-                AlertDialog dialog = new AlertDialog.Builder(GroupsActivity.this)
+                AlertDialog dialog = new MaterialAlertDialogBuilder(GroupsActivity.this)
                         .setCancelable(true)
                         .setTitle("Update PersonGroup")
                         .setView(R.layout.group_create_update)
