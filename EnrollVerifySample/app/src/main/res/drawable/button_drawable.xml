@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/message_color" />
+    <corners
+        android:bottomLeftRadius="@dimen/facesdk_go_button_corner"
+        android:bottomRightRadius="@dimen/facesdk_go_button_corner"
+        android:topRightRadius="@dimen/facesdk_go_button_corner"
+        android:topLeftRadius="@dimen/facesdk_go_button_corner" />
+</shape>

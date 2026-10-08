@@ -1,15 +1,15 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
-  "serialNumber": "urn:uuid:a84d2419-a32c-43e0-8633-dfa638ffcf64",
+  "serialNumber": "urn:uuid:57dd7b9c-7c18-47a1-b9a4-169832f40a77",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-08-04T13:19:48Z",
+    "timestamp": "2026-10-08T09:31:22Z",
     "tools": [
       {
         "vendor": "GitLab",
         "name": "Gemnasium",
-        "version": "6.6.1"
+        "version": "6.6.3"
       }
     ],
     "authors": [
@@ -897,38 +897,38 @@
     },
     {
       "name": "com.regula.common/api",
-      "version": "9.7.3762",
-      "purl": "pkg:maven/com.regula.common/api@9.7.3762",
+      "version": "9.9.3986",
+      "purl": "pkg:maven/com.regula.common/api@9.9.3986",
       "type": "library",
-      "bom-ref": "pkg:maven/com.regula.common/api@9.7.3762"
+      "bom-ref": "pkg:maven/com.regula.common/api@9.9.3986"
     },
     {
       "name": "com.regula.face.core/basic",
-      "version": "8.3.+",
-      "purl": "pkg:maven/com.regula.face.core/basic@8.3.%2B",
+      "version": "8.4.+",
+      "purl": "pkg:maven/com.regula.face.core/basic@8.4.%2B",
       "type": "library",
-      "bom-ref": "pkg:maven/com.regula.face.core/basic@8.3.%2B"
+      "bom-ref": "pkg:maven/com.regula.face.core/basic@8.4.%2B"
     },
     {
       "name": "com.regula.face.core/basic",
-      "version": "8.3.1975",
-      "purl": "pkg:maven/com.regula.face.core/basic@8.3.1975",
+      "version": "8.4.2127",
+      "purl": "pkg:maven/com.regula.face.core/basic@8.4.2127",
       "type": "library",
-      "bom-ref": "pkg:maven/com.regula.face.core/basic@8.3.1975"
+      "bom-ref": "pkg:maven/com.regula.face.core/basic@8.4.2127"
     },
     {
       "name": "com.regula.face/api",
-      "version": "8.3.+",
-      "purl": "pkg:maven/com.regula.face/api@8.3.%2B",
+      "version": "8.4.+",
+      "purl": "pkg:maven/com.regula.face/api@8.4.%2B",
       "type": "library",
-      "bom-ref": "pkg:maven/com.regula.face/api@8.3.%2B"
+      "bom-ref": "pkg:maven/com.regula.face/api@8.4.%2B"
     },
     {
       "name": "com.regula.face/api",
-      "version": "8.3.5199",
-      "purl": "pkg:maven/com.regula.face/api@8.3.5199",
+      "version": "8.4.5465",
+      "purl": "pkg:maven/com.regula.face/api@8.4.5465",
       "type": "library",
-      "bom-ref": "pkg:maven/com.regula.face/api@8.3.5199"
+      "bom-ref": "pkg:maven/com.regula.face/api@8.4.5465"
     },
     {
       "name": "com.squareup/javawriter",

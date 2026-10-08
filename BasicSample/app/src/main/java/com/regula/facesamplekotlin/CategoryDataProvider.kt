@@ -6,6 +6,8 @@ import com.regula.facesamplekotlin.items.basic.DetectFacesRequestItem
 import com.regula.facesamplekotlin.items.basic.FaceImageQualityRequestItem
 import com.regula.facesamplekotlin.items.basic.FaceCaptureDefaultItem
 import com.regula.facesamplekotlin.items.basic.LivenessDefaultItem
+import com.regula.facesamplekotlin.items.basic.LivenessPassiveItem
+import com.regula.facesamplekotlin.items.basic.LivenessPassiveWithBlinkItem
 import com.regula.facesamplekotlin.items.basic.MatchFacesRequestItem
 import com.regula.facesamplekotlin.items.configuration.FaceCaptureConfigurationItem
 import com.regula.facesamplekotlin.items.configuration.LivenessScreenConfigurationItem
@@ -21,6 +23,8 @@ class CategoryDataProvider {
             return listOf(
                 HeaderItem("Basic"),
                 LivenessDefaultItem(),
+                LivenessPassiveItem(),
+                LivenessPassiveWithBlinkItem(),
                 FaceCaptureDefaultItem(),
                 MatchFacesRequestItem(),
                 DetectFacesRequestItem(),

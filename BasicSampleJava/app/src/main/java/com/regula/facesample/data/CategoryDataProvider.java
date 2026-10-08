@@ -3,6 +3,8 @@ package com.regula.facesample.data;
 import com.regula.facesample.items.ICategoryItem;
 import com.regula.facesample.items.basic.FaceCaptureDefaultItem;
 import com.regula.facesample.items.basic.LivenessDefaultItem;
+import com.regula.facesample.items.basic.LivenessPassiveItem;
+import com.regula.facesample.items.basic.LivenessPassiveWithBlinkItem;
 import com.regula.facesample.items.basic.MatchFacesRequestItem;
 import com.regula.facesample.items.customization.BasicCustomItem;
 import com.regula.facesample.items.customization.AdvancedCustomItem;
@@ -24,6 +26,7 @@ import com.regula.facesample.items.features.LivenessSessionIdItem;
 import com.regula.facesample.items.other.LocalizationItem;
 import com.regula.facesample.items.other.NetworkInterceptorItem;
 import com.regula.facesample.items.other.VideoCompletionItem;
+import com.regula.facesample.util.LivenessResponseUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +48,8 @@ public class CategoryDataProvider {
                     }
                 },
                 new LivenessDefaultItem(),
+                new LivenessPassiveItem(),
+                new LivenessPassiveWithBlinkItem(),
                 new FaceCaptureDefaultItem(),
                 new MatchFacesRequestItem(),
                 new HeaderItem() {

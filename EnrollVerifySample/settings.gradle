@@ -1,0 +1,14 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url = uri("https://maven.regulaforensics.com/RegulaDocumentReader")
+        }
+    }
+}
+include ':app'
+rootProject.name = "EnrollVerifySample"
